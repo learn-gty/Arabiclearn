@@ -1,13 +1,274 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
+<!DOCTYPE html>
+<html lang="fr">
 <head>
-  <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="PSPad editor, www.pspad.com">
-  <title>index.html</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Navigation Compacte aux Couleurs de la Palestine</title>
+  <style>
+    :root {
+      --palestinian-red: #ee2a35;
+      --palestinian-green: #009736;
+      --palestinian-black: #000000;
+      --palestinian-white: #ffffff;
+      --palestinian-hover-red-shadow: rgba(238, 42, 53, 0.25);
+      --palestinian-green-shadow: rgba(0, 151, 54, 0.15);
+      --palestinian-black-shadow-light: rgba(0, 0, 0, 0.1);
+    }
+
+   body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 20px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+  position: relative;
+  overflow-x: hidden;
+  background: linear-gradient(to bottom, 
+              var(--palestinian-black) 0 33.33%, 
+              var(--palestinian-white) 33.33% 66.66%, 
+              var(--palestinian-green) 66.66% 100%);
+}
+
+
+    .main-page-content {
+      width: 100%;
+      max-width: 1100px;
+      display: flex;
+      gap: 20px;
+    }
+
+    .content-column {
+      flex-grow: 1;
+    }
+
+    .preview-column {
+      width: 300px;
+      flex-shrink: 0;
+      position: sticky;
+      top: 20px;
+      height: fit-content;
+      display: none;
+    }
+
+    .preview-column img {
+      width: 100%;
+      height: auto;
+      max-height: 400px;
+      object-fit: contain;
+      border-radius: 8px;
+      border: 2px solid var(--palestinian-green);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    header {
+      width: 100%;
+      margin-bottom: 25px;
+    }
+
+    header h1 {
+      color: var(--palestinian-green);
+      font-size: 1.8em;
+      text-align: left;
+      margin-top: 0;
+      text-shadow: 1px 1px 2px var(--palestinian-black-shadow-light);
+    }
+
+    .buttons-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .button-card {
+      background-color: var(--palestinian-white);
+      border-radius: 8px;
+      border: 1px solid var(--palestinian-black);
+      box-shadow: 0 2px 6px var(--palestinian-green-shadow);
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      color: inherit;
+      position: relative;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    .button-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--palestinian-red);
+      box-shadow: 0 4px 10px var(--palestinian-hover-red-shadow);
+    }
+
+    .button-card img.button-icon {
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+      border-radius: 6px;
+      border: 2px solid var(--palestinian-green);
+      margin-right: 12px;
+      flex-shrink: 0;
+      transition: border-color 0.2s ease;
+    }
+
+    .button-card:hover img.button-icon {
+      border-color: var(--palestinian-red);
+    }
+
+    .button-content {
+      flex-grow: 1;
+      text-align: left;
+    }
+
+    .button-label {
+      font-size: 1em;
+      font-weight: 600;
+      color: var(--palestinian-black);
+      margin-bottom: 2px;
+    }
+
+    .button-tooltip-text {
+      font-size: 0.8em;
+      color: #555;
+      line-height: 1.3;
+    }
+
+    @media (min-width: 992px) {
+      .preview-column {
+        display: block;
+      }
+      header h1 {
+        font-size: 2.2em;
+        color: var(--palestinian-red);
+      }
+    }
+
+    @media (max-width: 991.98px) {
+      .main-page-content {
+        flex-direction: column;
+      }
+    }
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100vh;
+  border-top: 100vh solid transparent;
+  border-right: 200px solid var(--palestinian-red);
+  z-index: 0;
+}
+
+.main-page-content {
+  position: relative;
+  z-index: 1;
+  background-color: rgba(255, 255, 255, 0.85); /* fond légèrement opaque pour la lisibilité */
+  border-radius: 12px;
+  padding: 20px;
+}
+
+  </style>
 </head>
 <body>
-<title>Mon site</title>
-<body>
-<h1>Bienvenue !</h1>
+
+<div class="main-page-content">
+  <div class="content-column">
+    <header>
+      <h1>Apprentissage Interactif</h1>
+    </header>
+
+    <div class="buttons-grid">
+      <!-- Boutons avec data-original-image -->
+      <a href="page1.html" class="button-card" title="Revoir le vocabulaire..." data-original-image="images/Learn-1.png">
+        <img src="images/bouton_Learn-1.png" class="button-icon" alt="">
+        <div class="button-content">
+          <span class="button-label">Quizz - Séquences - Leçons</span>
+          <span class="button-tooltip-text">Quiz sur les séquences, révision...</span>
+        </div>
+      </a>
+
+      <a href="page2.html" class="button-card" title="Mettez en pratique..." data-original-image="images/Learn-2.png">
+        <img src="images/bouton_Learn-2.png" class="button-icon" alt="">
+        <div class="button-content">
+          <span class="button-label">Pronoms arabes</span>
+          <span class="button-tooltip-text">S'exercer à reconnaitre les pronoms.</span>
+        </div>
+      </a>
+
+      <a href="page3.html" class="button-card" title="Pronoms possessifs..." data-original-image="images/Learn-3.png">
+        <img src="images/bouton_Learn-3.png" class="button-icon" alt="">
+        <div class="button-content">
+          <span class="button-label">Pronoms possessifs</span>
+          <span class="button-tooltip-text">S'exercer aux possessifs.</span>
+        </div>
+      </a>
+
+      <a href="page1.html" class="button-card" title="Lettres lunaires / solaires" data-original-image="images/Learn-4.png">
+        <img src="images/bouton_Learn-4.png" class="button-icon" alt="">
+        <div class="button-content">
+          <span class="button-label">Mots solaires - lunaires</span>
+          <span class="button-tooltip-text">Repérer la prononciation correcte.</span>
+        </div>
+      </a>
+
+      <a href="page2.html" class="button-card" title="Les chiffres arabes..." data-original-image="images/Learn-5.png">
+        <img src="images/bouton_Learn-5.png" class="button-icon" alt="">
+        <div class="button-content">
+          <span class="button-label">Exercices sur les chiffres</span>
+          <span class="button-tooltip-text">Reconnaitre les chiffres arabes.</span>
+        </div>
+      </a>
+
+      <a href="page3.html" class="button-card" title="Autres exercices..." data-original-image="images/Learn-6.png">
+        <img src="images/bouton_Learn-6.png" class="button-icon" alt="">
+        <div class="button-content">
+          <span class="button-label">Autres exercices sur les chiffres</span>
+          <span class="button-tooltip-text">Méthodes alternatives d'apprentissage.</span>
+        </div>
+      </a>
+    </div>
+  </div>
+
+<div class="preview-column" id="imagePreviewArea">
+    <img id="previewImageElement" src="" alt="Aperçu" style="display: none;">
+</div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const buttons = document.querySelectorAll('.button-card');
+    const previewImageElement = document.getElementById('previewImageElement');
+    const imagePreviewArea = document.getElementById('imagePreviewArea');
+
+    function isPreviewColumnVisible() {
+        return window.getComputedStyle(imagePreviewArea).display !== 'none';
+    }
+
+    buttons.forEach(button => {
+        button.addEventListener('mouseenter', function () {
+            if (!isPreviewColumnVisible()) return;
+
+            const originalImagePath = this.dataset.originalImage;
+            if (originalImagePath) {
+                previewImageElement.src = originalImagePath;
+                previewImageElement.style.display = 'block';
+            }
+        });
+
+        button.addEventListener('mouseleave', function () {
+            if (!isPreviewColumnVisible()) return;
+
+            previewImageElement.style.display = 'none';
+            previewImageElement.src = '';
+        });
+    });
+});
+</script>
+
 </body>
 </html>
