@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Apprendre la conjugaison du présent en arabe littéraire</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google Fonts for Arabic and Latin scripts -->
+  <!--   <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Segoe+UI:wght@400;700&display=swap" rel="stylesheet">
+   -->  <style>
+:root {
+    /* Couleurs du drapeau */
+    --pal-red: #E4312b;
+    --pal-black: #000000;
+    --pal-white: #FFFFFF;
+    --pal-green: #149954;
+
+    /* Palette interface */
+    --main-bg: var(--pal-white);
+    --container-bg: rgba(255,255,255,0.96);
+    --primary: var(--pal-black);
+    --secondary: #f4f8fc;
+    --accent: #b6d6f6;
+    --success: #1b8a4b;
+    --error: #c0392b;
+    --border-radius: 18px;
+    --shadow: 0 6px 24px rgba(60, 80, 120, 0.11);
+    --focus: var(--pal-red);
+    --transition: 0.3s cubic-bezier(.4,0,.2,1);
+}
+
+
+ body {
+            min-height: 100vh;
+            font-family: 'Quicksand', Arial, sans-serif;
+            background:
+                linear-gradient(to bottom, var(--pal-black) 0 33%, var(--pal-white) 33% 66%, var(--pal-green) 66% 100%),
+                linear-gradient(135deg, var(--pal-red) 0 32%, transparent 32% 100%);
+            color: var(--pal-black);
+            margin: 0;
+            padding: 0;
+            line-height: 1.1;
+        }
+ body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0;
+            width: 30vw; height: 100vh;
+            background: var(--pal-red);
+            clip-path: polygon(0 0, 100% 50%, 0 100%);
+            z-index: 0;
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+
+/* Conteneur principal */
+.container {
+    max-width: 700px;
+    margin: 40px auto 24px auto;
+    background: var(--container-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    padding: 32px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    position: relative;
+    z-index: 2;
+}
+
+h1, h2 {
+    text-align: center;
+    color: var(--pal-red);
+    margin-bottom: 8px;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.07);
+}
+
+.arabic {
+    font-family: 'Amiri', serif;
+    font-size: 1.5em;
+    direction: rtl;
+    display: inline-block;
+}
+
+.question {
+    font-size: 1.2em;
+    margin: 24px 0 16px 0;
+    text-align: center;
+    font-weight: 500;
+}
+
+.choices {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    margin-bottom: 18px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+@media (max-width: 600px) {
+    .choices { flex-direction: column; gap: 8px; }
+}
+
+.choice-btn {
+    background: var(--secondary);
+    border: 2px solid var(--pal-black);
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background var(--transition), color var(--transition), box-shadow var(--transition), border-color var(--transition);
+    min-width: 90px;
+    flex: 1 1 90px;
+    box-shadow: 0 2px 8px rgba(60,80,120,0.04);
+    font-weight: 500;
+    color: var(--primary);
+}
+
+.choice-btn:hover,
+.choice-btn:focus {
+    background: var(--pal-green);
+    color: var(--pal-white);
+    border-color: var(--pal-red);
+    box-shadow: 0 4px 12px rgba(60,80,120,0.10);
+    outline: none;
+}
+
+.feedback {
+    text-align: center;
+    font-size: 1.1em;
+    margin-bottom: 18px;
+    min-height: 28px;
+    transition: color var(--transition);
+}
+
+.feedback.good {
+    color: var(--success);
+    font-weight: bold;
+}
+
+.feedback.bad {
+    color: var(--error);
+    font-weight: bold;
+}
+
+.good-answer {
+    font-size: 1em;
+    color: var(--pal-black);
+    margin-bottom: 10px;
+}
+
+.btn, button {
+    background: var(--pal-red);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 24px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background var(--transition), box-shadow var(--transition);
+    margin: 6px 0;
+    font-weight: 500;
+    box-shadow: 0 2px 8px rgba(60,80,120,0.06);
+}
+
+.btn:hover, button:hover,
+.btn:focus, button:focus {
+    background: var(--pal-black);
+    box-shadow: 0 4px 12px rgba(60,80,120,0.12);
+    outline: none;
+}
+
+.top-bar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.progress {
+    background: var(--pal-white);
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 1em;
+    color: var(--pal-black);
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(60,80,120,0.04);
+    border: 1.5px solid var(--pal-green);
+}
+
+.help-section, .revision-section {
+    background: var(--secondary);
+    border-radius: 12px;
+    padding: 18px 14px;
+    margin-bottom: 18px;
+    display: none;
+    box-shadow: 0 2px 8px rgba(60,80,120,0.04);
+    border-left: 6px solid var(--pal-red);
+}
+
+.help-section ul {
+    margin: 0 0 0 24px;
+}
+
+.help-section li {
+    margin-bottom: 7px;
+}
+
+.show {
+    display: block !important;
+}
+
+.toggle-link {
+    color: var(--pal-red);
+    background: none;
+    border: none;
+    font-size: 1em;
+    cursor: pointer;
+    text-decoration: underline;
+    margin: 0 8px;
+    padding: 0;
+    transition: color var(--transition);
+}
+
+.toggle-link:hover,
+.toggle-link:focus {
+    color: var(--pal-black);
+    outline: none;
+    background:: var(--pal-black);
+}
+
+/* === COMBOS (SELECT) LISIBLES ET CONTRASTES === */
+.verb-select, select {
+    margin: 0 0 0 8px;
+    font-size: 1em;
+    padding: 7px 10px;
+    border-radius: 8px;
+    border: 2px solid var(--pal-black);
+    background: var(--pal-white);
+    color: var(--pal-black);
+    transition: border-color var(--transition), box-shadow var(--transition), background var(--transition), color var(--transition);
+    box-shadow: 0 2px 8px rgba(60,80,120,0.04);
+    appearance: none;
+    font-weight: 500;
+    min-width: 120px;
+    outline: none;
+    cursor: pointer;
+    position: relative;
+    z-index: 2;
+}
+
+/* Icône flèche personnalisée pour select */
+.verb-select, select {
+    background-image:
+      linear-gradient(45deg, transparent 49%, var(--pal-black) 51%),
+      linear-gradient(135deg, var(--pal-black) 51%, transparent 49%);
+    background-position:
+      calc(100% - 18px) calc(1em + 2px),
+      calc(100% - 13px) calc(1em + 2px);
+    background-size: 5px 5px, 5px 5px;
+    background-repeat: no-repeat;
+    padding-right: 32px;
+}
+
+/* Survol et focus visibles */
+.verb-select:hover, select:hover,
+.verb-select:focus, select:focus {
+    border-color: var(--pal-red);
+    background: var(--pal-green);
+    color: var(--pal-white);
+    box-shadow: 0 0 0 3px rgba(228,49,43,0.12);
+}
+
+.verb-select option, select option {
+    color: var(--pal-black);
+    background: var(--pal-white);
+}
+
+/* Option sélectionnée */
+.verb-select option:checked, select option:checked {
+    background: var(--pal-green);
+    color: var(--pal-white);
+}
+
+/* Pour forcer le contraste sur certains navigateurs */
+.verb-select:active, select:active {
+    border-color: var(--pal-red);
+}
+/* Tableaux */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 8px;
+    background: var(--pal-white);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(60,80,120,0.04);
+}
+
+th, td {
+    border: 1px solid #e0e7ef;
+    padding: 7px 4px;
+    text-align: center;
+    font-size: 1em;
+}
+
+th {
+    background: var(--pal-green);
+    color: var(--pal-white);
+    font-weight: bold;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 8px;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .container { max-width: 96vw; }
+}
+
+@media (max-width: 600px) {
+    .container { padding: 12px 2px; }
+    h1 { font-size: 1.3em; }
+    .top-bar { flex-direction: column; gap: 8px; }
+    .help-section, .revision-section { padding: 10px 2px; }
+    th, td { font-size: 0.95em; }
+    .choices { flex-direction: column; gap: 8px; }
+}
+
+@media (max-width: 400px) {
+    .container { padding: 4vw 1vw; }
+    .choice-btn, .btn, button, select { font-size: 0.95em; padding: 8px 10px; }
+}
+
+/* Animation douce pour changement de question */
+.question,
+.choice-btn,
+.feedback {
+    transition: all 0.35s cubic-bezier(.4,0,.2,1);
+}
+
+.question.fade-out {
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+    pointer-events: none;
+}
+
+.question.fade-in {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+/* Accessibilité focus visible */
+button:focus-visible,
+.choice-btn:focus-visible,
+.toggle-link:focus-visible,
+.verb-select:focus-visible, select:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+}
+
+/* Inputs harmonisés */
+input[type="number"], input[type="text"] {
+    border: 2px solid var(--pal-green);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 1em;
+    background: #f8fafc;
+    color: var(--pal-black);
+    transition: border-color var(--transition);
+}
+
+input[type="number"]:focus,
+input[type="text"]:focus {
+    border-color: var(--pal-red);
+    outline: none;
+}
+
+/* Pour les modales ou overlays éventuels */
+.modal {
+    background: var(--pal-white);
+    border-radius: 18px;
+    box-shadow: var(--shadow);
+    padding: 24px 16px;
+    max-width: 90vw;
+    margin: 10vh auto;
+}
+
+/* Sections ou cartes */
+.section,
+.card {
+    background: var(--secondary);
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(60,80,120,0.04);
+    padding: 18px 14px;
+    margin-bottom: 18px;
+    border-left: 6px solid var(--pal-red);
+}
+
+.menu-hamburger {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 1000;
+}
+
+.menu-icon {
+  display: flex;
+  flex-direction: column;
+  width: 36px;
+  height: 36px;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.menu-icon span {
+  height: 4px;
+  width: 100%;
+  background: #333;
+  margin: 4px 0;
+  border-radius: 2px;
+  transition: all 0.3s;
+}
+
+#menu-toggle {
+  display: none;
+}
+
+.menu {
+  position: fixed;
+  top: 0;
+  left: -220px;
+  width: 200px;
+  height: 100vh;
+  background: #fff;
+  box-shadow: 2px 0 12px rgba(0,0,0,0.05);
+  padding-top: 60px;
+  list-style: none;
+  transition: left 0.3s;
+  font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+.menu li {
+  margin: 0;
+  padding: 0;
+}
+
+.menu li a {
+  display: block;
+  padding: 16px 24px;
+  color: #333;
+  text-decoration: none;
+ font-size: 0.9rem;
+  transition: background 0.2s, color 0.2s;
+}
+
+.menu li a:hover {
+  background: #f0f0f0;
+  color: #007bff;
+}
+
+#menu-toggle:checked ~ .menu {
+  left: 0;
+}
+
+/* Animation hamburger */
+#menu-toggle:checked + .menu-icon span:nth-child(1) {
+  transform: rotate(45deg) translate(6px, 6px);
+}
+#menu-toggle:checked + .menu-icon span:nth-child(2) {
+  opacity: 0;
+}
+#menu-toggle:checked + .menu-icon span:nth-child(3) {
+  transform: rotate(-45deg) translate(7px, -7px);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .menu {
+    width: 80vw;
+    min-width: 160px;
+    max-width: 320px;
+  }
+  .menu-icon {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+
+
+
+    </style>
+</head>
+<body>
+ <ul class="menu">
+    <li><a href="../index.html">Accueil</a></li>
+    <li><a href="ar50.html">Séquences & Leçons</a></li>
+    <li><a href="pronoms.html">Pronoms</a></li>
+    <li><a href="pronomsPossessifs.html">Possessifs</a></li>
+    <li><a href="LunaireSolaire.html">Lettres Lunaires/Solaires</a></li>
+    <li><a href="chiffres.3.html">Exercice Chiffres </a></li>
+    <li><a href="ChiffresEx.3.4.html">Autres Exercice Chiffres</a></li> </ul>
+    <li><a href="Verb.1.1.html">Conjugaison (1er verbes)</a></li> </ul>
+    <li><a href="PageUnderConstruction">Suite...</a></li> </ul>
+ 
+    <div class="container">
+        <h1>Conjugaison du Présent ou Passé en Arabe Littéraire</h1>
+        <div class="top-bar">
+            <div>
+                <button class="toggle-link" onclick="toggleHelp()">Aide</button>
+                <button class="toggle-link" onclick="toggleRevision()">Révision</button>
+            </div>
+            <div>
+                <label for="verbSelect" style="color:var(--primary);font-weight:600;">Verbe :</label>
+                <select id="verbSelect" class="verb-select" onchange="changeVerb()">
+                    <option value="درس">étudier (دَرَسَ)</option>
+                    <option value="كتب">écrire (كَتَبَ)</option>
+                    <option value="قرأ">lire (قَرَأَ)</option>
+                    <option value="فتح">ouvrir (فَتَحَ)</option>
+                </select>
+                <label for="tenseSelect" style="color:var(--primary);font-weight:600;">Temps :</label>
+                <select id="tenseSelect" class="verb-select" onchange="changeTense()">
+                    <option value="present">présent</option>
+                    <option value="passe">passé</option>
+                </select>
+
+            </div>
+            <div class="progress" id="progressBar">
+                Bonnes réponses : <span id="goodCount">0</span> |
+                Erreurs : <span id="errorCount">0</span> |
+                Réussite : <span id="successRate">0%</span>
+            </div>
+        </div>
+
+        <!-- Section d'aide -->
+        <div class="help-section" id="helpSection">
+            <h2>Règles de conjugaison du présent en arabe</h2>
+            <ul>
+                <li><b>Préfixes :</b> Chaque personne utilise un préfixe :
+                    <ul>
+                        <li><span class="arabic">أَـ</span> (a-) pour <b>je</b> (أنا)</li>
+                        <li><span class="arabic">نَـ</span> (na-) pour <b>nous</b> (نحن)</li>
+                        <li><span class="arabic">تَـ</span> (ta-) pour <b>tu/vous</b> (أنتَ/أنتِ/أنتم/أنتنّ)</li>
+                        <li><span class="arabic">يَـ</span> (ya-) pour <b>il/ils/elles</b> (هو/هم/هنّ)</li>
+                    </ul>
+                </li>
+                <li><b>Suffixes :</b> Certaines personnes prennent un suffixe :
+                    <ul>
+                        <li><span class="arabic">ينَ</span> (ina) pour <b>tu (F)</b></li>
+                        <li><span class="arabic">انِ</span> (ani) pour <b>le duel</b></li>
+                        <li><span class="arabic">ونَ</span> (una) pour <b>pluriel masculin</b></li>
+                        <li><span class="arabic">نَ</span> (na) pour <b>pluriel féminin</b></li>
+                    </ul>
+                </li>
+                <li><b>Diacritiques :</b> Les voyelles courtes (fatha, damma, kasra) indiquent la prononciation correcte et sont essentielles pour distinguer les formes.</li>
+                <li><b>Exemple :</b> Pour <b>je</b> (أنا) : <span class="arabic">أَدْرُسُ</span> (j'étudie)</li>
+            </ul>
+            <p style="font-size:0.95em;color:#444;">Pour chaque verbe régulier, la racine reste la même et seuls les préfixes/suffixes changent selon la personne.</p>
+        </div>
+
+        <!-- Section révision -->
+        <div class="revision-section" id="revisionSection"></div>
+
+        <!-- Exercice interactif -->
+        <div id="exercise"></div>
+        <button class="btn" onclick="newExercise()">Nouvel exercice</button>
+    </div>
+
+    <script>
+        // Tableaux de conjugaison pour chaque verbe régulier (avec diacritiques)
+        // Les racines sont : درس (étudier), كتب (écrire), قرأ (lire), فتح (ouvrir)
+        // Les voyelles sont adaptées pour chaque verbe régulier
+        const verbs = {
+            "درس": {
+                "fr": "étudier",
+                "table": [
+                    // [pronom français, pronom arabe, verbe conjugué]
+                    ["je", "أنا", "أَدْرُسُ"],
+                    ["nous", "نَحْنُ", "نَدْرُسُ"],
+                    ["tu (M)", "أَنْتَ", "تَدْرُسُ"],
+                    ["tu (F)", "أَنْتِ", "تَدْرُسِينَ"],
+                    ["vous deux", "أَنْتُمَا", "تَدْرُسَانِ"],
+                    ["vous (M)", "أَنْتُمْ", "تَدْرُسُونَ"],
+                    ["vous (F)", "أَنْتُنَّ", "تَدْرُسْنَ"],
+                    ["il", "هُوَ", "يَدْرُسُ"],
+                    ["elle", "هِيَ", "تَدْرُسُ"],
+                    ["eux deux (M)", "هُمَا", "يَدْرُسَانِ"],
+                    ["elles deux (F)", "هُمَا", "تَدْرُسَانِ"],
+                    ["ils", "هُمْ", "يَدْرُسُونَ"],
+                    ["elles", "هُنَّ", "يَدْرُسْنَ"]
+                ]
+            },
+            "كتب": {
+                "fr": "écrire",
+                "table": [
+                    ["je", "أنا", "أَكْتُبُ"],
+                    ["nous", "نَحْنُ", "نَكْتُبُ"],
+                    ["tu (M)", "أَنْتَ", "تَكْتُبُ"],
+                    ["tu (F)", "أَنْتِ", "تَكْتُبِينَ"],
+                    ["vous deux", "أَنْتُمَا", "تَكْتُبَانِ"],
+                    ["vous (M)", "أَنْتُمْ", "تَكْتُبُونَ"],
+                    ["vous (F)", "أَنْتُنَّ", "تَكْتُبْنَ"],
+                    ["il", "هُوَ", "يَكْتُبُ"],
+                    ["elle", "هِيَ", "تَكْتُبُ"],
+                    ["eux deux (M)", "هُمَا", "يَكْتُبَانِ"],
+                    ["elles deux (F)", "هُمَا", "تَكْتُبَانِ"],
+                    ["ils", "هُمْ", "يَكْتُبُونَ"],
+                    ["elles", "هُنَّ", "يَكْتُبْنَ"]
+                ]
+            },
+            "قرأ": {
+                "fr": "lire",
+                "table": [
+                    ["je", "أنا", "أَقْرَأُ"],
+                    ["nous", "نَحْنُ", "نَقْرَأُ"],
+                    ["tu (M)", "أَنْتَ", "تَقْرَأُ"],
+                    ["tu (F)", "أَنْتِ", "تَقْرَئِينَ"],
+                    ["vous deux", "أَنْتُمَا", "تَقْرَآنِ"],
+                    ["vous (M)", "أَنْتُمْ", "تَقْرَؤُونَ"],
+                    ["vous (F)", "أَنْتُنَّ", "تَقْرَأْنَ"],
+                    ["il", "هُوَ", "يَقْرَأُ"],
+                    ["elle", "هِيَ", "تَقْرَأُ"],
+                    ["eux deux (M)", "هُمَا", "يَقْرَآنِ"],
+                    ["elles deux (F)", "هُمَا", "تَقْرَآنِ"],
+                    ["ils", "هُمْ", "يَقْرَؤُونَ"],
+                    ["elles", "هُنَّ", "يَقْرَأْنَ"]
+                ]
+            },
+            "فتح": {
+                "fr": "ouvrir",
+                "table": [
+                    ["je", "أنا", "أَفْتَحُ"],
+                    ["nous", "نَحْنُ", "نَفْتَحُ"],
+                    ["tu (M)", "أَنْتَ", "تَفْتَحُ"],
+                    ["tu (F)", "أَنْتِ", "تَفْتَحِينَ"],
+                    ["vous deux", "أَنْتُمَا", "تَفْتَحَانِ"],
+                    ["vous (M)", "أَنْتُمْ", "تَفْتَحُونَ"],
+                    ["vous (F)", "أَنْتُنَّ", "تَفْتَحْنَ"],
+                    ["il", "هُوَ", "يَفْتَحُ"],
+                    ["elle", "هِيَ", "تَفْتَحُ"],
+                    ["eux deux (M)", "هُمَا", "يَفْتَحَانِ"],
+                    ["elles deux (F)", "هُمَا", "تَفْتَحَانِ"],
+                    ["ils", "هُمْ", "يَفْتَحُونَ"],
+                    ["elles", "هُنَّ", "يَفْتَحْنَ"]
+                ]
+            },
+            "درس_passe": {
+    "fr": "étudier (passé)",
+    "table": [
+        ["je", "أنا", "دَرَسْتُ"],
+        ["nous", "نَحْنُ", "دَرَسْنَا"],
+        ["tu (M)", "أَنْتَ", "دَرَسْتَ"],
+        ["tu (F)", "أَنْتِ", "دَرَسْتِ"],
+        ["vous deux", "أَنْتُمَا", "دَرَسْتُمَا"],
+        ["vous (M)", "أَنْتُمْ", "دَرَسْتُمْ"],
+        ["vous (F)", "أَنْتُنَّ", "دَرَسْتُنَّ"],
+        ["il", "هُوَ", "دَرَسَ"],
+        ["elle", "هِيَ", "دَرَسَتْ"],
+        ["eux deux (M)", "هُمَا", "دَرَسَا"],
+        ["elles deux (F)", "هُمَا", "دَرَسَتَا"],
+        ["ils", "هُمْ", "دَرَسُوا"],
+        ["elles", "هُنَّ", "دَرَسْنَ"]
+    ]
+}
+
+        };
+
+        // Variables d'état
+        let currentVerb = "درس";
+        let currentQuestion = {};
+        let goodCount = 0, errorCount = 0, totalCount = 0;
+
+        let currentTense = "present";
+
+
+        // Utilitaires
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+
+function changeVerb() {
+    currentVerb = document.getElementById('verbSelect').value;
+    currentTense = document.getElementById('tenseSelect').value;
+    showRevision();
+    newExercise();
+}
+
+
+function changeTense() {
+    currentTense = document.getElementById('tenseSelect').value;
+    showRevision();
+    newExercise();
+}
+
+
+
+        function updateProgress() {
+            const total = goodCount + errorCount;
+            const percent = total ? Math.round(100 * goodCount / total) : 0;
+            document.getElementById('goodCount').textContent = goodCount;
+            document.getElementById('errorCount').textContent = errorCount;
+            document.getElementById('successRate').textContent = percent + "%";
+        }
+
+        function toggleHelp() {
+            document.getElementById('helpSection').classList.toggle('show');
+        }
+
+        function toggleRevision() {
+            const section = document.getElementById('revisionSection');
+            if (!section.classList.contains('show')) {
+                showRevision();
+            }
+            section.classList.toggle('show');
+        }
+
+        function showRevision() {
+            const table = verbs[currentVerb].table;
+            let html = `<h2>Tableau de conjugaison du verbe "${verbs[currentVerb].fr}"</h2>
+                <table>
+                <tr>
+                    <th>Pronom (français)</th>
+                    <th>Pronom (arabe)</th>
+                    <th>Forme conjuguée</th>
+                </tr>`;
+            for (let row of table) {
+                html += `<tr>
+                    <td>${row[0]}</td>
+                    <td><span class="arabic">${row[1]}</span></td>
+                    <td><span class="arabic">${row[2]}</span></td>
+                </tr>`;
+            }
+            html += `</table>`;
+            document.getElementById('revisionSection').innerHTML = html;
+        }
+
+        function changeVerb() {
+            currentVerb = document.getElementById('verbSelect').value;
+            showRevision();
+            newExercise();
+        }
+
+        function newExercise() {
+            // Générer une nouvelle question
+            const data = verbs[currentVerb].table;
+            const idx = Math.floor(Math.random() * data.length);
+            currentQuestion = data[idx];
+
+            // Générer de fausses réponses
+            let choices = [currentQuestion[2]];
+            while (choices.length < 4) {
+                let candidate = data[Math.floor(Math.random() * data.length)][2];
+                if (!choices.includes(candidate)) choices.push(candidate);
+            }
+            choices = shuffle(choices);
+
+            // Afficher la question et les choix
+            document.getElementById('exercise').innerHTML = `
+                <div class="question">
+                    Quelle est la forme correcte du verbe <b>${verbs[currentVerb].fr}</b> au présent pour :<br>
+                    <span style="color:var(--primary);font-weight:bold;">${currentQuestion[0]} (<span class="arabic">${currentQuestion[1]}</span>)</span> ?
+                </div>
+                <div class="choices">
+                    ${choices.map(choice =>
+                        `<button class="choice-btn" onclick="checkAnswer('${choice.replace(/'/g, "\\'")}')">
+                            <span class="arabic">${choice}</span>
+                        </button>`
+                    ).join('')}
+                </div>
+                <div id="feedback" class="feedback"></div>
+            `;
+            document.getElementById('feedback').innerHTML = '';
+        }
+
+        function checkAnswer(selected) {
+            const feedback = document.getElementById('feedback');
+            if (selected === currentQuestion[2]) {
+                feedback.innerHTML = "<span class='good-answer'>Bonne réponse !</span>";
+                feedback.className = "feedback good";
+                goodCount++;
+                totalCount++;
+                updateProgress();
+                setTimeout(newExercise, 1200);
+              
+            } else {
+                feedback.innerHTML = `Mauvaise réponse.<br>La bonne réponse était : <span class="arabic">${currentQuestion[2]}</span>`;
+                feedback.className = "feedback bad";
+                errorCount++;
+                totalCount++;
+                updateProgress();
+            }
+        }
+
+        // Initialisation
+        window.onload = function() {
+            updateProgress();
+            showRevision();
+            newExercise();
+        };
+    </script>
+</body>
+</html>

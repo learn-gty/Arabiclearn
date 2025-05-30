@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page Under Construction | [LEARN-GTY]</title>
+  <style>
+    /* Styles existants du site */
+    .maintenance-container {
+      max-width: 800px;
+      margin: 5% auto;
+      padding: 2rem;
+      text-align: center;
+      font-family: 'Segoe UI', system-ui;
+    }
+    .construction-icon {
+      width: 120px;
+      opacity: 0.9;
+      margin: 2rem auto;
+    }
+    .countdown {
+      font-size: 2.5rem;
+      color: #2c3e50;
+      margin: 2rem 0;
+    }
+    .notification-box {
+      background: #f8f9fa;
+      border-left: 4px solid #3498db;
+      padding: 1.5rem;
+      margin: 2rem 0;
+    }
+
+
+.menu-hamburger {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 1000;
+}
+
+.menu-icon {
+  display: flex;
+  flex-direction: column;
+  width: 36px;
+  height: 36px;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.menu-icon span {
+  height: 4px;
+  width: 100%;
+  background: #333;
+  margin: 4px 0;
+  border-radius: 2px;
+  transition: all 0.3s;
+}
+
+#menu-toggle {
+  display: none;
+}
+
+.menu {
+  position: fixed;
+  top: 0;
+  left: -220px;
+  width: 200px;
+  height: 100vh;
+  background: #fff;
+  box-shadow: 2px 0 12px rgba(0,0,0,0.05);
+  padding-top: 60px;
+  list-style: none;
+  transition: left 0.3s;
+  font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+.menu li {
+  margin: 0;
+  padding: 0;
+}
+
+.menu li a {
+  display: block;
+  padding: 16px 24px;
+  color: #333;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: background 0.2s, color 0.2s;
+}
+
+.menu li a:hover {
+  background: #f0f0f0;
+  color: #007bff;
+}
+
+#menu-toggle:checked ~ .menu {
+  left: 0;
+}
+
+/* Animation hamburger */
+#menu-toggle:checked + .menu-icon span:nth-child(1) {
+  transform: rotate(45deg) translate(6px, 6px);
+}
+#menu-toggle:checked + .menu-icon span:nth-child(2) {
+  opacity: 0;
+}
+#menu-toggle:checked + .menu-icon span:nth-child(3) {
+  transform: rotate(-45deg) translate(7px, -7px);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .menu {
+    width: 80vw;
+    min-width: 160px;
+    max-width: 320px;
+  }
+  .menu-icon {
+    width: 32px;
+    height: 32px;
+  }
+}
+  </style>
+</head>
+<body>
+ <ul class="menu">
+    <li><a href="../index.html">Accueil</a></li>
+    <li><a href="ar50.html">Séquences & Leçons</a></li>
+    <li><a href="pronoms.html">Pronoms</a></li>
+    <li><a href="pronomsPossessifs.html">Possessifs</a></li>
+    <li><a href="LunaireSolaire.html">Lettres Lunaires/Solaires</a></li>
+    <li><a href="chiffres.3.html">Exercice Chiffres </a></li>
+    <li><a href="ChiffresEx.3.4.html">Autres Exercice Chiffres</a></li> </ul>
+    <li><a href="Verb.1.1.html">Conjugaison (1er verbes)</a></li> </ul>
+    <li><a href="PageUnderConstruction">Suite...</a></li> </ul>
+
+  <div class="maintenance-container">
+    <svg class="construction-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <path d="M23 7V13H18.54C17.63 14.2 16.36 15 15 15C12.8 15 11 13.2 11 11C11 9.8 11.8 8.8 13 8.2V3H15V5H23V7M13 9C12.4 9 12 9.4 12 10C12 10.6 12.4 11 13 11C13.6 11 14 10.6 14 10C14 9.4 13.6 9 13 9M1 7V13H5.46C6.37 14.2 7.64 15 9 15C11.2 15 13 13.2 13 11C13 9.8 12.2 8.8 11 8.2V3H9V5H1V7M11 9C10.4 9 10 9.4 10 10C10 10.6 10.4 11 11 11C11.6 11 12 10.6 12 10C12 9.4 11.6 9 11 9Z"/>
+    </svg>
+    
+    <h1>Page Under Construction</h1>
+    
+    <div class="notification-box">
+      <p>We're currently working hard to improve this section of our website. Expected completion:</p>
+      <div class="countdown" id="countdown">14d 06h 23m 45s</div>
+    </div>
+
+    <p>In the meantime, feel free to:</p>
+    <div class="actions">
+      <a href="mailto:support@domain.com" class="contact-link">Contact Support</a>
+      <a href="index.html" class="home-link">Return to Homepage</a>
+    </div>
+  </div>
+
+  <script>
+    // Date cible : 15 juillet 2024 à 09:00 UTC
+    const targetDate = new Date('2025-07-15T09:00:00Z').getTime();
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const distance = targetDate - now;
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      document.getElementById('countdown').innerHTML = 
+        `${days}d ${hours}h ${minutes}m ${seconds}s`;
+
+      if (distance < 0) {
+        clearInterval(countdownInterval);
+        document.getElementById('countdown').innerHTML = "Update Completed!";
+      }
+    }
+
+    const countdownInterval = setInterval(updateCountdown, 1000);
+  </script>
+</body>
+</html>
