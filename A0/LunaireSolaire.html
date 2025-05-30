@@ -385,7 +385,9 @@ input[type="checkbox"] {
   }
 }
 
-
+.hide-col {
+  display: none;
+}
 
 </style>
 
@@ -438,7 +440,7 @@ input[type="checkbox"] {
                 <tr>
                     <th>Mot Arabe</th>
                     <th>Français</th>
-                    <th>Translittération</th>
+                    <th class="hide-col">Translittération</th>
                     <th>Sélection</th>
                 </tr>
             </thead>
@@ -714,7 +716,7 @@ input[type="checkbox"] {
                 <tr style="animation-delay: ${index * 0.1}s">
                     <td>${word.arabic}</td>
                     <td>${word.french}</td>
-                    <td>${word.translit}</td>
+                    <td class="hide-col">${word.translit}</td>
                     <td><input type="checkbox"></td>
                 </tr>
             `).join('');
@@ -729,7 +731,7 @@ input[type="checkbox"] {
             document.getElementById('feedback').innerHTML = '';
         }
 
-        function checkAnswers() {
+   /*     function checkAnswers() {
             const checkboxes = document.querySelectorAll('#tableBody input[type="checkbox"]');
             const feedback = document.getElementById('feedback');
             feedback.innerHTML = '';
@@ -782,6 +784,61 @@ input[type="checkbox"] {
 
             document.getElementById('checkBtn').disabled = true;
         }
+*/
+
+function checkAnswers() {
+    const checkboxes = document.querySelectorAll('#tableBody input[type="checkbox"]');
+    const feedback = document.getElementById('feedback');
+    feedback.innerHTML = '';
+    
+    let correctAnswers = 0;
+    let totalQuestions = checkboxes.length;
+    let errors = [];
+
+    checkboxes.forEach((checkbox, index) => {
+        const row = checkbox.closest('tr');
+        const arabicWord = row.cells[0].textContent;
+        const translit = row.cells[2].textContent;
+        const targetLetter = getTargetLetter(arabicWord);
+        
+        const isLunar = getLunarLetters().includes(targetLetter);
+        const shouldBeSelected = (currentQuestionType === 'lunar') === isLunar;
+
+        setTimeout(() => {
+            if(checkbox.checked === shouldBeSelected) {
+                correctAnswers++;
+                row.classList.add('correct-row');
+            } else {
+                row.classList.add('incorrect-row');
+                const wordType = isLunar ? 'lunaire' : 'solaire';
+                const expectedAction = shouldBeSelected ? 'cocher' : 'ne pas cocher';
+                errors.push(`${arabicWord} (${translit}) : lettre ${targetLetter} — ${wordType} ➤ Il fallait ${expectedAction}`);
+            }
+
+            if(index === checkboxes.length - 1) {
+                setTimeout(() => {
+                    stats.total++;
+                    if (correctAnswers === totalQuestions) {
+                        stats.correct++;
+                        stats.streak++;
+                        showSuccessMessage(correctAnswers, totalQuestions);
+                        setTimeout(() => {
+                            generateExercise();
+                        }, 3000);
+                    } else {
+                        stats.errors++;
+                        stats.streak = 0;
+                        showErrorMessage(errors, correctAnswers, totalQuestions);
+                    }
+                    updateStats();
+                }, 500);
+            }
+        }, index * 100);
+    });
+
+    document.getElementById('checkBtn').disabled = true;
+}
+
 
         function showSuccessMessage(correct, total) {
             const feedback = document.getElementById('feedback');
