@@ -188,9 +188,112 @@ body::before {
 }
 
 
-  </style>
+/* Bouton discret : bleu, arrondi, petit, texte blanc, effet au survol */
+.btn-descriptif {
+  background: var(--palestinian-green);
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  padding: 0.35em 1em 0.35em 0.7em;
+  font-size: 1em;
+  cursor: pointer;
+  opacity: 0.85;
+  transition: background 0.2s, opacity 0.2s;
+  box-shadow: 0 1px 4px rgba(59,130,246,0.10);
+  margin: 0.5em 0.5em 0.5em 0;
+  vertical-align: middle;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+}
+.btn-descriptif:hover,
+.btn-descriptif:focus {
+  background: var(--palestinian-red);
+  opacity: 1;
+  outline: none;
+}
+
+/* Popup responsive */
+.modal-descriptif {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0; top: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.3);
+  align-items: center; justify-content: center;
+  overflow: auto;
+}
+.modal-descriptif.open {
+  display: flex;
+}
+.modal-content {
+  background: #fff;
+  border-radius: 12px;
+  max-width: 95vw;
+  width: 420px;
+  max-height: 90vh;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.15);
+  position: relative;
+  padding: 1.2em 1em 1em 1em;
+  display: flex;
+  flex-direction: column;
+}
+.close-descriptif {
+  position: absolute;
+  top: 0.7em; right: 0.7em;
+  background: none; border: none;
+  font-size: 2em; color: #888;
+  cursor: pointer;
+  width: 44px; height: 44px;
+  line-height: 1;
+}
+.modal-scroll {
+  overflow-y: auto;
+  flex: 1;
+  padding-right: 0.5em;
+  font-size: 1.08em;
+  line-height: 1.7;
+  max-height: 70vh;
+}
+@media (max-width: 600px) {
+  .modal-content {
+    width: 98vw; max-width: 98vw; padding: 0.9em 0.3em 0.5em 0.3em;
+  }
+  .modal-scroll { max-height: 62vh; font-size: 1em;}
+  .close-descriptif { top: 0.4em; right: 0.4em; }
+}
+
+.fermer-descriptif {
+  margin: 1.2em auto 0.5em auto;
+  background: var(--palestinian-green);
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  padding: 0.5em 2.2em;
+  font-size: 1.1em;
+  cursor: pointer;
+  opacity: 0.93;
+  transition: background 0.2s, opacity 0.2s;
+  box-shadow: 0 1px 4px rgba(59,130,246,0.10);
+  display: block;
+}
+.fermer-descriptif:hover,
+.fermer-descriptif:focus {
+  background:var(--palestinian-red);
+  opacity: 1;
+  outline: none;
+}
+ </style>
 </head>
 <body>
+
+<button id="open-descriptif"
+  aria-label="Descriptif du site"
+  class="btn-descriptif">
+  <span aria-hidden="true" style="font-size:1.1em;">&#9432;</span>
+  descriptif
+</button>
 
 <div class="main-page-content">
   <div class="content-column">
@@ -335,6 +438,759 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 
+</script>
+
+
+<!-- Popup modal -->
+<div id="descriptif-modal" class="modal-descriptif" aria-modal="true" role="dialog" tabindex="-1">
+  <div class="modal-content">
+    <button class="fermer-descriptif" aria-label="Fermer la fenêtre du descriptif">Fermer</button>
+    <button class="close-descriptif" aria-label="Fermer le descriptif">&times;</button>
+
+    <div class="modal-scroll">
+
+
+<p style="line-height: 100%; margin-bottom: 0cm">
+<br/>
+
+</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<h1 class="western">Quizz - Séquences - Leçons</h1>
+<p style=" line-height: 80%; margin-bottom: 0cm">Accès à des quiz
+interactifs sur les séquences et à la révision structurée des
+leçons d’arabe littéraire.</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<p style=" line-height: 80%; margin-bottom: 0cm">Cette page constitue
+le point central de navigation et d’apprentissage de la plateforme,
+avec deux modes principaux : Quiz et Leçons/Séquences. Voici une
+fiche d’emploi détaillée pour chaque mode et les boutons associés
+:</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<h2 class="western">1. Mode Quiz</h2>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<p style=" line-height: 80%; margin-bottom: 0cm">Principe : Ce mode
+permet de s’entraîner à la compréhension orale et écrite à
+travers des quiz interactifs. Selon les réglages, l’utilisateur
+doit écouter un son (mot ou phrase en arabe) puis, après un délai
+choisi (2s, 5s, etc.), la traduction s’affiche en français ou en
+arabe.</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<h3 class="western">Boutons et réglages :</h3>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<blockquote>Audio - <font face="Noto Sans Devanagari"><span lang="hi-IN">صَوْتِيٌّ
+</span></font>: Active ou désactive la lecture automatique du son
+associé à chaque question.</blockquote>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<blockquote>Langue (FR / AR) : Choisit la langue d’affichage des
+réponses ou des consignes (français ou arabe).</blockquote>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<blockquote>Délai (1s, 3s, 5s) : Détermine le temps d’attente
+entre l’écoute du son et l’affichage de la réponse, permettant
+d’ajuster la difficulté ou le rythme de travail.</blockquote>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<blockquote>Ordre (bouton d’ordre) : Permet de choisir si le son
+est joué avant l’affichage du texte ou inversement. Cela aide à
+travailler la compréhension orale (son avant texte) ou la
+reconnaissance écrite (texte avant son).</blockquote>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<blockquote>Utilisation rapide : Sélectionnez le mode Quiz, réglez
+le délai et l’ordre selon votre préférence, puis lancez
+l’exercice. À chaque question, écoutez le son, attendez le délai
+choisi, puis vérifiez la réponse affichée pour vous auto-évaluer.</blockquote>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<h2 class="western">2. Mode Leçons/Séquences</h2>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<h3 class="western">Principe : 
+</h3>
+<blockquote>Ce mode est orienté « cours » : il permet de revoir de
+façon structurée les leçons et séquences, avec accès direct aux
+contenus pédagogiques et aux sons associés.</blockquote>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<blockquote>Boutons et navigation :</blockquote>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<blockquote>Séquences &amp; Leçons : Accède à la liste des
+séquences ou des leçons disponibles. Chaque élément propose un
+contenu explicatif accompagné de l’audio correspondant, pour
+travailler à la fois la compréhension écrite et orale.</blockquote>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<blockquote>Audio : Pour chaque leçon ou séquence, un bouton permet
+d’écouter le son associé (mot, phrase, règle, etc.), favorisant
+la mémorisation auditive.</blockquote>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<blockquote>Navigation : Passez d’une séquence à l’autre ou
+d’une leçon à l’autre via les boutons du menu principal.</blockquote>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<blockquote>Utilisation rapide : Cliquez sur « Séquences » ou «
+Leçons », puis sélectionnez le contenu souhaité. Lisez
+l’explication, écoutez l’audio associé, et passez à la suite à
+votre rythme.</blockquote>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<h3 class="western">Résumé des boutons principaux :</h3>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<blockquote>Accueil : Retour au menu principal.</blockquote>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<blockquote>Séquences &amp; Leçons, Pronoms, Possessifs, Lettres
+Lunaires/Solaires, Exercice Chiffres, Autres Exercice Chiffres,
+Conjugaison (1er verbes), Suite… : Accès direct aux différents
+modules thématiques.</blockquote>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<blockquote>Audio, Langue, Délai, Ordre : Réglages spécifiques
+pour personnaliser votre expérience d’apprentissage</blockquote>
+<h1 class="western">Pronoms arabes</h1>
+<p style=" line-height: 80%; margin-bottom: 0cm">Module
+d’entraînement pour reconnaître et utiliser correctement les
+pronoms personnels en arabe.</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<p style=" line-height: 80%; margin-bottom: 0cm">Cette page est
+dédiée à l’apprentissage des pronoms arabes. Voici les
+fonctionnalités principales :</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<h2 class="western">Tableau des pronoms : 
+</h2>
+<p style=" line-height: 80%; margin-bottom: 0cm">Un tableau
+interactif présente les pronoms en français et en arabe, facilitant
+la mémorisation et la comparaison.</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<h3 class="western">Modes d’apprentissage : 
+</h3>
+<blockquote>Plusieurs modes sont disponibles, sélectionnables par
+boutons radio :</blockquote>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<blockquote>Français → Arabe : voir le pronom en français et
+deviner/trouver l’équivalent en arabe.</blockquote>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<blockquote>Arabe → Français : l’inverse.</blockquote>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<blockquote>Français → Translittération et autres combinaisons :
+pour travailler la correspondance entre l’écriture, la
+prononciation et la traduction.</blockquote>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<blockquote>Quiz : Deux types de quiz sont proposés : par mode
+d’apprentissage (pour cibler une direction de traduction) ou global
+(pour tout mélanger).</blockquote>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<blockquote>Réglage du délai de réponse : Choisissez le temps
+imparti pour répondre (2s, 4s, 8s, 5min), ce qui permet d’adapter
+la difficulté.</blockquote>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<blockquote>Statistiques : La page affiche le nombre de bonnes et
+mauvaises réponses, ainsi que le pourcentage de précision, pour
+suivre vos progrès.</blockquote>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<blockquote>Export/Import : Vous pouvez exporter vos statistiques au
+format CSV ou JSON, ou importer des données, pratique pour suivre
+votre évolution sur plusieurs sessions ou appareils.</blockquote>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<blockquote>Navigation : Les boutons « Valider », « Question
+suivante » et « Continuer » servent à répondre, passer à la
+question suivante ou reprendre une session.</blockquote>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<blockquote>Pour l’utiliser, choisissez un mode d’apprentissage,
+réglez le délai si besoin, puis lancez les quiz. Les tableaux
+servent de référence rapide, et les statistiques vous permettent
+d’identifier vos points forts et à améliorer.</blockquote>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<h1 class="western">Pronoms possessifs</h1>
+<p style=" line-height: 80%; margin-bottom: 0cm">Exercices pour
+maîtriser les formes possessives en arabe, avec mise en pratique et
+quiz.</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<p style=" line-height: 80%; margin-bottom: 0cm">Cette page
+fonctionne sur le même principe que la précédente, mais elle est
+centrée sur les pronoms possessifs arabes. Les fonctionnalités sont
+:</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<h2 class="western">Tableau des pronoms possessifs : 
+</h2>
+<p style=" line-height: 80%; margin-bottom: 0cm">Un tableau présente
+les pronoms possessifs en français et en arabe, pour faciliter la
+mémorisation.</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<h3 class="western">Modes d’apprentissage : 
+</h3>
+<blockquote>Identiques à la page des pronoms : plusieurs directions
+de traduction et de translittération pour s’exercer à reconnaître
+et produire les formes correctes.</blockquote>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<blockquote>Quiz : Deux types de quiz (par mode d’apprentissage ou
+global), pour tester vos connaissances de manière ciblée ou
+générale.</blockquote>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<blockquote>Réglage du délai de réponse : Adaptez la difficulté
+selon votre aisance.</blockquote>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<blockquote>Statistiques : Suivi du nombre de bonnes/mauvaises
+réponses et précision.</blockquote>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<blockquote>Export/Import : Exportez ou importez vos résultats pour
+un suivi personnalisé.</blockquote>
+<blockquote><br/>
+<br/>
+
+</blockquote>
+<blockquote>Navigation : Boutons pour valider, passer à la question
+suivante ou continuer une session.</blockquote>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<blockquote>Pour débuter, sélectionnez le mode d’apprentissage
+souhaité, ajustez le délai si besoin, puis lancez le quiz. Le
+tableau reste accessible pour vérification rapide, et les
+statistiques vous aident à cibler vos révisions.</blockquote>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<h1 class="western">Conjugaison (inaccompli &amp; présent)</h1>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<p style=" line-height: 80%; margin-bottom: 0cm">Module dédié à la
+conjugaison des verbes arabes à l’inaccompli (présent), avec
+explications et exercices pratiques.</p>
+<p style=" line-height: 80%; margin-bottom: 0cm">Cette page est
+consacrée à la conjugaison des verbes réguliers arabes. L’accent
+est mis sur la structure : la racine du verbe reste constante, seuls
+les préfixes et suffixes changent selon la personne. Bien que le
+contenu détaillé ne soit pas entièrement visible, on peut déduire
+que la page propose :</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<h2 class="western">Explication structurée :</h2>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"> Présentation
+claire du principe de conjugaison des verbes réguliers, avec
+exemples.</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<h3 class="western">Tableaux ou exercices interactifs : 
+</h3>
+<p style=" line-height: 80%; margin-bottom: 0cm">Probablement des
+tableaux pour visualiser les différentes formes conjuguées ou des
+exercices pour s’entraîner.</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<h3 class="western">Navigation vers d’autres verbes ou exercices : 
+</h3>
+<blockquote>Possibilité de passer d’un verbe à l’autre ou de
+changer de temps/personne.</blockquote>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<blockquote>Pour utiliser efficacement cette page, lisez d’abord
+l’explication sur la racine et les affixes, puis entraînez-vous à
+reconnaître et former les différentes conjugaisons, soit via des
+exercices interactifs, soit à l’aide de tableaux récapitulatifs.</blockquote>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<h1 class="western">Exercices sur les chiffres</h1>
+<p style=" line-height: 80%; margin-bottom: 0cm">Activités pour
+reconnaître, lire et écrire les chiffres arabes dans différents
+systèmes (arabes, indiens, lettres).</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<p style=" line-height: 80%; margin-bottom: 0cm">Cette page est
+dédiée à l’apprentissage des chiffres arabes sous plusieurs
+formes : chiffres dits « arabes » (utilisés en Occident), chiffres
+indiens (utilisés dans le monde arabe), et leur écriture en lettres
+arabes. Elle propose une interface très complète pour s’exercer à
+la reconnaissance, la conversion, la prononciation et la mémorisation
+des chiffres.</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<h2 class="western">Fonctionnalités principales :</h2>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<h3 class="western">Tableau des Chiffres : 
+</h3>
+<p style=" line-height: 80%; margin-bottom: 0cm">Un tableau de
+référence présente les chiffres en français, en arabe (écriture
+occidentale), en chiffres indiens et en écriture arabe, pour
+comparer et mémoriser facilement les différentes formes.</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<h3 class="western">Modes d’apprentissage : 
+</h3>
+<p style=" line-height: 80%; margin-bottom: 0cm">Plusieurs modes sont
+accessibles via des boutons radio, chacun permettant de travailler
+une conversion spécifique :</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<blockquote>Chiffre Arabe → Écriture (lettres arabes)</blockquote>
+<blockquote>Écriture → Chiffre Arabe</blockquote>
+<blockquote>Chiffre Arabe → Chiffre Indien</blockquote>
+<blockquote>Chiffre Indien → Chiffre Arabe</blockquote>
+<blockquote>Écriture → Chiffre Indien</blockquote>
+<blockquote>Chiffre Indien → Écriture</blockquote>
+<blockquote>Son → Chiffre Arabe</blockquote>
+<blockquote>Son → Écriture Arabe</blockquote>
+<blockquote>Son → Chiffre Indien</blockquote>
+<blockquote><br/>
+<br/>
+
+</blockquote>
+<h3 class="western">Quiz : 
+</h3>
+<p style=" line-height: 80%; margin-bottom: 0cm">Deux types de quiz
+sont proposés : un quiz ciblé sur le mode d’apprentissage
+sélectionné, et un quiz global qui mélange tous les modes.</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<h3 class="western">Entraînement auditif : 
+</h3>
+<p style=" line-height: 80%; margin-bottom: 0cm">Un mode spécifique
+permet d’écouter les chiffres et de s’entraîner à les
+reconnaître uniquement à l’oral, sans support écrit.</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<h3 class="western">Réglage du délai de réponse : 
+</h3>
+<p style=" line-height: 80%; margin-bottom: 0cm">Choisissez le temps
+imparti pour répondre (2s, 4s, 8s, 5min), ce qui permet d’adapter
+la difficulté à votre niveau.</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<h3 class="western">Statistiques : 
+</h3>
+<p style=" line-height: 80%; margin-bottom: 0cm">La page affiche le
+nombre de bonnes et mauvaises réponses, le niveau (débutant, etc.),
+la précision en pourcentage, et le nombre de sons entendus. Ces
+statistiques vous permettent de suivre vos progrès en temps réel.</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<h3 class="western">Répétition du son : 
+</h3>
+<p style=" line-height: 80%; margin-bottom: 0cm">Un bouton permet de
+réécouter le son du chiffre à volonté.</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<h3 class="western">Export/Import des résultats : 
+</h3>
+<p style=" line-height: 80%; margin-bottom: 0cm">Exportez vos
+statistiques au format CSV ou JSON, ou importez-les pour reprendre
+votre progression sur un autre appareil ou à une autre session.</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<h3 class="western">Navigation : 
+</h3>
+<p style=" line-height: 80%; margin-bottom: 0cm">Les boutons «
+Valider », « Question suivante » et « Continuer » servent à
+répondre, passer à la question suivante ou reprendre une session
+interrompue.</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<h3 class="western">Utilisation rapide :</h3>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<p style=" line-height: 80%; margin-bottom: 0cm">Sélectionnez le
+mode d’apprentissage (par exemple, « Chiffre Arabe → Écriture
+»), réglez le délai de réponse si besoin, puis lancez le quiz.
+Écoutez les sons si le mode le propose, répondez, puis validez.
+Consultez vos statistiques pour cibler vos révisions. Le tableau des
+chiffres reste accessible pour vérification rapide.</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<h1 class="western">Autres exercices sur les chiffres</h1>
+<p style=" line-height: 80%; margin-bottom: 0cm">Méthodes
+alternatives et exercices complémentaires pour approfondir la
+connaissance et la manipulation des chiffres arabes.</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<p style=" line-height: 80%; margin-bottom: 0cm">Cette page propose
+des exercices avancés sur les chiffres arabes, axés sur la pratique
+et la manipulation des nombres dans différents systèmes (arabe,
+indien, écriture, translittération) et différentes situations
+arithmétiques. Elle est idéale pour renforcer la maîtrise des
+chiffres et des opérations simples en arabe.</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<h2 class="western">Fonctionnalités principales :</h2>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<p style=" line-height: 80%; margin-bottom: 0cm">Choix du mode
+d’apprentissage : Un menu propose de nombreux modes d’exercice,
+chacun ciblant une compétence particulière :</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<p style=" line-height: 80%; margin-bottom: 0cm">Conversion entre
+chiffres arabes, indiens, écriture arabe et translittération.</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<p style=" line-height: 80%; margin-bottom: 0cm">Exercices sur le
+complément arithmétique (trouver le nombre qui complète jusqu’à
+un total donné).</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<p style=" line-height: 80%; margin-bottom: 0cm">Additions simples,
+avec réponse attendue en écriture arabe ou en chiffres indiens.</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<p style=" line-height: 80%; margin-bottom: 0cm">Séquences
+numériques (trouver le nombre suivant dans une suite logique).</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<p style=" line-height: 80%; margin-bottom: 0cm">Comparaisons
+(indiquer le chiffre le plus grand ou le plus petit).</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<h3 class="western">Sélection de la somme cible : 
+</h3>
+<p style=" line-height: 80%; margin-bottom: 0cm">Pour les exercices
+de complément, vous pouvez définir la somme maximale (jusqu’à
+20), ce qui permet d’adapter la difficulté.</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<h3 class="western" style="page-break-after: avoid">Niveaux de
+difficulté : 
+</h3>
+<p style=" line-height: 80%; margin-bottom: 0cm">Trois niveaux sont
+proposés : Facile (0-10), Moyen (0-20), Difficile (0-100). Cela
+permet de progresser graduellement.</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<h3 class="western" style="page-break-after: avoid">Navigation et
+validation : 
+</h3>
+<p style=" line-height: 80%; margin-bottom: 0cm">Les boutons «
+Nouvelle question » génèrent un nouvel exercice, « Valider »
+permet de soumettre sa réponse, et « Aide » affiche un tableau
+récapitulatif des chiffres de 0 à 10 dans les différents systèmes
+(arabe, écriture, indien, translittération).</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<h3 class="western" style="page-break-after: avoid">Aide <font face="Liberation Sans, sans-serif">contextuelle</font>
+: 
+</h3>
+<p style=" line-height: 80%; margin-bottom: 0cm">Le bouton « Aide »
+ouvre une fenêtre avec un tableau des chiffres pour faciliter la
+vérification et l’apprentissage pendant les exercices.</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<h3 class="western" style="page-break-after: avoid">Menu <font face="Liberation Sans, sans-serif">général</font>
+: 
+</h3>
+<p style=" line-height: 80%; margin-bottom: 0cm">En haut de la page,
+des boutons permettent de revenir à l’accueil ou d’accéder
+rapidement à d’autres modules (leçons, pronoms, possessifs,
+conjugaison, etc.).</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<h3 class="western" style="page-break-after: avoid">Utilisation
+<font face="Liberation Sans, sans-serif">rapide</font> :</h3>
+<p style=" line-height: 80%; margin-bottom: 0cm">Choisissez le mode
+d’exercice (par exemple, « Addition simple → Écriture arabe »),
+sélectionnez la difficulté, puis cliquez sur « Nouvelle question
+». Répondez à l’exercice, validez, et consultez l’aide si
+besoin. Répétez pour vous entraîner sur différents aspects des
+chiffres arabes.</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<h1 class="western">Lettres lunaires et lettres solaires.</h1>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<p style=" line-height: 80%; margin-bottom: 0cm">Cette page est
+consacrée à l’apprentissage des lettres lunaires et solaires en
+arabe, un point clé pour bien prononcer et écrire les mots précédés
+de l’article défini « <font face="Noto Sans Devanagari"><span lang="hi-IN">ال
+</span></font>». Elle propose un environnement interactif pour
+distinguer ces deux groupes de lettres et s’entraîner à les
+reconnaître dans des mots.</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<h2 class="western">Fonctionnalités disponibles :</h2>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<h3 class="western">Tableau interactif des mots :</h3>
+<p style=" line-height: 80%; margin-bottom: 0cm">La page affiche une
+liste de mots en arabe, avec leur traduction française et leur
+translittération. Vous devez sélectionner pour chaque mot s’il
+commence par une lettre lunaire ou solaire.</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<h3 class="western" style="page-break-after: avoid">Sélection et
+<font face="Liberation Sans, sans-serif">validation</font> :</h3>
+<p style=" line-height: 80%; margin-bottom: 0cm">Pour chaque mot,
+vous choisissez (par bouton ou case à cocher) s’il s’agit d’une
+lettre lunaire ou solaire. Une fois vos choix faits, cliquez sur le
+bouton « ✅ Vérifier les réponses » pour corriger votre
+exercice. Les bonnes réponses, erreurs, précision (%) et série de
+bonnes réponses sont affichés en haut de la page pour suivre votre
+progression.</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<h3 class="western" style="page-break-after: avoid">Nouvel <font face="Liberation Sans, sans-serif">exercice</font>
+:</h3>
+<p style=" line-height: 80%; margin-bottom: 0cm">Le bouton « 🔄
+Nouvel exercice » permet de générer une nouvelle série de mots à
+classer, pour s’entraîner sans cesse sur de nouveaux exemples.</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<h3 class="western" style="page-break-after: avoid">Aides
+<font face="Liberation Sans, sans-serif">pédagogiques</font> :</h3>
+<p style=" line-height: 80%; margin-bottom: 0cm">Deux boutons d’aide
+sont disponibles :</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<blockquote>« 🌙 Aide Lunaires » : Affiche la liste complète des
+lettres lunaires avec leur forme arabe</blockquote>
+<blockquote>« ☀️ Aide Solaires » : Affiche la liste complète
+des lettres solaires avec leur forme arabe.</blockquote>
+<p style=" line-height: 80%; margin-bottom: 0cm">Ces listes sont
+utiles pour mémoriser les deux groupes et comprendre la règle :</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<p style=" line-height: 80%; margin-bottom: 0cm">Lettres lunaires :
+le « <font face="Noto Sans Devanagari"><span lang="hi-IN">ل </span></font>»
+de l’article défini est prononcé.</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<h3 class="western">Lettres solaires :</h3>
+<p style=" line-height: 80%; margin-bottom: 0cm"> le « <font face="Noto Sans Devanagari"><span lang="hi-IN">ل
+</span></font>» n’est pas prononcé, et la lettre qui suit est
+doublée (chadda).</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<h3 class="western">Navigation générale :</h3>
+<p style=" line-height: 80%; margin-bottom: 0cm">En haut de la page,
+des boutons permettent de revenir à l’accueil ou d’accéder
+directement aux autres modules (Séquences &amp; Leçons, Pronoms,
+Possessifs, Exercices sur les chiffres, Conjugaison…).</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<h3 class="western" style="page-break-after: avoid">Fiche <font face="Liberation Sans, sans-serif">d’emploi</font>
+rapide :</h3>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<p style=" line-height: 80%; margin-bottom: 0cm">Sélectionnez pour
+chaque mot s’il commence par une lettre lunaire ou solaire.</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<p style=" line-height: 80%; margin-bottom: 0cm">Cliquez sur «
+Vérifier les réponses » : les résultats s’affichent
+instantanément.</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<p style=" line-height: 80%; margin-bottom: 0cm">Consultez les aides
+si besoin pour réviser la liste des lettres.</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<p style=" line-height: 80%; margin-bottom: 0cm">Relancez un nouvel
+exercice pour continuer à progresser.</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<p style=" line-height: 80%; margin-bottom: 0cm">Cette page est
+idéale pour comprendre la règle des lettres lunaires et solaires,
+la mettre en pratique et mémoriser les différences de prononciation
+et d’écriture en contexte.</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+<p style=" line-height: 80%; margin-bottom: 0cm"><br/>
+
+</p>
+    </div>
+
+    
+  </div>
+
+</div>
+
+
+<script>
+ 
+
+// Ouvre la popup
+document.getElementById('open-descriptif').addEventListener('click', function() {
+  document.getElementById('descriptif-modal').classList.add('open');
+  document.getElementById('descriptif-modal').focus();
+});
+// Ferme la popup par la croix
+document.querySelector('.close-descriptif').addEventListener('click', function() {
+  document.getElementById('descriptif-modal').classList.remove('open');
+});
+// Ferme la popup par le bouton "Fermer"
+document.querySelector('.fermer-descriptif').addEventListener('click', function() {
+  document.getElementById('descriptif-modal').classList.remove('open');
+});
+// Ferme la popup par la touche Echap
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    document.getElementById('descriptif-modal').classList.remove('open');
+  }
+});
+
+ 
 </script>
 
 </body>
