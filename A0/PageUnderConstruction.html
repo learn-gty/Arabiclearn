@@ -108,18 +108,25 @@
   transform: rotate(-45deg) translate(7px, -7px);
 }
 
-/* Responsive */
+
 @media (max-width: 600px) {
-  .menu {
-    width: 80vw;
-    min-width: 160px;
-    max-width: 320px;
+  #content-wrapper {
+    z-index: 0;
+    position: relative;
   }
-  .menu-icon {
-    width: 32px;
-    height: 32px;
+
+  .menu {
+    z-index: 1001;
+    background: rgba(255, 255, 255, 0.97); /* semi-transparent pour voir le fond */
+  }
+
+  #loader-overlay {
+    z-index: 10000;
   }
 }
+
+
+
   </style>
 </head>
 <body>

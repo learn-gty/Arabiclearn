@@ -1,18 +1,18 @@
 <html lang="fr">
 <head>
-<script src="https://learn-gty.github.io/Arabiclearn/A0/tracks.js" defer></script>
-<script src="https://learn-gty.github.io/Arabiclearn/A0/trackSeqInit.js"  defer></script>
-<script src="https://learn-gty.github.io/Arabiclearn/A0/trackSeq1.js" defer></script>
-<script src="https://learn-gty.github.io/Arabiclearn/A0/trackSeq2.js" defer></script>
-<script src="https://learn-gty.github.io/Arabiclearn/A0/trackSeq3.js" defer></script>
-<script src="https://learn-gty.github.io/Arabiclearn/A0/trackSeq4.js" defer></script>
-<script src="https://learn-gty.github.io/Arabiclearn/A0/trackSeq5.js" defer></script>
-<script src="https://learn-gty.github.io/Arabiclearn/A0/trackSeq6.js" defer></script>
-<script src="https://learn-gty.github.io/Arabiclearn/A0/trackSeq7.js" defer></script>
-<script src="https://learn-gty.github.io/Arabiclearn/A0/trackSeq8.js" defer></script>
-<script src="https://learn-gty.github.io/Arabiclearn/A0/trackSeq9.js" defer></script>
-<script src="https://learn-gty.github.io/Arabiclearn/A0/tableauBase64.js" defer></script>
-<script src="https://learn-gty.github.io/Arabiclearn/A0/main.js" defer></script>
+<script src="tracks.js" defer></script>
+<script src="trackSeqInit.js"  defer></script>
+<script src="trackSeq1.js" defer></script>
+<script src="trackSeq2.js" defer></script>
+<script src="trackSeq3.js" defer></script>
+<script src="trackSeq4.js" defer></script>
+<script src="trackSeq5.js" defer></script>
+<script src="trackSeq6.js" defer></script>
+<script src="trackSeq7.js" defer></script>
+<script src="trackSeq8.js" defer></script>
+<script src="trackSeq9.js" defer></script>
+<script src="tableauBase64.js" defer></script>
+<script src="main.js" defer></script>
 
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -413,20 +413,56 @@ button.tree-control-btn-collapse.Minusactive {
   transform: rotate(-45deg) translate(7px, -7px);
 }
 
-/* Responsive */
 @media (max-width: 600px) {
-  .menu {
-    width: 80vw;
-    min-width: 160px;
-    max-width: 320px;
+  #content-wrapper {
+    z-index: 0;
+    position: relative;
   }
-  .menu-icon {
-    width: 32px;
-    height: 32px;
+
+  .menu {
+    z-index: 1001;
+    background: rgba(255, 255, 255, 0.97); /* semi-transparent pour voir le fond */
+  }
+
+  #loader-overlay {
+    z-index: 10000;
   }
 }
 
 
+
+
+
+
+/* Overlay transparent avec sablier centré */
+#loader-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  backdrop-filter: blur(1px);
+  background-color: rgba(255, 255, 255, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+}
+
+/* Sablier simple en CSS (spinner rond) */
+.hourglass {
+  width: 48px;
+  height: 48px;
+  border: 5px solid #007A33;
+  border-top: 5px solid transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  box-shadow: 0 0 6px rgba(0,0,0,0.2);
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
 
 
     </style>
@@ -452,6 +488,9 @@ button.tree-control-btn-collapse.Minusactive {
     <li><a href="PageUnderConstruction.html">Suite...</a></li> </ul>
 </nav>
 
+<div id="loader-overlay">
+  <div class="hourglass"></div>
+</div>
 
 <div id="content-wrapper">
 
@@ -635,6 +674,12 @@ button.tree-control-btn-collapse.Minusactive {
 </div>
 </div> <!-- Fin de content-wrapper -->
 
-
+<script>
+  window.addEventListener('load', () => {
+    const loader = document.getElementById('loader-overlay');
+    if (loader) loader.remove();
+    document.body.style.overflow = 'auto';
+  });
+</script>
 </body>
 </html>
