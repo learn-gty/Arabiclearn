@@ -417,10 +417,104 @@ input[type="checkbox"] {
 }
 
 
+@media (max-width: 480px) {
+
+  body {
+    padding: 10px;
+  }
+
+  .container {
+    padding: 12px;
+    border-radius: 8px;
+  }
+
+  h1 {
+    font-size: 1.2rem;
+    text-align: center;
+  }
+
+  .stats {
+    flex-direction: column;
+    gap: 10px;
+    font-size: 0.95rem;
+    padding: 8px;
+  }
+
+  .controls {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 0.95rem;
+    margin-bottom: 15px;
+  }
+
+  .controls input[type="number"] {
+    max-width: 80px;
+    font-size: 1rem;
+  }
+
+  .letter-box {
+    font-size: 20px;
+    padding: 4px 6px;
+  }
+
+  #wordTable {
+    font-size: 0.85rem;
+    width: 100%;
+  }
+
+  #wordTable th,
+  #wordTable td {
+    padding: 6px 4px;
+    font-size: 0.85rem;
+  }
+
+  .menu {
+    width: 85vw;
+    max-width: 280px;
+    left: -100vw; /* complètement caché par défaut */
+    padding-top: 60px;
+    border-radius: 0 12px 12px 0;
+  }
+
+  #menu-toggle:checked ~ .menu {
+    left: 0;
+  }
+
+  .menu li a {
+    font-size: 1rem;
+    padding: 12px 18px;
+  }
+
+  .help-modal {
+    padding: 10px;
+    font-size: 0.95rem;
+    max-width: 95vw;
+  }
+
+  #question {
+    font-size: 1rem;
+    margin: 16px 0;
+  }
+
+  #feedback {
+    font-size: 0.9rem;
+    padding: 8px;
+  }
+
+  button {
+    font-size: 0.95rem;
+    padding: 8px 12px;
+  }
+}
+
+
 
 .hide-col {
   display: none;
 }
+
+
 
 </style>
 
