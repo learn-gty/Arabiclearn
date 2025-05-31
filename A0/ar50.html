@@ -704,26 +704,7 @@ button.tree-control-btn-collapse.Minusactive {
     document.body.style.overflow = 'auto';
   });
 </script>
-<script>
-  const menuToggle = document.getElementById('menu-toggle');
-  const menuIcon = document.querySelector('.menu-icon');
 
-  let autoCloseTimer = null;
-
-  // Quand on clique sur l’icône du menu
-  menuIcon.addEventListener('click', () => {
-    // Petite attente pour laisser le menu s’ouvrir via le CSS
-    setTimeout(() => {
-      if (menuToggle.checked) {
-        // Si menu ouvert, lancer le minuteur
-        if (autoCloseTimer) clearTimeout(autoCloseTimer); // Réinitialise si déjà lancé
-        autoCloseTimer = setTimeout(() => {
-          menuToggle.checked = false; // Replier le menu
-        }, 5000); // 5 secondes
-      }
-    }, 50); // on laisse le temps à l’état "checked" de s’activer
-  });
-</script>
 
 </body>
 </html>
