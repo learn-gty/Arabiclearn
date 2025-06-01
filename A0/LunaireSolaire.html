@@ -365,10 +365,108 @@ input[type="checkbox"] {
   }
 }
 
+
+/* Cacher les cases à cocher sur mobile */
+@media (max-width: 600px) {
+  .checkbox-selection {
+    display: none !important;
+  }
+  .mobile-btn-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 12px 0;
+  }
+  .reponse-btn {
+    display: inline-block;
+    padding: 12px 18px;
+    border: 2px solid #1976d2;
+    border-radius: 8px;
+    background: #fff;
+    color: #1976d2;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, border 0.2s;
+    min-width: 120px;
+    text-align: center;
+    margin-bottom: 8px;
+    user-select: none;
+  }
+  .reponse-btn.selected {
+    background: #1976d2;
+    color: #fff;
+    border-color: #1976d2;
+  }
+  .reponse-btn.erreur {
+    background: #e53935;
+    color: #fff;
+    border-color: #b71c1c;
+  }
+  .reponse-btn.correction {
+    background: #43a047;
+    color: #fff;
+    border-color: #1b5e20;
+  }
+}
+
+
 /* Cacher certaines colonnes */
 .hide-col {
   display: none;
 }
+
+
+@media (max-width: 700px), (pointer: coarse) {
+  /* Cache l’en-tête du tableau sur mobile */
+  #tableHead, #tableHead tr, #tableHead th {
+    display: none !important;
+  }
+  /* Cache le tableau des mots sur mobile */
+  #tableBody, #tableBody tr, #tableBody td, #tableBody input[type="checkbox"] {
+    display: none !important;
+  }
+  /* Affichage vertical des boutons sous le bouton de vérification */
+  #mobileChoices {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    align-items: stretch;
+    margin: 18px 0;
+    width: 100%;
+  }
+  #mobileChoices button {
+    width: 100%;
+    font-size: 1.1em;
+    padding: 14px 0;
+    border-radius: 6px;
+    border: 2px solid #222;
+    background: #f4f4f4;
+    color: #222;
+    transition: background 0.2s, color 0.2s, border 0.2s;
+    font-weight: 600;
+    outline: none;
+    text-align: center;
+  }
+  #mobileChoices button.selected {
+    background: #E4312b;
+    color: #fff;
+    border-color: #E4312b;
+  }
+  #mobileChoices button:active {
+    filter: brightness(0.95);
+  }
+  body.dark-mode #mobileChoices button {
+    background: #232323;
+    color: #fff;
+    border-color: #fff;
+  }
+  body.dark-mode #mobileChoices button.selected {
+    background: #149954;
+    color: #fff;
+    border-color: #149954;
+  }
+}
+
 
 </style>
 
@@ -425,11 +523,14 @@ input[type="checkbox"] {
                     <th>Sélection</th>
                 </tr>
             </thead>
+        
             <tbody id="tableBody"></tbody>
         </table>
-
+       <div class="mobile-btn-group" id="mobile-btn-group" style="display:none"></div>
         <div style="text-align: center; margin: 20px 0">
             <button id="checkBtn" onclick="checkAnswers()">✅ Vérifier les réponses</button>
+            <div id="mobileChoices"></div>
+
         </div>
         <div id="feedback" class="feedback"></div>
     </div>
@@ -671,6 +772,14 @@ input[type="checkbox"] {
             total: 0
         };
 
+
+let deviceIsMobile = window.matchMedia("(pointer:coarse)").matches || window.innerWidth < 700;
+window.addEventListener('resize', function() {
+    deviceIsMobile = window.matchMedia("(pointer:coarse)").matches || window.innerWidth < 700;
+});
+
+
+
         function updateStats() {
             document.getElementById('correctCount').textContent = stats.correct;
             document.getElementById('errorCount').textContent = stats.errors;
@@ -693,133 +802,40 @@ input[type="checkbox"] {
             }, 1000);
 
             const tbody = document.getElementById('tableBody');
-            tbody.innerHTML = selectedWords.map((word, index) => `
-                <tr style="animation-delay: ${index * 0.1}s">
-                    <td>${word.arabic}</td>
-                    <td>${word.french}</td>
-                    <td class="hide-col">${word.translit}</td>
-                    <td><input type="checkbox"></td>
-                </tr>
-            `).join('');
+tbody.innerHTML = ""; // Vide le tableau
 
-            // Réinitialiser les styles des lignes
-            document.querySelectorAll('#tableBody tr').forEach(row => {
-                row.className = '';
-            });
+const mobileChoicesDiv = document.getElementById('mobileChoices');
+if (mobileChoicesDiv) mobileChoicesDiv.innerHTML = '';
+
+if (!deviceIsMobile) {
+    // --- TABLEAU À COCHES (desktop) : code existant ---
+    tbody.innerHTML = selectedWords.map((word, index) => `
+        <tr style="animation-delay: ${index * 0.1}s">
+            <td>${word.arabic}</td>
+            <td>${word.french}</td>
+            <td class="hide-col">${word.translit}</td>
+            <td><input type="checkbox"></td>
+        </tr>
+    `).join('');
+} else {
+    // --- BOUTONS VERTICAUX (MOBILE) ---
+    selectedWords.forEach((word, i) => {
+        let btn = document.createElement('button');
+        btn.type = "button";
+        btn.textContent = `${word.arabic} — ${word.french}`;
+        btn.onclick = () => {
+            btn.classList.toggle("selected");
+        };
+        mobileChoicesDiv.appendChild(btn);
+    });
+    // Stocke pour la validation
+    window._mobileChoices = { selectedWords };
+}
 
             // Réactiver le bouton et vider le feedback
             document.getElementById('checkBtn').disabled = false;
             document.getElementById('feedback').innerHTML = '';
         }
-
-   /*     function checkAnswers() {
-            const checkboxes = document.querySelectorAll('#tableBody input[type="checkbox"]');
-            const feedback = document.getElementById('feedback');
-            feedback.innerHTML = '';
-            
-            let correctAnswers = 0;
-            let totalQuestions = checkboxes.length;
-            let errors = [];
-
-            checkboxes.forEach((checkbox, index) => {
-                const row = checkbox.closest('tr');
-                const arabicWord = row.cells[0].textContent;
-                const targetLetter = getTargetLetter(arabicWord);
-                
-                const isLunar = getLunarLetters().includes(targetLetter);
-                const shouldBeSelected = (currentQuestionType === 'lunar') === isLunar;
-
-                setTimeout(() => {
-                    if(checkbox.checked === shouldBeSelected) {
-                        correctAnswers++;
-                        row.classList.add('correct-row');
-                    } else {
-                        row.classList.add('incorrect-row');
-                        const wordType = isLunar ? 'lunaire' : 'solaire';
-                        const expectedAction = shouldBeSelected ? 'cocher' : 'ne pas cocher';
-                        errors.push(`${arabicWord} (${targetLetter}) est ${wordType} - Il fallait ${expectedAction}`);
-                    }
-
-                    // Quand toutes les vérifications sont terminées
-                    if(index === checkboxes.length - 1) {
-                        setTimeout(() => {
-                            stats.total++;
-                            if (correctAnswers === totalQuestions) {
-                                stats.correct++;
-                                stats.streak++;
-                                showSuccessMessage(correctAnswers, totalQuestions);
-                                
-                                setTimeout(() => {
-                                    generateExercise();
-                                }, 3000);
-                            } else {
-                                stats.errors++;
-                                stats.streak = 0;
-                                showErrorMessage(errors, correctAnswers, totalQuestions);
-                            }
-                            updateStats();
-                        }, 500);
-                    }
-                }, index * 100);
-            });
-
-            document.getElementById('checkBtn').disabled = true;
-        }
-*/
-
-function checkAnswers() {
-    const checkboxes = document.querySelectorAll('#tableBody input[type="checkbox"]');
-    const feedback = document.getElementById('feedback');
-    feedback.innerHTML = '';
-    
-    let correctAnswers = 0;
-    let totalQuestions = checkboxes.length;
-    let errors = [];
-
-    checkboxes.forEach((checkbox, index) => {
-        const row = checkbox.closest('tr');
-        const arabicWord = row.cells[0].textContent;
-        const translit = row.cells[2].textContent;
-        const targetLetter = getTargetLetter(arabicWord);
-        
-        const isLunar = getLunarLetters().includes(targetLetter);
-        const shouldBeSelected = (currentQuestionType === 'lunar') === isLunar;
-
-        setTimeout(() => {
-            if(checkbox.checked === shouldBeSelected) {
-                correctAnswers++;
-                row.classList.add('correct-row');
-            } else {
-                row.classList.add('incorrect-row');
-                const wordType = isLunar ? 'lunaire' : 'solaire';
-                const expectedAction = shouldBeSelected ? 'cocher' : 'ne pas cocher';
-                errors.push(`${arabicWord} (${translit}) : lettre ${targetLetter} — ${wordType} ➤ Il fallait ${expectedAction}`);
-            }
-
-            if(index === checkboxes.length - 1) {
-                setTimeout(() => {
-                    stats.total++;
-                    if (correctAnswers === totalQuestions) {
-                        stats.correct++;
-                        stats.streak++;
-                        showSuccessMessage(correctAnswers, totalQuestions);
-                        setTimeout(() => {
-                            generateExercise();
-                        }, 3000);
-                    } else {
-                        stats.errors++;
-                        stats.streak = 0;
-                        showErrorMessage(errors, correctAnswers, totalQuestions);
-                    }
-                    updateStats();
-                }, 500);
-            }
-        }, index * 100);
-    });
-
-    document.getElementById('checkBtn').disabled = true;
-}
-
 
         function showSuccessMessage(correct, total) {
             const feedback = document.getElementById('feedback');
@@ -848,41 +864,6 @@ function checkAnswers() {
             return normalized.startsWith('ال') ? normalized[2] : normalized[0];
         }
 
-/*        function showHelp(type) {
-            document.getElementById(`${type}Help`).style.display = 'block';
-        }*/
-
-/*       // Fonction améliorée pour fermer les modales
-function hideHelp() {
-    document.querySelectorAll('.help-modal').forEach(modal => {
-        modal.style.display = 'none';
-    });
-}
-*/
-/*
-// Fermeture par la touche Échap
-document.addEventListener('keydown', function(event) {
-    if (event.key === 'Escape') {
-        hideHelp();
-    }
-});
-
-// Fermeture en cliquant à l'extérieur de la modale
-document.addEventListener('click', function(event) {
-    const modals = document.querySelectorAll('.help-modal');
-    modals.forEach(modal => {
-        if (modal.style.display === 'block' && !modal.contains(event.target)) {
-            // Vérifier que le clic n'est pas sur un bouton d'ouverture
-            const isOpenButton = event.target.closest('button') && 
-                                 (event.target.textContent.includes('Lunaires') || 
-                                  event.target.textContent.includes('Solaires'));
-            if (!isOpenButton) {
-                hideHelp();
-            }
-        }
-    });
-});
-*/
 
         function getLunarLetters() {
             return ['أ','ب','ج','ح','خ','ع','غ','ف','ق','ك','م','ه','و','ي'];
@@ -945,5 +926,275 @@ document.addEventListener('click', function(event) {
     }, 50); // on laisse le temps à l’état "checked" de s’activer
   });
 </script>
+
+<script>
+  
+// Génère les boutons pour mobile
+function genererBoutonsMobile() {
+  const group = document.getElementById('mobile-btn-group');
+  if (!group) return;
+  group.innerHTML = '';
+ selectedWords.forEach((mot, idx) => {
+    const btn = document.createElement('button');
+    btn.className = "reponse-btn";
+    btn.type = "button";
+    btn.dataset.idx = idx;
+    btn.innerText = `${mot.arabe} – ${mot.francais}`;
+    btn.onclick = () => btn.classList.toggle('selected');
+    group.appendChild(btn);
+  });
+}
+
+// Affiche ou masque les boutons/cases selon la largeur
+function afficherBoutonsSiMobile() {
+  const group = document.getElementById('mobile-btn-group');
+  if (!group) return;
+  if (window.innerWidth <= 600) {
+    group.style.display = 'flex';
+    document.querySelectorAll('.checkbox-selection').forEach(e => e.style.display = 'none');
+    genererBoutonsMobile();
+  } else {
+    group.style.display = 'none';
+    document.querySelectorAll('.checkbox-selection').forEach(e => e.style.display = '');
+  }
+}
+window.addEventListener('resize', afficherBoutonsSiMobile);
+window.addEventListener('DOMContentLoaded', afficherBoutonsSiMobile);
+
+// Vérification des réponses via boutons mobiles
+/*
+function checkAnswers() {
+    const feedback = document.getElementById('feedback');
+    feedback.innerHTML = '';
+
+    // D'abord, on détecte si on est en mode boutons (mobile) ou cases à cocher (desktop)
+    const btnGroup = document.getElementById('mobile-btn-group');
+    const isMobileMode = btnGroup && btnGroup.style.display !== 'none';
+
+    // Initialisation des stats
+    let correctAnswers = 0;
+    let totalQuestions = 0;
+    let errors = [];
+
+    // --- MODE MOBILE : boutons ---
+    if (isMobileMode) {
+        // Nettoyer les anciennes classes
+        document.querySelectorAll('.reponse-btn').forEach(btn => {
+            btn.classList.remove('erreur', 'correction');
+        });
+
+        // Parcourir chaque bouton
+        document.querySelectorAll('.reponse-btn').forEach((btn, index) => {
+            const idx = parseInt(btn.dataset.idx, 10);
+            // Récupérer les infos du mot (adaptez selon votre structure)
+            const mot = selectedWords.[idx];
+            const arabicWord = mot.arabe;
+            const translit = mot.translit || '';
+            const targetLetter = getTargetLetter(arabicWord);
+            const isLunar = getLunarLetters().includes(targetLetter);
+            const shouldBeSelected = (currentQuestionType === 'lunar') === isLunar;
+            const isSelected = btn.classList.contains('selected');
+            totalQuestions++;
+
+            if (isSelected === shouldBeSelected) {
+                correctAnswers++;
+                btn.classList.add('correct-row');
+            } else {
+                btn.classList.add('erreur');
+                const wordType = isLunar ? 'lunaire' : 'solaire';
+                const expectedAction = shouldBeSelected ? 'sélectionner' : 'ne pas sélectionner';
+                errors.push(`${arabicWord} (${translit}) : lettre ${targetLetter} — ${wordType} ➤ Il fallait ${expectedAction}`);
+            }
+
+            if (!isSelected && shouldBeSelected) {
+                btn.classList.add('correction');
+            }
+        });
+
+        // Feedback et stats
+        stats.total++;
+        if (correctAnswers === totalQuestions) {
+            stats.correct++;
+            stats.streak++;
+            showSuccessMessage(correctAnswers, totalQuestions);
+            setTimeout(() => {
+                generateExercise();
+            }, 2000);
+        } else {
+            stats.errors++;
+            stats.streak = 0;
+            showErrorMessage(errors, correctAnswers, totalQuestions);
+        }
+        updateStats();
+        document.getElementById('checkBtn').disabled = true;
+        return; // On sort, pas besoin d'aller plus loin
+    }
+
+    // --- MODE DESKTOP : cases à cocher ---
+    const checkboxes = document.querySelectorAll('#tableBody input[type="checkbox"]');
+    totalQuestions = checkboxes.length;
+    correctAnswers = 0;
+    errors = [];
+
+    checkboxes.forEach((checkbox, index) => {
+        const row = checkbox.closest('tr');
+        const arabicWord = row.cells[0].textContent;
+        const translit = row.cells[2].textContent;
+        const targetLetter = getTargetLetter(arabicWord);
+
+        const isLunar = getLunarLetters().includes(targetLetter);
+        const shouldBeSelected = (currentQuestionType === 'lunar') === isLunar;
+
+        setTimeout(() => {
+            if (checkbox.checked === shouldBeSelected) {
+                correctAnswers++;
+                row.classList.add('correct-row');
+            } else {
+                row.classList.add('incorrect-row');
+                const wordType = isLunar ? 'lunaire' : 'solaire';
+                const expectedAction = shouldBeSelected ? 'cocher' : 'ne pas cocher';
+                errors.push(`${arabicWord} (${translit}) : lettre ${targetLetter} — ${wordType} ➤ Il fallait ${expectedAction}`);
+            }
+
+            if (index === checkboxes.length - 1) {
+                setTimeout(() => {
+                    stats.total++;
+                    if (correctAnswers === totalQuestions) {
+                        stats.correct++;
+                        stats.streak++;
+                        showSuccessMessage(correctAnswers, totalQuestions);
+                        setTimeout(() => {
+                            generateExercise();
+                        }, 3000);
+                    } else {
+                        stats.errors++;
+                        stats.streak = 0;
+                        showErrorMessage(errors, correctAnswers, totalQuestions);
+                    }
+                    updateStats();
+                }, 500);
+            }
+        }, index * 100);
+    });
+
+    document.getElementById('checkBtn').disabled = true;
+}
+*/
+
+function checkAnswers() {
+    const feedback = document.getElementById('feedback');
+    feedback.innerHTML = '';
+
+    // Détection mobile
+    let deviceIsMobile = window.matchMedia("(pointer:coarse)").matches || window.innerWidth < 700;
+
+    if (!deviceIsMobile) {
+        // --- DESKTOP : tableau à coches ---
+        const checkboxes = document.querySelectorAll('#tableBody input[type="checkbox"]');
+        let correctAnswers = 0;
+        let totalQuestions = checkboxes.length;
+        let errors = [];
+
+        checkboxes.forEach((checkbox, index) => {
+            const row = checkbox.closest('tr');
+            const arabicWord = row.cells[0].textContent;
+            const translit = row.cells[2].textContent;
+            const targetLetter = getTargetLetter(arabicWord);
+
+            const isLunar = getLunarLetters().includes(targetLetter);
+            const shouldBeSelected = (currentQuestionType === 'lunar') === isLunar;
+
+            setTimeout(() => {
+                if(checkbox.checked === shouldBeSelected) {
+                    correctAnswers++;
+                    row.classList.add('correct-row');
+                } else {
+                    row.classList.add('incorrect-row');
+                    const wordType = isLunar ? 'lunaire' : 'solaire';
+                    const expectedAction = shouldBeSelected ? 'cocher' : 'ne pas cocher';
+                    errors.push(`${arabicWord} (${translit}) : lettre ${targetLetter} — ${wordType} ➤ Il fallait ${expectedAction}`);
+                }
+
+                if(index === checkboxes.length - 1) {
+                    setTimeout(() => {
+                        stats.total++;
+                        if (correctAnswers === totalQuestions) {
+                            stats.correct++;
+                            stats.streak++;
+                            showSuccessMessage(correctAnswers, totalQuestions);
+                            setTimeout(() => {
+                                generateExercise();
+                            }, 3000);
+                        } else {
+                            stats.errors++;
+                            stats.streak = 0;
+                            showErrorMessage(errors, correctAnswers, totalQuestions);
+                        }
+                        updateStats();
+                    }, 500);
+                }
+            }, index * 100);
+        });
+
+        document.getElementById('checkBtn').disabled = true;
+    } else {
+        // --- MOBILE : multi-sélection boutons ---
+        let mobileZone = document.getElementById('mobileChoices');
+        if (!mobileZone) return;
+        let selectedBtns = Array.from(mobileZone.children).filter(b => b.classList.contains("selected"));
+        let { selectedWords } = window._mobileChoices || {};
+        let correctAnswers = 0;
+        let errors = [];
+        let totalQuestions = selectedWords.length;
+
+        selectedWords.forEach((word, i) => {
+            const targetLetter = getTargetLetter(word.arabic);
+            const isLunar = getLunarLetters().includes(targetLetter);
+            const shouldBeSelected = (currentQuestionType === 'lunar') === isLunar;
+            const isSelected = selectedBtns.includes(mobileZone.children[i]);
+            if (isSelected === shouldBeSelected) {
+                correctAnswers++;
+            } else {
+                const wordType = isLunar ? 'lunaire' : 'solaire';
+                const expectedAction = shouldBeSelected ? 'Sélectionner' : 'Ne pas sélectionner';
+                errors.push(`${word.arabic} (${word.translit}) : lettre ${targetLetter} — ${wordType} ➤ Il fallait ${expectedAction}`);
+            }
+        });
+
+        stats.total++;
+        if (correctAnswers === totalQuestions) {
+            stats.correct++;
+            stats.streak++;
+            showSuccessMessage(correctAnswers, totalQuestions);
+            setTimeout(() => {
+                generateExercise();
+            }, 3000);
+        } else {
+            stats.errors++;
+            stats.streak = 0;
+            showErrorMessage(errors, correctAnswers, totalQuestions);
+        }
+        updateStats();
+        document.getElementById('checkBtn').disabled = true;
+    }
+}
+
+
+
+// Recharge une nouvelle question (exemple)
+function nouvelleQuestion() {
+  genererBoutonsMobile();
+  const feedback = document.getElementById('feedback');
+  if (feedback) feedback.innerHTML = '';
+}
+
+// S'assure que le bouton vérifie bien la fonction
+window.addEventListener('DOMContentLoaded', () => {
+  const btn = document.getElementById('checkBtn');
+  if (btn) btn.onclick = checkAnswers;
+});
+
+</script>
+
 </body>
 </html>
