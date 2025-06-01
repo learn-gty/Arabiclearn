@@ -1,0 +1,1475 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apprentissage des pays arabes et nationalités</title>
+  <link href="https://fonts.googleapis.com/css?family=Quicksand:400,700&display=swap" rel="stylesheet">
+  <style>
+    /* CSS du cahier des charges (voir paste.txt) */
+    :root {
+      --pal-red: #E4312b;
+      --pal-black: #000;
+      --pal-white: #fff;
+      --pal-green: #149954;
+      --container-bg: rgba(255,255,255,0.98);
+      --container-border: #ddd;
+      --button-bg: var(--pal-black);
+      --button-text: var(--pal-white);
+      --button-hover-bg: var(--pal-red);
+      --button-hover-text: var(--pal-white);
+      --stats-bg: #f4f4f4;
+    }
+    body.dark-mode {
+      --container-bg: rgba(24,24,24,0.96);
+      --container-border: #444;
+      --button-bg: var(--pal-black);
+      --button-text: var(--pal-white);
+      --button-hover-bg: var(--pal-red);
+      --button-hover-text: var(--pal-white);
+      --stats-bg: #232323;
+    }
+    body {
+      min-height: 100vh;
+      font-family: 'Quicksand', Arial, sans-serif;
+      background:
+        linear-gradient(to bottom, var(--pal-black) 0 33%, var(--pal-white) 33% 66%, var(--pal-green) 66% 100%),
+        linear-gradient(135deg, var(--pal-red) 0 32%, transparent 32% 100%);
+      color: var(--pal-black);
+      margin: 0;
+      padding: 0;
+      line-height: 1.1;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0;
+      width: 30vw; height: 100vh;
+      background: var(--pal-red);
+      clip-path: polygon(0 0, 100% 50%, 0 100%);
+      z-index: 0;
+      opacity: 0.7;
+      pointer-events: none;
+    }
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 900px;
+      width: 99vw;
+      margin: 10px auto 0 auto;
+      background: var(--container-bg);
+      border-radius: 8px;
+      box-shadow: 0 0 6px rgba(0,0,0,0.08);
+      padding: 15px 10px;
+      border: 1px solid var(--container-border);
+      display: flex;
+      flex-direction: column;
+      animation: slideIn 0.8s ease-out;
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(30px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+    h1, h2 {
+      font-weight: 700;
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      color: var(--pal-red);
+      text-align: center;
+      letter-spacing: 0.5px;
+      animation: fadeInScale 1s ease-out;
+    }
+    @keyframes fadeInScale {
+      from { opacity: 0; transform: scale(0.8);}
+      to { opacity: 1; transform: scale(1);}
+    }
+    #question {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin: 1rem 0;
+      text-align: center;
+      color: var(--pal-black);
+      min-height: 40px;
+      padding: 15px;
+      background: var(--stats-bg);
+      border-radius: 8px;
+      border-left: 4px solid var(--pal-red);
+    }
+    body.dark-mode #question { color: var(--pal-white);}
+    .tableau-reponses {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 25px 0;
+      background: var(--container-bg);
+      border: 2px solid var(--pal-black);
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      animation: tableSlide 0.6s ease-out;
+      font-size: 0.85rem;
+    }
+    @keyframes tableSlide {
+      from { opacity: 0; transform: translateX(-20px);}
+      to { opacity: 1; transform: translateX(0);}
+    }
+    .tableau-reponses td {
+      min-width: 80px;
+      border: 1px solid var(--pal-black);
+      text-align: center;
+      vertical-align: middle;
+      font-weight: 600;
+      line-height: 1.1;
+      transition: all 0.3s ease;
+      padding: 8px;
+    }
+    .checkbox-cell {
+      background-color: var(--stats-bg);
+      padding: 8px;
+      height: 40px;
+    }
+    body.dark-mode .checkbox-cell { background-color: var(--stats-bg);}
+    .checkbox-cell:hover {
+      background: rgba(228, 49, 43, 0.1);
+      transform: scale(1.01);
+    }
+    .checkbox-cell input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+      margin: 0;
+      accent-color: var(--pal-red);
+      transform: scale(1.1);
+    }
+    .checkbox-cell input[type="checkbox"]:checked {
+      animation: checkBounce 0.3s ease-out;
+    }
+
+body.dark-mode .tableau-reponses td,
+body.dark-mode .tableau-reponses label {
+    color: #fff !important;
+}
+
+    @keyframes checkBounce {
+      0% { transform: scale(1.1);}
+      50% { transform: scale(1.3);}
+      100% { transform: scale(1.1);}
+    }
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin: 25px 0;
+      font-size: 0.87rem;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      padding: 20px;
+      background-color: var(--stats-bg);
+      border-radius: 8px;
+      border-left: 4px solid var(--pal-red);
+    }
+    body.dark-mode .controls { background-color: var(--stats-bg);}
+    .controls:hover { transform: translateY(-2px);}
+    .control-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+    }
+    input[type="number"], select {
+      padding: 8px 12px;
+      margin-left: 10px;
+      border: 2px solid var(--pal-black);
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--pal-black);
+      background: var(--container-bg);
+      transition: all 0.3s ease;
+    }
+    body.dark-mode input[type="number"], 
+    body.dark-mode select {
+      color: var(--pal-white);
+      border-color: var(--pal-white);
+      background: #232323;
+    }
+    input[type="number"]:focus, select:focus {
+      border-color: var(--pal-green);
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(20, 153, 84, 0.2);
+    }
+    .buttons {
+      margin-top: 25px;
+      text-align: center;
+    }
+    button {
+      background-color: var(--button-bg);
+      color: var(--button-text);
+      border: 1px solid var(--pal-black);
+      border-radius: 4px;
+      padding: 12px 25px;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      white-space: nowrap;
+      line-height: 1;
+      margin: 0 10px;
+    }
+    button:hover:not(:disabled) {
+      background-color: var(--button-hover-bg);
+      color: var(--button-hover-text);
+      border: 1px solid var(--pal-red);
+      transform: translateY(-1px);
+    }
+    button:active { transform: translateY(1px);}
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .feedback {
+      font-weight: 700;
+      min-height: 20px;
+      margin: 1rem 0;
+      text-align: center;
+      font-size: 0.9rem;
+      transition: all 0.3s;
+      padding: 12px;
+      border-radius: 4px;
+    }
+    .success {
+      background: rgba(20, 153, 84, 0.15);
+      border-left: 4px solid var(--pal-green);
+      color: var(--pal-green);
+    }
+    .error {
+      background: rgba(228, 49, 43, 0.15);
+      border-left: 4px solid var(--pal-red);
+      color: var(--pal-red);
+    }
+    @media (max-width: 768px) {
+      .container { max-width: 100vw; padding: 8px 4vw; margin: 2vw auto 0 auto;}
+      .controls { justify-content: center; flex-direction: column; gap: 8px;}
+      .tableau-reponses td { font-size: 14px; height: 45px; min-width: 60px;}
+      .checkbox-cell input[type="checkbox"] { width: 12px; height: 12px; transform: scale(0.9);}
+    }
+    @media (max-width: 480px) {
+      .container { width: 98vw; padding: 8px 3px;}
+      .tableau-reponses td { min-width: 35px; height: 35px; font-size: 11px;}
+      .checkbox-cell input[type="checkbox"] { width: 10px; height: 10px; transform: scale(0.8);}
+      h1, h2 { font-size: 0.9rem;}
+      #question { font-size: 0.8rem; padding: 8px;}
+      button { width: 90%; padding: 10px; font-size: 13px;}
+    }
+    .menu-hamburger { position: fixed; top: 1rem; left: 1rem; z-index: 1100;}
+    .menu-icon {
+      display: flex; flex-direction: column; justify-content: center;
+      width: 40px; height: 40px; cursor: pointer; transition: transform 0.3s ease;
+    }
+    .menu-icon span {
+      height: 3px; width: 100%; background-color: #333; margin: 5px 0;
+      border-radius: 2px; transition: 0.4s ease;
+    }
+    #menu-toggle { display: none;}
+    .menu {
+      position: fixed; top: 0; left: -260px; width: 240px; height: 100vh;
+      background: #fff; box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
+      border-top-right-radius: 16px; border-bottom-right-radius: 16px;
+      padding: 60px 0 20px 0; list-style: none; transition: left 0.35s ease;
+      font-family: 'Segoe UI', Arial, sans-serif; overflow-y: auto;
+    }
+    .menu li { margin: 0; padding: 0;}
+    .menu li a {
+      display: block; padding: 14px 24px; color: #333; font-size: 1rem;
+      text-decoration: none; border-left: 4px solid transparent;
+      transition: background-color 0.25s, border-color 0.25s;
+    }
+    .menu li a:hover {
+      background-color: #f5f5f5; color: #007a33; border-left: 4px solid #007a33;
+    }
+    #menu-toggle:checked ~ .menu { left: 0;}
+    #menu-toggle:checked + .menu-icon span:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);}
+    #menu-toggle:checked + .menu-icon span:nth-child(2) { opacity: 0;}
+    #menu-toggle:checked + .menu-icon span:nth-child(3) {
+      transform: rotate(-45deg) translate(5px, -5px);}
+    @media (max-width: 600px) {
+      .menu { width: 80vw; max-width: 300px; border-radius: 0 16px 16px 0; left: -300px;}
+      .menu li a { font-size: 0.95rem; padding: 12px 20px;}
+      .menu-icon { width: 36px; height: 36px;}
+      .menu-icon span { margin: 4px 0;}
+      #content-wrapper { z-index: 0; position: relative; }
+    }
+
+
+/* Affichage vertical des boutons de réponse sur mobile */
+@media (max-width: 700px), (pointer: coarse) {
+  .mobile-choices {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
+    margin: 20px 0;
+  }
+  .mobile-choices button {
+    width: 100%;
+    font-size: 1.1em;
+    padding: 14px 0;
+    border-radius: 6px;
+    border: 2px solid var(--pal-black);
+    background: var(--container-bg);
+    color: var(--pal-black);
+    transition: background 0.2s, color 0.2s, border 0.2s;
+    font-weight: 600;
+    outline: none;
+  }
+  .mobile-choices button.selected {
+    background: var(--pal-red);
+    color: #fff;
+    border-color: var(--pal-red);
+  }
+  .mobile-choices button:active {
+    filter: brightness(0.95);
+  }
+  body.dark-mode .mobile-choices button {
+    background: #232323;
+    color: #fff;
+    border-color: #fff;
+  }
+  body.dark-mode .mobile-choices button.selected {
+    background: var(--pal-green);
+    color: #fff;
+    border-color: var(--pal-green);
+  }
+}
+
+/* Pour l'affichage vertical des boutons de réponse sur mobile */
+@media (max-width: 700px), (pointer: coarse) {
+  .mobile-choices {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    align-items: stretch;
+    margin: 20px 0;
+  }
+  .mobile-choices button {
+    width: 100%;
+    font-size: 1.2em;
+    padding: 16px 0;
+    border-radius: 6px;
+    border: 2px solid var(--pal-black);
+    background: var(--container-bg);
+    color: var(--pal-black);
+    transition: background 0.2s, color 0.2s, border 0.2s;
+    font-weight: 600;
+    outline: none;
+  }
+  .mobile-choices button.selected {
+    background: var(--pal-red);
+    color: #fff;
+    border-color: var(--pal-red);
+  }
+  .mobile-choices button:active {
+    filter: brightness(0.95);
+  }
+  body.dark-mode .mobile-choices button {
+    background: #232323;
+    color: #fff;
+    border-color: #fff;
+  }
+  body.dark-mode .mobile-choices button.selected {
+    background: var(--pal-green);
+    color: #fff;
+    border-color: var(--pal-green);
+  }
+}
+/* Cacher le tableau des coches sur mobile */
+@media (max-width: 700px), (pointer: coarse) {
+  .tableau-reponses {
+    display: none !important;
+  }
+}
+
+
+
+  </style>
+</head>
+<body>
+  <!-- Menu hamburger pour mobile -->
+  <input type="checkbox" id="menu-toggle" style="display:none;">
+  <label class="menu-icon menu-hamburger" for="menu-toggle">
+    <span></span>
+    <span></span>
+    <span></span>
+  </label>
+  <ul class="menu">
+    <li><a href="#" onclick="showCountriesPopup(); return false;">Tableau des pays</a></li>
+    <li><a href="#" onclick="showNationalitiesPopup(); return false;">Tableau des nationalités</a></li>
+    <li><a href="#" onclick="showRulesPopup(); return false;">Règle du Alif & Suffixes</a></li>
+    <li><a href="#" onclick="toggleDarkMode(); return false;">Basculer mode clair/sombre</a></li>
+  </ul>
+  <div id="content-wrapper">
+    <div class="container">
+      <h1>Apprentissage : Pays arabes & Nationalités</h1>
+      <div class="controls">
+        <div class="control-group">
+          <label for="mode-select">Mode :</label>
+          <select id="mode-select">
+            <option value="country-fr-to-ar">Pays (français → arabe)</option>
+            <option value="country-ar-to-fr">Pays (arabe → français)</option>
+            <option value="nat-m-sg-fr-to-ar">Nationalité masc. sg (fr → ar)</option>
+            <option value="nat-m-pl-fr-to-ar">Nationalité masc. pl (fr → ar)</option>
+            <option value="nat-f-sg-fr-to-ar">Nationalité fém. sg (fr → ar)</option>
+            <option value="nat-f-pl-fr-to-ar">Nationalité fém. pl (fr → ar)</option>
+            <option value="nat-m-sg-ar-to-fr">Nationalité masc. sg (ar → fr)</option>
+            <option value="nat-m-pl-ar-to-fr">Nationalité masc. pl (ar → fr)</option>
+            <option value="nat-f-sg-ar-to-fr">Nationalité fém. sg (ar → fr)</option>
+            <option value="nat-f-pl-ar-to-fr">Nationalité fém. pl (ar → fr)</option>
+            <option value="quizz-mix">Quizz (modes mélangés)</option>
+          </select>
+        </div>
+      <div class="control-group">
+      <label for="level-select">Niveau :</label>
+      <select id="level-select">
+        <option value="1">Niveau 1</option>
+        <option value="2">Niveau 2</option>
+      </select>
+      </div>
+        <div class="control-group">
+          <label for="timer-input">Délai (s) :</label>
+          <input type="number" id="timer-input" min="10" max="600" value="120">
+        </div>
+        <div class="control-group">
+          <button onclick="toggleDarkMode()">Clair/Sombre</button>
+        </div>
+        <div class="control-group">
+          <button onclick="showCountriesPopup()">Pays</button>
+          <button onclick="showNationalitiesPopup()">Nationalités</button>
+          <button onclick="showRulesPopup()">Règles</button>
+        </div>
+      </div>
+      <div id="stats">
+        <span>✅ <span id="good-count">0</span></span> &nbsp; 
+        <span>❌ <span id="bad-count">0</span></span>
+        <span id="timer" style="float:right;"></span>
+      </div>
+      <div id="question"></div>
+      <div id="reponses"></div>
+      <div class="feedback" id="feedback"></div>
+      <div class="buttons" id="action-buttons"></div>
+    </div>
+  </div>
+  <!-- Popups pédagogiques -->
+  <div id="popup-overlay" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:10000;background:rgba(0,0,0,0.25);">
+    <div id="popup-content" style="background:white;max-width:90vw;max-height:80vh;overflow:auto;position:relative;margin:5vh auto;padding:24px;border-radius:10px;box-shadow:0 8px 32px rgba(0,0,0,0.25);">
+      <button onclick="closePopup()" style="position:absolute;top:10px;right:10px;font-size:1.3em;">&times;</button>
+      <button onclick="closePopup()" style="position:absolute;top:10px;left:10px;font-size:1.1em;">Fermer</button>
+      <div id="popup-inner"></div>
+    </div>
+  </div>
+  <script>
+
+
+
+
+
+
+    // --- Données niveau 1 ---
+    const data = [
+      {
+        arabicCountry: "ُﺏِﺮْﻐَﻤﻟا",
+        frenchCountry: "Maroc",
+        translitCountry: "al-maghrib",
+        arabicNationalityPlurielMale: "َﻥﻮُّﻴِﺑِﺮْﻐَﻣ",
+        frenchNationalityPlurielMale: "Marocains",
+        translitNationalityPlurielMale: "maghribiyyūn",
+        arabicNationalitySingularMale: "ٌّﻲِﺑِﺮْﻐَﻣ",
+        frenchNationalitySingularMale: "Marocain",
+        translitNationalitySingularMale: "maghribiyy",
+        arabicNationalityPlurielFemale: "ٌﺕﺎَّﻴِﺑِﺮْﻐَﻣ",
+        frenchNationalityPlurielFemale: "Marocaines",
+        translitNationalityPlurielFemale: "maghribiyyāt",
+        arabicNationalitySingularFemale: "ٌﺔَّﻴِﺑِﺮْﻐَﻣ",
+        frenchNationalitySingularFemale: "Marocaine",
+        translitNationalitySingularFemale: "maghribiyya"
+      },
+      {
+        arabicCountry: "ُﺮِﺋاَﺰَﺠﻟا",
+        frenchCountry: "Algérie",
+        translitCountry: "al-jazā'ir",
+        arabicNationalityPlurielMale: "َﻥﻮُّﻳِﺮِﺋاَﺰَﺟ",
+        frenchNationalityPlurielMale: "Algériens",
+        translitNationalityPlurielMale: "jazā’iriyyūn",
+        arabicNationalitySingularMale: "ٌّﻱِﺮِﺋاَﺰَﺟ",
+        frenchNationalitySingularMale: "Algérien",
+        translitNationalitySingularMale: "jazā’iriyy",
+        arabicNationalityPlurielFemale: "ٌﺕﺎَّﻳِﺮِﺋاَﺰَﺟ",
+        frenchNationalityPlurielFemale: "Algériennes",
+        translitNationalityPlurielFemale: "jazā’iriyyāt",
+        arabicNationalitySingularFemale: "ٌﺔَّﻳِﺮِﺋاَﺰَﺟ",
+        frenchNationalitySingularFemale: "Algérienne",
+        translitNationalitySingularFemale: "jazā’iriyya"
+      },
+      {
+        arabicCountry: "ُﺲِﻧﻮُﺗ",
+        frenchCountry: "Tunisie",
+        translitCountry: "tūnis",
+        arabicNationalityPlurielMale: "َﻥﻮُّﻴِﺴِﻧﻮُﺗ",
+        frenchNationalityPlurielMale: "Tunisiens",
+        translitNationalityPlurielMale: "tūnisiyyūn",
+        arabicNationalitySingularMale: "ٌّﻲِﺴِﻧﻮُﺗ",
+        frenchNationalitySingularMale: "Tunisien",
+        translitNationalitySingularMale: "tūnisiyy",
+        arabicNationalityPlurielFemale: "ٌﺕﺎَّﻴِﺴِﻧﻮُﺗ",
+        frenchNationalityPlurielFemale: "Tunisiennes",
+        translitNationalityPlurielFemale: "tūnisiyyāt",
+        arabicNationalitySingularFemale: "ٌﺔَّﻴِﺴِﻧﻮُﺗ",
+        frenchNationalitySingularFemale: "Tunisienne",
+        translitNationalitySingularFemale: "tūnisiyya"
+      },
+      {
+        arabicCountry: "ﺎَﻴِﺒﻴِﻟ",
+        frenchCountry: "Libye",
+        translitCountry: "lībiyā",
+        arabicNationalityPlurielMale: "َﻥﻮُّﻴِﺒﻴِﻟ",
+        frenchNationalityPlurielMale: "Libyens",
+        translitNationalityPlurielMale: "lībiyyūn",
+        arabicNationalitySingularMale: "ٌّﻲِﺒﻴِﻟ",
+        frenchNationalitySingularMale: "Libyen",
+        translitNationalitySingularMale: "lībiyy",
+        arabicNationalityPlurielFemale: "ٌﺕﺎَّﻴِﺒﻴِﻟ",
+        frenchNationalityPlurielFemale: "Libyennes",
+        translitNationalityPlurielFemale: "lībiyyāt",
+        arabicNationalitySingularFemale: "ٌﺔَّﻴِﺒﻴِﻟ",
+        frenchNationalitySingularFemale: "Libyenne",
+        translitNationalitySingularFemale: "lībiyya"
+      },
+      {
+        arabicCountry: "ُﺮْﺼِﻣ",
+        frenchCountry: "Égypte",
+        translitCountry: "miṣr",
+        arabicNationalityPlurielMale: "َﻥﻮُّﻳِﺮْﺼِﻣ",
+        frenchNationalityPlurielMale: "Égyptiens",
+        translitNationalityPlurielMale: "miṣriyyūn",
+        arabicNationalitySingularMale: "ٌّﻱِﺮْﺼِﻣ",
+        frenchNationalitySingularMale: "Égyptien",
+        translitNationalitySingularMale: "miṣriyy",
+        arabicNationalityPlurielFemale: "ٌﺕﺎَّﻳِﺮْﺼِﻣ",
+        frenchNationalityPlurielFemale: "Égyptiennes",
+        translitNationalityPlurielFemale: "miṣriyyāt",
+        arabicNationalitySingularFemale: "ٌﺔَّﻳِﺮْﺼِﻣ",
+        frenchNationalitySingularFemale: "Égyptienne",
+        translitNationalitySingularFemale: "miṣriyya"
+      },
+      {
+        arabicCountry: "ُﻥاَﺩﻮُّﺴﻟا",
+        frenchCountry: "Soudan",
+        translitCountry: "as-sūdān",
+        arabicNationalityPlurielMale: "َﻥﻮُّﻴِﻧاَﺩﻮُﺳ",
+        frenchNationalityPlurielMale: "Soudanais",
+        translitNationalityPlurielMale: "sūdāniyyūn",
+        arabicNationalitySingularMale: "ٌّﻲِﻧاَﺩﻮُﺳ",
+        frenchNationalitySingularMale: "Soudanais",
+        translitNationalitySingularMale: "sūdāniyy",
+        arabicNationalityPlurielFemale: "ٌﺕﺎَّﻴِﻧاَﺩﻮُﺳ",
+        frenchNationalityPlurielFemale: "Soudanaises",
+        translitNationalityPlurielFemale: "sūdāniyyāt",
+        arabicNationalitySingularFemale: "ٌﺔَّﻴِﻧاَﺩﻮُﺳ",
+        frenchNationalitySingularFemale: "Soudanaise",
+        translitNationalitySingularFemale: "sūdāniyya"
+      },
+      {
+        arabicCountry: "ُﻥﺎَﻨْﺒُﻟ",
+        frenchCountry: "Liban",
+        translitCountry: "lubnān",
+        arabicNationalityPlurielMale: "َﻥﻮُّﻴِﻧﺎَﻨْﺒُﻟ",
+        frenchNationalityPlurielMale: "Libanais",
+        translitNationalityPlurielMale: "lubnāniyyūn",
+        arabicNationalitySingularMale: "ٌّﻲِﻧﺎَﻨْﺒُﻟ",
+        frenchNationalitySingularMale: "Libanais",
+        translitNationalitySingularMale: "lubnāniyy",
+        arabicNationalityPlurielFemale: "ٌﺕﺎَّﻴِﻧﺎَﻨْﺒُﻟ",
+        frenchNationalityPlurielFemale: "Libanaises",
+        translitNationalityPlurielFemale: "lubnāniyyāt",
+        arabicNationalitySingularFemale: "ٌﺔَّﻴِﻧﺎَﻨْﺒُﻟ",
+        frenchNationalitySingularFemale: "Libanaise",
+        translitNationalitySingularFemale: "lubnāniyya"
+      },
+      {
+        arabicCountry: "ﺎَﻳِﺭﻮُﺳ",
+        frenchCountry: "Syrie",
+        translitCountry: "sūriyā",
+        arabicNationalityPlurielMale: "َﻥﻮُّﻳِﺭﻮُﺳ",
+        frenchNationalityPlurielMale: "Syriens",
+        translitNationalityPlurielMale: "sūriyyūn",
+        arabicNationalitySingularMale: "ٌّﻱِﺭﻮُﺳ",
+        frenchNationalitySingularMale: "Syrien",
+        translitNationalitySingularMale: "sūriyy",
+        arabicNationalityPlurielFemale: "ٌﺕﺎَّﻳِﺭﻮُﺳ",
+        frenchNationalityPlurielFemale: "Syriennes",
+        translitNationalityPlurielFemale: "sūriyyāt",
+        arabicNationalitySingularFemale: "ٌﺔَّﻳِﺭﻮُﺳ",
+        frenchNationalitySingularFemale: "Syrienne",
+        translitNationalitySingularFemale: "sūriyya"
+      }
+    ];
+
+
+ const dataLevel2 =[
+  {
+    arabicCountry: "ﺎﻴﻧﺎﺘﻳﺭﻮﻣ",
+    frenchCountry: "Mauritanie",
+    translitCountry: "mūritāniyā",
+    arabicNationalityPlurielMale: "َﻥﻮُّﻴِﻧﺎَﺘﻳِﺭﻮُﻣ",
+    frenchNationalityPlurielMale: "Mauritaniens",
+    translitNationalityPlurielMale: "mūritāniyyūn",
+    arabicNationalitySingularMale: "ٌّﻲِﻧﺎَﺘﻳِﺭﻮُﻣ",
+    frenchNationalitySingularMale: "Mauritanien",
+    translitNationalitySingularMale: "mūritāniyy",
+    arabicNationalityPlurielFemale: "ٌﺕﺎَّﻴِﻧﺎَﺘﻳِﺭﻮُﻣ",
+    frenchNationalityPlurielFemale: "Mauritaniennes",
+    translitNationalityPlurielFemale: "mūritāniyyāt",
+    arabicNationalitySingularFemale: "ٌﺔَّﻴِﻧﺎَﺘﻳِﺭﻮُﻣ",
+    frenchNationalitySingularFemale: "Mauritanienne",
+    translitNationalitySingularFemale: "mūritāniyya"
+  },
+  {
+    arabicCountry: "ﻲﻟﺎﻣ",
+    frenchCountry: "Mali",
+    translitCountry: "mālī",
+    arabicNationalityPlurielMale: "َﻥﻮُّﻴِﻟﺎَﻣ",
+    frenchNationalityPlurielMale: "Maliens",
+    translitNationalityPlurielMale: "māliyyūn",
+    arabicNationalitySingularMale: "ٌّﻲِﻟﺎَﻣ",
+    frenchNationalitySingularMale: "Malien",
+    translitNationalitySingularMale: "māliyy",
+    arabicNationalityPlurielFemale: "ٌﺕﺎَّﻴِﻟﺎَﻣ",
+    frenchNationalityPlurielFemale: "Maliennes",
+    translitNationalityPlurielFemale: "māliyyāt",
+    arabicNationalitySingularFemale: "ٌﺔَّﻴِﻟﺎَﻣ",
+    frenchNationalitySingularFemale: "Malienne",
+    translitNationalitySingularFemale: "māliyya"
+  },
+  {
+    arabicCountry: "ﺮﺠﻴﻨﻟا",
+    frenchCountry: "Niger",
+    translitCountry: "an-nījar",
+    arabicNationalityPlurielMale: "َﻥﻮُّﻳِﺮَﺠﻴِﻧ",
+    frenchNationalityPlurielMale: "Nigériens",
+    translitNationalityPlurielMale: "nījariyyūn",
+    arabicNationalitySingularMale: "ٌّﻱِﺮَﺠﻴِﻧ",
+    frenchNationalitySingularMale: "Nigérien",
+    translitNationalitySingularMale: "nījariyy",
+    arabicNationalityPlurielFemale: "ٌﺕﺎَّﻳِﺮَﺠﻴِﻧ",
+    frenchNationalityPlurielFemale: "Nigériennes",
+    translitNationalityPlurielFemale: "nījariyyāt",
+    arabicNationalitySingularFemale: "ٌﺔَّﻳِﺮَﺠﻴِﻧ",
+    frenchNationalitySingularFemale: "Nigérienne",
+    translitNationalitySingularFemale: "nījariyya"
+  },
+  {
+    arabicCountry: "ﺩﺎﺸﺗ",
+    frenchCountry: "Tchad",
+    translitCountry: "tšād",
+    arabicNationalityPlurielMale: "َﻥﻮُّﻳِﺩﺎَﺸَﺗ",
+    frenchNationalityPlurielMale: "Tchadiens",
+    translitNationalityPlurielMale: "tšādiyyūn",
+    arabicNationalitySingularMale: "ٌّﻱِﺩﺎَﺸَﺗ",
+    frenchNationalitySingularMale: "Tchadien",
+    translitNationalitySingularMale: "tšādiyy",
+    arabicNationalityPlurielFemale: "ٌﺕﺎَّﻳِﺩﺎَﺸَﺗ",
+    frenchNationalityPlurielFemale: "Tchadiennes",
+    translitNationalityPlurielFemale: "tšādiyyāt",
+    arabicNationalitySingularFemale: "ٌﺔَّﻳِﺩﺎَﺸَﺗ",
+    frenchNationalitySingularFemale: "Tchadienne",
+    translitNationalitySingularFemale: "tšādiyya"
+  },
+  {
+    arabicCountry: "ﺎﻳﺮﺘﻳﺭﺇ",
+    frenchCountry: "Érythrée",
+    translitCountry: "irītriyā",
+    arabicNationalityPlurielMale: "َﻥﻮُّﻳِﺮْﺘﻳِﺭِﺇ",
+    frenchNationalityPlurielMale: "Érythréens",
+    translitNationalityPlurielMale: "irītriyyūn",
+    arabicNationalitySingularMale: "ٌّﻱِﺮْﺘﻳِﺭِﺇ",
+    frenchNationalitySingularMale: "Érythréen",
+    translitNationalitySingularMale: "irītriyy",
+    arabicNationalityPlurielFemale: "ٌﺕﺎَّﻳِﺮْﺘﻳِﺭِﺇ",
+    frenchNationalityPlurielFemale: "Érythréennes",
+    translitNationalityPlurielFemale: "irītriyyāt",
+    arabicNationalitySingularFemale: "ٌﺔَّﻳِﺮْﺘﻳِﺭِﺇ",
+    frenchNationalitySingularFemale: "Érythréenne",
+    translitNationalitySingularFemale: "irītriyya"
+  },
+  {
+    arabicCountry: "ﻦﻴﻄﺴﻠﻓ",
+    frenchCountry: "Palestine",
+    translitCountry: "falastīn",
+    arabicNationalityPlurielMale: "َﻥﻮُّﻴِﻨﻴِﻄْﺴَﻠِﻓ",
+    frenchNationalityPlurielMale: "Palestiniens",
+    translitNationalityPlurielMale: "falastīniyyūn",
+    arabicNationalitySingularMale: "ٌّﻲِﻨﻴِﻄْﺴَﻠِﻓ",
+    frenchNationalitySingularMale: "Palestinien",
+    translitNationalitySingularMale: "falastīniyy",
+    arabicNationalityPlurielFemale: "ٌﺕﺎَّﻴِﻨﻴِﻄْﺴَﻠِﻓ",
+    frenchNationalityPlurielFemale: "Palestiniennes",
+    translitNationalityPlurielFemale: "falastīniyyāt",
+    arabicNationalitySingularFemale: "ٌﺔَّﻴِﻨﻴِﻄْﺴَﻠِﻓ",
+    frenchNationalitySingularFemale: "Palestinienne",
+    translitNationalitySingularFemale: "falastīniyya"
+  },
+  {
+    arabicCountry: "ﻕاﺮﻌﻟا",
+    frenchCountry: "Irak",
+    translitCountry: "al-‘irāq",
+    arabicNationalityPlurielMale: "َﻥﻮُّﻴِﻗاَﺮِﻋ",
+    frenchNationalityPlurielMale: "Irakiens",
+    translitNationalityPlurielMale: "‘irāqiyyūn",
+    arabicNationalitySingularMale: "ٌّﻲِﻗاَﺮِﻋ",
+    frenchNationalitySingularMale: "Irakien",
+    translitNationalitySingularMale: "‘irāqiyy",
+    arabicNationalityPlurielFemale: "ٌﺕﺎَّﻴِﻗاَﺮِﻋ",
+    frenchNationalityPlurielFemale: "Irakiennes",
+    translitNationalityPlurielFemale: "‘irāqiyyāt",
+    arabicNationalitySingularFemale: "ٌﺔَّﻴِﻗاَﺮِﻋ",
+    frenchNationalitySingularFemale: "Irakienne",
+    translitNationalitySingularFemale: "‘irāqiyya"
+  },
+  {
+    arabicCountry: "ﻥﺩﺭﻷا",
+    frenchCountry: "Jordanie",
+    translitCountry: "al-urdunn",
+    arabicNationalityPlurielMale: "َﻥﻮُّﻴِﻧُﺩْﺭُﺃ",
+    frenchNationalityPlurielMale: "Jordaniens",
+    translitNationalityPlurielMale: "urdunniyyūn",
+    arabicNationalitySingularMale: "ٌّﻲِﻧُﺩْﺭُﺃ",
+    frenchNationalitySingularMale: "Jordanien",
+    translitNationalitySingularMale: "urdunniyy",
+    arabicNationalityPlurielFemale: "ٌﺕﺎَّﻴِﻧُﺩْﺭُﺃ",
+    frenchNationalityPlurielFemale: "Jordaniennes",
+    translitNationalityPlurielFemale: "urdunniyyāt",
+    arabicNationalitySingularFemale: "ٌﺔَّﻴِﻧُﺩْﺭُﺃ",
+    frenchNationalitySingularFemale: "Jordanienne",
+    translitNationalitySingularFemale: "urdunniyya"
+  },
+  {
+    arabicCountry: "ﺔﻳﺩﻮﻌﺴﻟا ﺔﻴﺑﺮﻌﻟا ﺔﻜﻠﻤﻤﻟا",
+    frenchCountry: "Arabie Saoudite",
+    translitCountry: "al-mamlaka al-‘arabiyya as-sa‘ūdiyya",
+    arabicNationalityPlurielMale: "َﻥﻮُّﻳِﺩﻮُﻌَﺳ",
+    frenchNationalityPlurielMale: "Saoudiens",
+    translitNationalityPlurielMale: "sa‘ūdiyyūn",
+    arabicNationalitySingularMale: "ٌّﻱِﺩﻮُﻌَﺳ",
+    frenchNationalitySingularMale: "Saoudien",
+    translitNationalitySingularMale: "sa‘ūdiyy",
+    arabicNationalityPlurielFemale: "ٌﺕﺎَّﻳِﺩﻮُﻌَﺳ",
+    frenchNationalityPlurielFemale: "Saoudiennes",
+    translitNationalityPlurielFemale: "sa‘ūdiyyāt",
+    arabicNationalitySingularFemale: "ٌﺔَّﻳِﺩﻮُﻌَﺳ",
+    frenchNationalitySingularFemale: "Saoudienne",
+    translitNationalitySingularFemale: "sa‘ūdiyya"
+  },
+  {
+    arabicCountry: "ﻦﻤﻴﻟا",
+    frenchCountry: "Yémen",
+    translitCountry: "al-yaman",
+    arabicNationalityPlurielMale: "َﻥﻮُّﻴِﻨَﻤَﻳ",
+    frenchNationalityPlurielMale: "Yéménites",
+    translitNationalityPlurielMale: "yamaniyyūn",
+    arabicNationalitySingularMale: "ٌّﻲِﻨَﻤَﻳ",
+    frenchNationalitySingularMale: "Yéménite",
+    translitNationalitySingularMale: "yamaniyy",
+    arabicNationalityPlurielFemale: "ٌﺕﺎَّﻴِﻨَﻤَﻳ",
+    frenchNationalityPlurielFemale: "Yéménites",
+    translitNationalityPlurielFemale: "yamaniyyāt",
+    arabicNationalitySingularFemale: "ٌﺔَّﻴِﻨَﻤَﻳ",
+    frenchNationalitySingularFemale: "Yéménite",
+    translitNationalitySingularFemale: "yamaniyya"
+  },
+  {
+    arabicCountry: "ﻥﺎﻤﻋ",
+    frenchCountry: "Oman",
+    translitCountry: "‘umān",
+    arabicNationalityPlurielMale: "َﻥﻮُّﻴِﻧﺎَﻤُﻋ",
+    frenchNationalityPlurielMale: "Omanais",
+    translitNationalityPlurielMale: "‘umāniyyūn",
+    arabicNationalitySingularMale: "ٌّﻲِﻧﺎَﻤُﻋ",
+    frenchNationalitySingularMale: "Omanais",
+    translitNationalitySingularMale: "‘umāniyy",
+    arabicNationalityPlurielFemale: "ٌﺕﺎَّﻴِﻧﺎَﻤُﻋ",
+    frenchNationalityPlurielFemale: "Omanaises",
+    translitNationalityPlurielFemale: "‘umāniyyāt",
+    arabicNationalitySingularFemale: "ٌﺔَّﻴِﻧﺎَﻤُﻋ",
+    frenchNationalitySingularFemale: "Omanaise",
+    translitNationalitySingularFemale: "‘umāniyya"
+  },
+  {
+    arabicCountry: "ﺓﺪﺤﺘﻤﻟا ﺔﻴﺑﺮﻌﻟا ﺕاﺭﺎﻣﻹا",
+    frenchCountry: "Émirats Arabes Unis",
+    translitCountry: "al-imārāt al-‘arabiyya al-muttaḥida",
+    arabicNationalityPlurielMale: "َﻥﻮُّﻴِﺗاَﺭﺎَﻣِﺇ",
+    frenchNationalityPlurielMale: "Émiratis",
+    translitNationalityPlurielMale: "imārātiyyūn",
+    arabicNationalitySingularMale: "ٌّﻲِﺗاَﺭﺎَﻣِﺇ",
+    frenchNationalitySingularMale: "Émirati",
+    translitNationalitySingularMale: "imārātiyy",
+    arabicNationalityPlurielFemale: "ٌﺕﺎَّﻴِﺗاَﺭﺎَﻣِﺇ",
+    frenchNationalityPlurielFemale: "Émiraties",
+    translitNationalityPlurielFemale: "imārātiyyāt",
+    arabicNationalitySingularFemale: "ٌﺔَّﻴِﺗاَﺭﺎَﻣِﺇ",
+    frenchNationalitySingularFemale: "Émiratie",
+    translitNationalitySingularFemale: "imārātiyya"
+  },
+  {
+    arabicCountry: "ﺮﻄﻗ",
+    frenchCountry: "Qatar",
+    translitCountry: "qaṭar",
+    arabicNationalityPlurielMale: "َﻥﻮُّﻳِﺮَﻄَﻗ",
+    frenchNationalityPlurielMale: "Qataris",
+    translitNationalityPlurielMale: "qaṭariyyūn",
+    arabicNationalitySingularMale: "ٌّﻱِﺮَﻄَﻗ",
+    frenchNationalitySingularMale: "Qatari",
+    translitNationalitySingularMale: "qaṭariyy",
+    arabicNationalityPlurielFemale: "ٌﺕﺎَّﻳِﺮَﻄَﻗ",
+    frenchNationalityPlurielFemale: "Qataries",
+    translitNationalityPlurielFemale: "qaṭariyyāt",
+    arabicNationalitySingularFemale: "ٌﺔَّﻳِﺮَﻄَﻗ",
+    frenchNationalitySingularFemale: "Qatarie",
+    translitNationalitySingularFemale: "qaṭariyya"
+  },
+  {
+    arabicCountry: "ﻦﻳﺮﺤﺒﻟا",
+    frenchCountry: "Bahreïn",
+    translitCountry: "al-baḥrayn",
+    arabicNationalityPlurielMale: "َﻥﻮُّﻴِﻨْﻳَﺮْﺤَﺑ",
+    frenchNationalityPlurielMale: "Bahreïniens",
+    translitNationalityPlurielMale: "baḥrayniyyūn",
+    arabicNationalitySingularMale: "ٌّﻲِﻨْﻳَﺮْﺤَﺑ",
+    frenchNationalitySingularMale: "Bahreïnien",
+    translitNationalitySingularMale: "baḥrayniyy",
+    arabicNationalityPlurielFemale: "ٌﺕﺎَّﻴِﻨْﻳَﺮْﺤَﺑ",
+    frenchNationalityPlurielFemale: "Bahreïniennes",
+    translitNationalityPlurielFemale: "baḥrayniyyāt",
+    arabicNationalitySingularFemale: "ٌﺔَّﻴِﻨْﻳَﺮْﺤَﺑ",
+    frenchNationalitySingularFemale: "Bahreïnienne",
+    translitNationalitySingularFemale: "baḥrayniyya"
+  },
+  {
+    arabicCountry: "ﺖﻳﻮﻜﻟا",
+    frenchCountry: "Koweït",
+    translitCountry: "al-kuwayt",
+    arabicNationalityPlurielMale: "َﻥﻮُّﻴِﺘْﻳَﻮُﻛ",
+    frenchNationalityPlurielMale: "Koweïtiens",
+    translitNationalityPlurielMale: "kuwaytiyyūn",
+    arabicNationalitySingularMale: "ٌّﻲِﺘْﻳَﻮُﻛ",
+    frenchNationalitySingularMale: "Koweïtien",
+    translitNationalitySingularMale: "kuwaytiyy",
+    arabicNationalityPlurielFemale: "ٌﺕﺎَّﻴِﺘْﻳَﻮُﻛ",
+    frenchNationalityPlurielFemale: "Koweïtiennes",
+    translitNationalityPlurielFemale: "kuwaytiyyāt",
+    arabicNationalitySingularFemale: "ٌﺔَّﻴِﺘْﻳَﻮُﻛ",
+    frenchNationalitySingularFemale: "Koweïtienne",
+    translitNationalitySingularFemale: "kuwaytiyya"
+  },
+  {
+    arabicCountry: "ﺎﻴﻛﺮﺗ",
+    frenchCountry: "Turquie",
+    translitCountry: "turkiyā",
+    arabicNationalityPlurielMale: "ٌﻙاَﺮْﺗَﺃ",
+    frenchNationalityPlurielMale: "Turcs",
+    translitNationalityPlurielMale: "atrāk",
+    arabicNationalitySingularMale: "ٌّﻲِﻛْﺮُﺗ",
+    frenchNationalitySingularMale: "Turc",
+    translitNationalitySingularMale: "turkiyy",
+    arabicNationalityPlurielFemale: "ٌﺕﺎَّﻴِﻛْﺮُﺗ",
+    frenchNationalityPlurielFemale: "Turques",
+    translitNationalityPlurielFemale: "turkiyyāt",
+    arabicNationalitySingularFemale: "ٌﺔَّﻴِﻛْﺮُﺗ",
+    frenchNationalitySingularFemale: "Turque",
+    translitNationalitySingularFemale: "turkiyya"
+  },
+  {
+    arabicCountry: "ﺹﺮﺒﻗ",
+    frenchCountry: "Chypre",
+    translitCountry: "qubrus",
+    arabicNationalityPlurielMale: "َﻥﻮُّﻴِﺻُﺮْﺒُﻗ",
+    frenchNationalityPlurielMale: "Chypriotes",
+    translitNationalityPlurielMale: "qubrusiyyūn",
+    arabicNationalitySingularMale: "ٌّﻲِﺻُﺮْﺒُﻗ",
+    frenchNationalitySingularMale: "Chypriote",
+    translitNationalitySingularMale: "qubrusiyy",
+    arabicNationalityPlurielFemale: "ٌﺕﺎَّﻴِﺻُﺮْﺒُﻗ",
+    frenchNationalityPlurielFemale: "Chypriotes",
+    translitNationalityPlurielFemale: "qubrusiyyāt",
+    arabicNationalitySingularFemale: "ٌﺔَّﻴِﺻُﺮْﺒُﻗ",
+    frenchNationalitySingularFemale: "Chypriote",
+    translitNationalitySingularFemale: "qubrusiyya"
+  },
+  {
+    arabicCountry: "ﻥاﺮﻳﺇ",
+    frenchCountry: "Iran",
+    translitCountry: "īrān",
+    arabicNationalityPlurielMale: "َﻥﻮُّﻴِﻧاَﺮﻳِﺇ",
+    frenchNationalityPlurielMale: "Iraniens",
+    translitNationalityPlurielMale: "īrāniyyūn",
+    arabicNationalitySingularMale: "ٌّﻲِﻧاَﺮﻳِﺇ",
+    frenchNationalitySingularMale: "Iranien",
+    translitNationalitySingularMale: "īrāniyy",
+    arabicNationalityPlurielFemale: "ٌﺕﺎَّﻴِﻧاَﺮﻳِﺇ",
+    frenchNationalityPlurielFemale: "Iraniennes",
+    translitNationalityPlurielFemale: "īrāniyyāt",
+    arabicNationalitySingularFemale: "ٌﺔَّﻴِﻧاَﺮﻳِﺇ",
+    frenchNationalitySingularFemale: "Iranienne",
+    translitNationalitySingularFemale: "īrāniyya"
+  },
+  {
+    arabicCountry: "ﺎﺴﻧﺮﻓ",
+    frenchCountry: "France",
+    translitCountry: "faransā",
+    arabicNationalityPlurielMale: "َﻥﻮُّﻴِﺴْﻧَﺮَﻓ",
+    frenchNationalityPlurielMale: "Français",
+    translitNationalityPlurielMale: "faransiyyūn",
+    arabicNationalitySingularMale: "ٌّﻲِﺴْﻧَﺮَﻓ",
+    frenchNationalitySingularMale: "Français",
+    translitNationalitySingularMale: "faransiyy",
+    arabicNationalityPlurielFemale: "ٌﺕﺎَّﻴِﺴْﻧَﺮَﻓ",
+    frenchNationalityPlurielFemale: "Françaises",
+    translitNationalityPlurielFemale: "faransiyyāt",
+    arabicNationalitySingularFemale: "ٌﺔَّﻴِﺴْﻧَﺮَﻓ",
+    frenchNationalitySingularFemale: "Française",
+    translitNationalitySingularFemale: "faransiyya"
+  },
+  {
+    arabicCountry: "ﺎﻴﻧﺎﺒﺳﺇ",
+    frenchCountry: "Espagne",
+    translitCountry: "isbāniyā",
+    arabicNationalityPlurielMale: "َﻥﻮُّﻴِﻧﺎَﺒْﺳِﺇ",
+    frenchNationalityPlurielMale: "Espagnols",
+    translitNationalityPlurielMale: "isbāniyyūn",
+    arabicNationalitySingularMale: "ٌّﻲِﻧﺎَﺒْﺳِﺇ",
+    frenchNationalitySingularMale: "Espagnol",
+    translitNationalitySingularMale: "isbāniyy",
+    arabicNationalityPlurielFemale: "ٌﺕﺎَّﻴِﻧﺎَﺒْﺳِﺇ",
+    frenchNationalityPlurielFemale: "Espagnoles",
+    translitNationalityPlurielFemale: "isbāniyyāt",
+    arabicNationalitySingularFemale: "ٌﺔَّﻴِﻧﺎَﺒْﺳِﺇ",
+    frenchNationalitySingularFemale: "Espagnole",
+    translitNationalitySingularFemale: "isbāniyya"
+  },
+  {
+    arabicCountry: "ﻝﺎﻐﺗﺮﺒﻟا",
+    frenchCountry: "Portugal",
+    translitCountry: "al-burtughāl",
+    arabicNationalityPlurielMale: "َﻥﻮُّﻴِﻟﺎَﻐُﺗْﺮُﺑ",
+    frenchNationalityPlurielMale: "Portugais",
+    translitNationalityPlurielMale: "burtughāliyūn",
+    arabicNationalitySingularMale: "ٌّﻲِﻟﺎَﻐُﺗْﺮُﺑ",
+    frenchNationalitySingularMale: "Portugais",
+    translitNationalitySingularMale: "burtughāliy",
+    arabicNationalityPlurielFemale: "ٌﺕﺎَّﻴِﻟﺎَﻐُﺗْﺮُﺑ",
+    frenchNationalityPlurielFemale: "Portugaises",
+    translitNationalityPlurielFemale: "burtughāliyāt",
+    arabicNationalitySingularFemale: "ٌﺔَّﻴِﻟﺎَﻐُﺗْﺮُﺑ",
+    frenchNationalitySingularFemale: "Portugaise",
+    translitNationalitySingularFemale: "burtughāliyya"
+  },
+  {
+    arabicCountry: "ﺎﻴﻟﺎﻄﻳﺇ",
+    frenchCountry: "Italie",
+    translitCountry: "iṭāliyā",
+    arabicNationalityPlurielMale: "َﻥﻮُّﻴِﻟﺎَﻄﻳِﺇ",
+    frenchNationalityPlurielMale: "Italiens",
+    translitNationalityPlurielMale: "iṭāliyyūn",
+    arabicNationalitySingularMale: "ٌّﻲِﻟﺎَﻄﻳِﺇ",
+    frenchNationalitySingularMale: "Italien",
+    translitNationalitySingularMale: "iṭāliyy",
+    arabicNationalityPlurielFemale: "ٌﺕﺎَّﻴِﻟﺎَﻄﻳِﺇ",
+    frenchNationalityPlurielFemale: "Italiennes",
+    translitNationalityPlurielFemale: "iṭāliyyāt",
+    arabicNationalitySingularFemale: "ٌﺔَّﻴِﻟﺎَﻄﻳِﺇ",
+    frenchNationalitySingularFemale: "Italienne",
+    translitNationalitySingularFemale: "iṭāliyya"
+  },
+  {
+    arabicCountry: "ﻥﺎﻧﻮﻴﻟا",
+    frenchCountry: "Grèce",
+    translitCountry: "al-yūnān",
+    arabicNationalityPlurielMale: "َﻥﻮُّﻴِﻧﺎَﻧﻮُﻳ",
+    frenchNationalityPlurielMale: "Grecs",
+    translitNationalityPlurielMale: "yūnāniyyūn",
+    arabicNationalitySingularMale: "ٌّﻲِﻧﺎَﻧﻮُﻳ",
+    frenchNationalitySingularMale: "Grec",
+    translitNationalitySingularMale: "yūnāniyy",
+    arabicNationalityPlurielFemale: "ٌﺕﺎَّﻴِﻧﺎَﻧﻮُﻳ",
+    frenchNationalityPlurielFemale: "Grecques",
+    translitNationalityPlurielFemale: "yūnāniyyāt",
+    arabicNationalitySingularFemale: "ٌﺔَّﻴِﻧﺎَﻧﻮُﻳ",
+    frenchNationalitySingularFemale: "Grecque",
+    translitNationalitySingularFemale: "yūnāniyya"
+  },
+  {
+    arabicCountry: "ﻞﻴﺋاﺮﺳﺇ",
+    frenchCountry: "Israël",
+    translitCountry: "isrā’īl",
+    arabicNationalityPlurielMale: "َﻥﻮُّﻴِﻠﻴِﺋاَﺮْﺳِﺇ",
+    frenchNationalityPlurielMale: "Israéliens",
+    translitNationalityPlurielMale: "isrā’īliyyūn",
+    arabicNationalitySingularMale: "ٌّﻲِﻠﻴِﺋاَﺮْﺳِﺇ",
+    frenchNationalitySingularMale: "Israélien",
+    translitNationalitySingularMale: "isrā’īliyy",
+    arabicNationalityPlurielFemale: "ٌﺕﺎَّﻴِﻠﻴِﺋاَﺮْﺳِﺇ",
+    frenchNationalityPlurielFemale: "Israéliennes",
+    translitNationalityPlurielFemale: "isrā’īliyyāt",
+    arabicNationalitySingularFemale: "ٌﺔَّﻴِﻠﻴِﺋاَﺮْﺳِﺇ",
+    frenchNationalitySingularFemale: "Israélienne",
+    translitNationalitySingularFemale: "isrā’īliyya"
+  }
+] ;
+
+    // --- Modes d'apprentissage ---
+    const modes = [
+      { value: "country-fr-to-ar", label: "Pays (français → arabe)", q: d => d.frenchCountry, a: d => d.arabicCountry, showTranslit: d => d.translitCountry, inputType: "ar-list", answerLang: "ar" },
+      { value: "country-ar-to-fr", label: "Pays (arabe → français)", q: d => d.arabicCountry, a: d => d.frenchCountry, showTranslit: d => d.translitCountry, inputType: "text", answerLang: "fr" },
+      { value: "nat-m-sg-fr-to-ar", label: "Nationalité masc. sg (fr → ar)", q: d => d.frenchNationalitySingularMale, a: d => d.arabicNationalitySingularMale, showTranslit: d => d.translitNationalitySingularMale, inputType: "ar-list", answerLang: "ar" },
+      { value: "nat-m-pl-fr-to-ar", label: "Nationalité masc. pl (fr → ar)", q: d => d.frenchNationalityPlurielMale, a: d => d.arabicNationalityPlurielMale, showTranslit: d => d.translitNationalityPlurielMale, inputType: "ar-list", answerLang: "ar" },
+      { value: "nat-f-sg-fr-to-ar", label: "Nationalité fém. sg (fr → ar)", q: d => d.frenchNationalitySingularFemale, a: d => d.arabicNationalitySingularFemale, showTranslit: d => d.translitNationalitySingularFemale, inputType: "ar-list", answerLang: "ar" },
+      { value: "nat-f-pl-fr-to-ar", label: "Nationalité fém. pl (fr → ar)", q: d => d.frenchNationalityPlurielFemale, a: d => d.arabicNationalityPlurielFemale, showTranslit: d => d.translitNationalityPlurielFemale, inputType: "ar-list", answerLang: "ar" },
+      { value: "nat-m-sg-ar-to-fr", label: "Nationalité masc. sg (ar → fr)", q: d => d.arabicNationalitySingularMale, a: d => d.frenchNationalitySingularMale, showTranslit: d => d.translitNationalitySingularMale, inputType: "text", answerLang: "fr" },
+      { value: "nat-m-pl-ar-to-fr", label: "Nationalité masc. pl (ar → fr)", q: d => d.arabicNationalityPlurielMale, a: d => d.frenchNationalityPlurielMale, showTranslit: d => d.translitNationalityPlurielMale, inputType: "text", answerLang: "fr" },
+      { value: "nat-f-sg-ar-to-fr", label: "Nationalité fém. sg (ar → fr)", q: d => d.arabicNationalitySingularFemale, a: d => d.frenchNationalitySingularFemale, showTranslit: d => d.translitNationalitySingularFemale, inputType: "text", answerLang: "fr" },
+      { value: "nat-f-pl-ar-to-fr", label: "Nationalité fém. pl (ar → fr)", q: d => d.arabicNationalityPlurielFemale, a: d => d.frenchNationalityPlurielFemale, showTranslit: d => d.translitNationalityPlurielFemale, inputType: "text", answerLang: "fr" },
+      { value: "quizz-mix", label: "Quizz (modes mélangés)", q: null, a: null, showTranslit: null, inputType: "auto", answerLang: null },
+    ];
+    let currentMode = modes[0];
+    let currentData = null;
+    let good = 0, bad = 0;
+    let timer = null;
+    let timerVal = 120;
+    let timeLeft = 120;
+    let lastQuestionIndex = -1;
+    let allowAnswer = true;
+    let deviceIsMobile = window.matchMedia("(pointer:coarse)").matches || window.innerWidth < 700;
+
+let currentLevel = 1; // 1 ou 2
+let currentDataList = data; // tableau utilisé pour les questions
+
+
+// Prépare la séquence de questions aléatoires
+let questionOrder = [];
+let questionPointer = 0;
+
+
+function getCurrentDataList() {
+  if (currentLevel === 1) return data;
+  // Niveau 2 : concatène data et dataLevel2
+  return data.concat(dataLevel2);
+}
+
+
+document.getElementById("level-select").addEventListener("change", function() {
+  currentLevel = parseInt(this.value, 10);
+  currentDataList = getCurrentDataList();
+  resetQuiz();
+});
+
+function shuffleQuestions() {
+  /*questionOrder = Array.from({length: data.length}, (_, i) => i);*/
+const dataList = getCurrentDataList();
+questionOrder = Array.from({length: dataList.length}, (_, i) => i);
+  for (let i = questionOrder.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [questionOrder[i], questionOrder[j]] = [questionOrder[j], questionOrder[i]];
+  }
+  questionPointer = 0;
+}
+
+
+
+
+
+    function shuffle(arr) {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+    /*function pickRandomQuestion() {
+      let idx;
+      do {
+        idx = Math.floor(Math.random() * data.length);
+      } while (idx === lastQuestionIndex && data.length > 1);
+      lastQuestionIndex = idx;
+      return data[idx];
+    }*/
+
+function pickRandomQuestion() {
+  if (questionOrder.length === 0 || questionPointer >= questionOrder.length) {
+    shuffleQuestions();
+  }
+  const idx = questionOrder[questionPointer];
+  questionPointer++;
+  return getCurrentDataList()[idx];
+}
+
+
+
+    function pickRandomMode() {
+      let idx;
+      do {
+        idx = Math.floor(Math.random() * (modes.length - 1));
+      } while (idx === modes.indexOf(currentMode) && modes.length > 2);
+      return modes[idx];
+    }
+    function updateStats() {
+      document.getElementById("good-count").textContent = good;
+      document.getElementById("bad-count").textContent = bad;
+    }
+    function updateTimerDisplay() {
+      document.getElementById("timer").textContent = `⏳ ${timeLeft}s`;
+    }
+    function startTimer() {
+      clearInterval(timer);
+      timeLeft = timerVal;
+      updateTimerDisplay();
+      timer = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay();
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          allowAnswer = false;
+          showFeedback(false, "⏰ Temps écoulé !");
+          document.getElementById("action-buttons").innerHTML = `<button onclick="nextQuestion()">Nouvel exercice</button>`;
+        }
+      }, 1000);
+    }
+    function resetQuiz() {
+       good = 0; bad = 0;
+  updateStats();
+  shuffleQuestions(); // <-- Ajout ici !
+  nextQuestion();
+    }
+    function stripSpecial(str) {
+      return str.normalize("NFD").replace(/[\u064B-\u0652]/g, "")
+        .replace(/[\u200C-\u206F\u2E00-\u2E7F'’‘"«».,;:!?()\[\]\-–—_]/g, "")
+        .replace(/\s+/g, " ")
+        .trim()
+        .toLowerCase();
+    }
+    function answerIsCorrect(user, expected) {
+      let userWords = stripSpecial(user).split(" ").filter(Boolean);
+      let expectedWords = stripSpecial(expected).split(" ").filter(Boolean);
+      return expectedWords.every(w => userWords.includes(w)) && userWords.length === expectedWords.length;
+    }
+    function showFeedback(ok, msg, translit = "") {
+      const fb = document.getElementById("feedback");
+      fb.className = "feedback " + (ok ? "success" : "error");
+      fb.innerHTML = ok ? `✅ ${msg}` : `❌ ${msg}`;
+      if (ok && translit) fb.innerHTML += `<br><span style="font-size:1.1em;color:#555;">Translittération : <b>${translit}</b></span>`;
+    }
+    function nextQuestion() {
+      allowAnswer = true;
+      document.getElementById("feedback").textContent = "";
+      document.getElementById("action-buttons").innerHTML = "";
+      if (document.activeElement) document.activeElement.blur();
+      if (currentMode.value === "quizz-mix") {
+        currentMode = pickRandomMode();
+      }
+      currentData = pickRandomQuestion();
+      const qDiv = document.getElementById("question");
+      qDiv.style.opacity = 0;
+      setTimeout(() => {
+        renderQuestion();
+        qDiv.style.opacity = 1;
+      }, 200);
+      startTimer();
+    }
+    function renderQuestion() {
+      let qDiv = document.getElementById("question");
+      let rDiv = document.getElementById("reponses");
+      let ab = document.getElementById("action-buttons");
+      rDiv.innerHTML = "";
+      ab.innerHTML = "";
+      let qtxt = currentMode.q(currentData);
+      qDiv.textContent = qtxt;
+      // Cas réponse attendue en arabe (liste)
+      if (currentMode.inputType === "ar-list") {
+        renderArList();
+      } else if (currentMode.inputType === "auto") {
+        // Pour le mode quizz mix, choisir au hasard entre input texte ou liste
+        let mode = Math.random() < 0.5 ? "ar-list" : "text";
+        if (mode === "ar-list") renderArList(); else renderTextInput();
+      } else {
+        renderTextInput();
+      }
+    }
+    function renderTextInput() {
+      let rDiv = document.getElementById("reponses");
+      let input = document.createElement("input");
+      input.type = "text";
+      input.lang = currentMode.answerLang;
+      input.dir = currentMode.answerLang === "ar" ? "rtl" : "ltr";
+      input.style.fontSize = "1.3em";
+      input.style.width = "80%";
+      input.autofocus = true;
+      input.addEventListener("keydown", function(e) {
+        if (e.key === "Enter" && allowAnswer) validateTextAnswer(input.value);
+      });
+      rDiv.appendChild(input);
+      input.focus();
+    }
+/*    function renderArList() {
+      let ab = document.getElementById("action-buttons");
+      let rDiv = document.getElementById("reponses");
+      // Génère la liste plausible pour ce mode (tous pays ou toutes nationalités niveau 1)
+      let all = data.map(currentMode.a);
+      let expected = currentMode.a(currentData);
+      let choices = shuffle([...all]);
+      // Desktop : tableau à 4 colonnes, checkboxes exclusives
+      if (!deviceIsMobile) {
+        let table = document.createElement("table");
+        table.className = "tableau-reponses";
+        let tr = null;
+        choices.forEach((c, i) => {
+          if (i % 4 === 0) {
+            tr = document.createElement("tr");
+            table.appendChild(tr);
+          }
+          let td = document.createElement("td");
+          td.className = "checkbox-cell";
+          let chk = document.createElement("input");
+          chk.type = "checkbox";
+          chk.name = "choix";
+          chk.id = "choix" + i;
+          chk.onclick = () => {
+            document.querySelectorAll('input[name="choix"]').forEach(cb => { if (cb !== chk) cb.checked = false; });
+          };
+          td.appendChild(chk);
+          td.appendChild(document.createElement("br"));
+          let lbl = document.createElement("label");
+          lbl.htmlFor = "choix" + i;
+          lbl.innerHTML = c;
+          td.appendChild(lbl);
+          tr.appendChild(td);
+        });
+        rDiv.appendChild(table);
+        ab.innerHTML = `<button onclick="validateArListAnswer()">Valider</button>`;
+      } else {
+        // Mobile : boutons
+        choices.forEach((c, i) => {
+          let btn = document.createElement("button");
+          btn.textContent = c;
+          btn.onclick = () => validateArListAnswer(i);
+          ab.appendChild(btn);
+        });
+      }
+    }*/
+
+function renderArList() {
+  let ab = document.getElementById("action-buttons");
+  let rDiv = document.getElementById("reponses");
+  // Génère la liste plausible pour ce mode (tous pays ou toutes nationalités niveau 1)
+/*  let all = data.map(currentMode.a);
+ */ 
+let all = getCurrentDataList().map(currentMode.a);
+
+  let expected = currentMode.a(currentData);
+  let choices = shuffle([...all]);
+  // Desktop : tableau à 4 colonnes, checkboxes exclusives
+  if (!deviceIsMobile) {
+    let table = document.createElement("table");
+    table.className = "tableau-reponses";
+    let tr = null;
+    choices.forEach((c, i) => {
+      if (i % 4 === 0) {
+        tr = document.createElement("tr");
+        table.appendChild(tr);
+      }
+      let td = document.createElement("td");
+      td.className = "checkbox-cell";
+      let chk = document.createElement("input");
+      chk.type = "checkbox";
+      chk.name = "choix";
+      chk.id = "choix" + i;
+      chk.onclick = () => {
+        document.querySelectorAll('input[name="choix"]').forEach(cb => { if (cb !== chk) cb.checked = false; });
+      };
+      td.appendChild(chk);
+      td.appendChild(document.createElement("br"));
+      let lbl = document.createElement("label");
+      lbl.htmlFor = "choix" + i;
+      lbl.innerHTML = c;
+      td.appendChild(lbl);
+      tr.appendChild(td);
+    });
+    rDiv.appendChild(table);
+    ab.innerHTML = `<button onclick="validateArListAnswer()">Valider</button>`;
+  } else {
+    // MOBILE : boutons verticaux, une seule sélection possible
+    let container = document.createElement("div");
+    container.className = "mobile-choices";
+    let selectedIdx = null;
+    choices.forEach((c, i) => {
+      let btn = document.createElement("button");
+      btn.type = "button";
+      btn.textContent = c;
+      btn.onclick = () => {
+        // Désélectionner tous les boutons
+        Array.from(container.children).forEach(b => b.classList.remove("selected"));
+        btn.classList.add("selected");
+        selectedIdx = i;
+      };
+      container.appendChild(btn);
+    });
+    rDiv.appendChild(container);
+    ab.innerHTML = `<button onclick="validateArListAnswerMobile()">Valider</button>`;
+    // Fonction de validation spécifique mobile
+    window.validateArListAnswerMobile = function() {
+      if (!allowAnswer) return;
+      allowAnswer = false;
+      clearInterval(timer);
+      let expected = currentMode.a(currentData);
+      let ok = false;
+      if (selectedIdx !== null) {
+        ok = container.children[selectedIdx].textContent === expected;
+      }
+      if (ok) {
+        good++; updateStats();
+        showFeedback(true, "Bonne réponse !", currentMode.showTranslit(currentData));
+        setTimeout(nextQuestion, 1100);
+      } else {
+        bad++; updateStats();
+        showFeedback(false, `Mauvaise réponse. Réponse attendue : <b>${expected}</b>`, currentMode.showTranslit(currentData));
+        ab.innerHTML = `<button onclick="nextQuestion()">Nouvel exercice</button>`;
+      }
+    }
+  }
+}
+
+
+
+
+    function validateTextAnswer(val) {
+      if (!allowAnswer) return;
+      allowAnswer = false;
+      clearInterval(timer);
+      let expected = currentMode.a(currentData);
+      let ok = answerIsCorrect(val, expected);
+      if (ok) {
+        good++; updateStats();
+        showFeedback(true, "Bonne réponse !", currentMode.showTranslit(currentData));
+        setTimeout(nextQuestion, 1100);
+      } else {
+        bad++; updateStats();
+        showFeedback(false, `Mauvaise réponse. Réponse attendue : <b>${expected}</b>`, currentMode.showTranslit(currentData));
+        document.getElementById("action-buttons").innerHTML = `<button onclick="nextQuestion()">Nouvel exercice</button>`;
+      }
+    }
+    function validateArListAnswer(idx) {
+      if (!allowAnswer) return;
+      allowAnswer = false;
+      clearInterval(timer);
+      let expected = currentMode.a(currentData);
+      let ok = false;
+      if (!deviceIsMobile) {
+        let chks = Array.from(document.querySelectorAll('input[name="choix"]'));
+        let checkedIdx = chks.findIndex(cb => cb.checked);
+        ok = checkedIdx !== -1 && chks[checkedIdx].nextSibling.nextSibling.textContent === expected;
+      } else {
+        ok = typeof idx === "number" && document.getElementById("action-buttons").children[idx].textContent === expected;
+      }
+      if (ok) {
+        good++; updateStats();
+        showFeedback(true, "Bonne réponse !", currentMode.showTranslit(currentData));
+        setTimeout(nextQuestion, 1100);
+      } else {
+        bad++; updateStats();
+        showFeedback(false, `Mauvaise réponse. Réponse attendue : <b>${expected}</b>`, currentMode.showTranslit(currentData));
+        document.getElementById("action-buttons").innerHTML = `<button onclick="nextQuestion()">Nouvel exercice</button>`;
+      }
+    }
+    // --- Popups pédagogiques ---
+    function showCountriesPopup() {
+      let html = `<table class="responsive-table" style="width:100%;font-size:1.1em;"><thead><tr><th>🇦🇪 Arabe</th><th>🇫🇷 Français</th></tr></thead><tbody>`;
+      getCurrentDataList().forEach(d => {
+        html += `<tr><td style="font-family:serif;font-size:1.2em;">${d.arabicCountry}</td><td>${d.frenchCountry}</td></tr>`;
+      });
+      html += "</tbody></table>";
+      document.getElementById("popup-inner").innerHTML = html;
+      document.getElementById("popup-overlay").style.display = "block";
+    }
+    function showNationalitiesPopup() {
+      let html = `<table class="responsive-table" style="width:100%;font-size:1em;"><thead><tr>
+      <th>Arabe masc. sg</th><th>Fr. masc. sg</th>
+      <th>Arabe masc. pl</th><th>Fr. masc. pl</th>
+      <th>Arabe fém. sg</th><th>Fr. fém. sg</th>
+      <th>Arabe fém. pl</th><th>Fr. fém. pl</th>
+      </tr></thead><tbody>`;
+      getCurrentDataList().forEach(d => {
+        html += `<tr>
+          <td>${d.arabicNationalitySingularMale}</td>
+          <td>${d.frenchNationalitySingularMale}</td>
+          <td>${d.arabicNationalityPlurielMale}</td>
+          <td>${d.frenchNationalityPlurielMale}</td>
+          <td>${d.arabicNationalitySingularFemale}</td>
+          <td>${d.frenchNationalitySingularFemale}</td>
+          <td>${d.arabicNationalityPlurielFemale}</td>
+          <td>${d.frenchNationalityPlurielFemale}</td>
+        </tr>`;
+      });
+      html += "</tbody></table>";
+      document.getElementById("popup-inner").innerHTML = html;
+      document.getElementById("popup-overlay").style.display = "block";
+    }
+    function showRulesPopup() {
+      document.getElementById("popup-inner").innerHTML = `
+        <h2>Règle du Alif & Suffixes</h2>
+        <ul>
+          <li>Le nom du pays commence souvent par <b>Alif + ﻝ</b> (ex : <b>ﺏﺮﻐﻤﻟا</b> = al-maghrib).</li>
+          <li>Pour la nationalité masculine singulier, suffixe <b>ٌّﻱ</b> ("-iyy")</li>
+          <li>Pour le pluriel masculin, suffixe <b>َﻥﻮُّﻳ</b> ("-iyyūn")</li>
+          <li>Pour la nationalité féminine singulier, suffixe <b>ٌﺔَّﻳ</b> ("-iyya")</li>
+          <li>Pour le pluriel féminin, suffixe <b>ٌﺕﺎَّﻳ</b> ("-iyyāt")</li>
+          <li>Le <b>ﻱ</b> ("ya" long) marque le féminin/pluriel.</li>
+        </ul>
+      `;
+      document.getElementById("popup-overlay").style.display = "block";
+    }
+    function closePopup() {
+      document.getElementById("popup-overlay").style.display = "none";
+    }
+    // --- Mode sombre/clair persistant ---
+    function toggleDarkMode() {
+      let dark = !(localStorage.getItem("darkMode") === "true");
+      document.body.classList.toggle("dark-mode", dark);
+      localStorage.setItem("darkMode", dark);
+    }
+    function initDarkMode() {
+      let dark = localStorage.getItem("darkMode") === "true";
+      document.body.classList.toggle("dark-mode", dark);
+    }
+    document.getElementById("mode-select").addEventListener("change", function() {
+      let val = this.value;
+      currentMode = modes.find(m => m.value === val);
+      resetQuiz();
+    });
+    document.getElementById("timer-input").addEventListener("input", function() {
+      timerVal = parseInt(this.value, 10) || 120;
+      timeLeft = timerVal;
+      updateTimerDisplay();
+    });
+    window.onload = function() {
+      deviceIsMobile = window.matchMedia("(pointer:coarse)").matches || window.innerWidth < 700;
+      initDarkMode();
+      resetQuiz();
+    };
+    window.addEventListener("keydown", function(e) {
+      if (e.key === "Escape") closePopup();
+    });
+    window.addEventListener("resize", function() {
+      deviceIsMobile = window.matchMedia("(pointer:coarse)").matches || window.innerWidth < 700;
+    });
+  </script>
+</body>
+</html>
