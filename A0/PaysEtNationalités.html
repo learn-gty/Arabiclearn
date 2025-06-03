@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Apprentissage des pays arabes et nationalités</title>
-  <link href="https://fonts.googleapis.com/css?family=Quicksand:400,700&display=swap" rel="stylesheet">
   <style>
     /* CSS du cahier des charges (voir paste.txt) */
     :root {
@@ -300,6 +299,13 @@ body.dark-mode .tableau-reponses label {
       .menu-icon { width: 36px; height: 36px;}
       .menu-icon span { margin: 4px 0;}
       #content-wrapper { z-index: 0; position: relative; }
+
+      /* Pour tous les boutons avec texte arabe */
+.mode-btn[dir="rtl"] {
+  direction: rtl;
+  text-align: right; /* Optionnel, améliore l’alignement */
+}
+
     }
 
 
@@ -391,8 +397,38 @@ body.dark-mode .tableau-reponses label {
   }
 }
 
+td[dir="rtl"], span[dir="rtl"], label[dir="rtl"] {
+  direction: rtl;
+  text-align: right;
 
+}
 
+[dir="rtl"][lang="ar"] {
+  text-align: right;
+  direction: rtl;
+  font-family: 'Arial', 'Tahoma', sans-serif; /* police adaptée à l'arabe */
+}
+/* 🔽 Ajout spécifique pour garantir l'affichage correct de l'arabe */
+.texte-arabe,
+[dir="rtl"][lang="ar"],
+span[lang="ar"],
+label[lang="ar"],
+td[lang="ar"] {
+  direction: rtl !important;
+  text-align: center !important;
+  font-family: 'Amiri', 'Scheherazade New', 'Noto Naskh Arabic', 'Arial', 'Tahoma', sans-serif !important;
+  font-size: 2.0em;
+  line-height: 1.6;
+  unicode-bidi: isolate; /* essentiel pour forcer le regroupement logique */
+}
+
+/* 📱 Bonus mobile : améliore le rendu arabe sur petit écran */
+@media (max-width: 600px) {
+  .texte-arabe,
+  [dir="rtl"][lang="ar"] {
+    font-size: 1.2em;
+  }
+}
   </style>
 </head>
 <body>
@@ -463,8 +499,8 @@ body.dark-mode .tableau-reponses label {
   <!-- Popups pédagogiques -->
   <div id="popup-overlay" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:10000;background:rgba(0,0,0,0.25);">
     <div id="popup-content" style="background:white;max-width:90vw;max-height:80vh;overflow:auto;position:relative;margin:5vh auto;padding:24px;border-radius:10px;box-shadow:0 8px 32px rgba(0,0,0,0.25);">
-      <button onclick="closePopup()" style="position:absolute;top:10px;right:10px;font-size:1.3em;">&times;</button>
-      <button onclick="closePopup()" style="position:absolute;top:10px;left:10px;font-size:1.1em;">Fermer</button>
+      <button onclick="closePopup()" style="position:absolute;top:10px;right:10px;font-size:1.3em;padding:5px">&times;</button>
+      <button onclick="closePopup()" style="position:absolute;top:10px;left:10px;font-size:1.1em;padding:5px">Fermer</button>
       <div id="popup-inner"></div>
     </div>
   </div>
@@ -478,552 +514,552 @@ body.dark-mode .tableau-reponses label {
     // --- Données niveau 1 ---
     const data = [
       {
-        arabicCountry: "ُﺏِﺮْﻐَﻤﻟا",
-        frenchCountry: "Maroc",
-        translitCountry: "al-maghrib",
-        arabicNationalityPlurielMale: "َﻥﻮُّﻴِﺑِﺮْﻐَﻣ",
-        frenchNationalityPlurielMale: "Marocains",
-        translitNationalityPlurielMale: "maghribiyyūn",
-        arabicNationalitySingularMale: "ٌّﻲِﺑِﺮْﻐَﻣ",
-        frenchNationalitySingularMale: "Marocain",
-        translitNationalitySingularMale: "maghribiyy",
-        arabicNationalityPlurielFemale: "ٌﺕﺎَّﻴِﺑِﺮْﻐَﻣ",
-        frenchNationalityPlurielFemale: "Marocaines",
-        translitNationalityPlurielFemale: "maghribiyyāt",
-        arabicNationalitySingularFemale: "ٌﺔَّﻴِﺑِﺮْﻐَﻣ",
-        frenchNationalitySingularFemale: "Marocaine",
-        translitNationalitySingularFemale: "maghribiyya"
+        arabicCountry: 'ُﺏِﺮْﻐَﻤﻟا',
+        frenchCountry: 'Maroc',
+        translitCountry: 'al-maghrib',
+        arabicNationalityPlurielMale: 'َﻥﻮُّﻴِﺑِﺮْﻐَﻣ',
+        frenchNationalityPlurielMale: 'Marocains',
+        translitNationalityPlurielMale: 'maghribiyyūn',
+        arabicNationalitySingularMale: 'ٌّﻲِﺑِﺮْﻐَﻣ',
+        frenchNationalitySingularMale: 'Marocain',
+        translitNationalitySingularMale: 'maghribiyy',
+        arabicNationalityPlurielFemale: 'ٌﺕﺎَّﻴِﺑِﺮْﻐَﻣ',
+        frenchNationalityPlurielFemale: 'Marocaines',
+        translitNationalityPlurielFemale: 'maghribiyyāt',
+        arabicNationalitySingularFemale: 'ٌﺔَّﻴِﺑِﺮْﻐَﻣ',
+        frenchNationalitySingularFemale: 'Marocaine',
+        translitNationalitySingularFemale: 'maghribiyya'
       },
       {
-        arabicCountry: "ُﺮِﺋاَﺰَﺠﻟا",
-        frenchCountry: "Algérie",
-        translitCountry: "al-jazā'ir",
-        arabicNationalityPlurielMale: "َﻥﻮُّﻳِﺮِﺋاَﺰَﺟ",
-        frenchNationalityPlurielMale: "Algériens",
-        translitNationalityPlurielMale: "jazā’iriyyūn",
-        arabicNationalitySingularMale: "ٌّﻱِﺮِﺋاَﺰَﺟ",
-        frenchNationalitySingularMale: "Algérien",
-        translitNationalitySingularMale: "jazā’iriyy",
-        arabicNationalityPlurielFemale: "ٌﺕﺎَّﻳِﺮِﺋاَﺰَﺟ",
-        frenchNationalityPlurielFemale: "Algériennes",
-        translitNationalityPlurielFemale: "jazā’iriyyāt",
-        arabicNationalitySingularFemale: "ٌﺔَّﻳِﺮِﺋاَﺰَﺟ",
-        frenchNationalitySingularFemale: "Algérienne",
-        translitNationalitySingularFemale: "jazā’iriyya"
+        arabicCountry: 'ﺮِﺋاَﺰَﺠﻟا',
+        frenchCountry: 'Algérie',
+        translitCountry: 'al-jazā\'ir',
+        arabicNationalityPlurielMale: 'َﻥﻮُّﻳِﺮِﺋاَﺰَﺟ',
+        frenchNationalityPlurielMale: 'Algériens',
+        translitNationalityPlurielMale: 'jazā’iriyyūn',
+        arabicNationalitySingularMale: 'ٌّﻱِﺮِﺋاَﺰَﺟ',
+        frenchNationalitySingularMale: 'Algérien',
+        translitNationalitySingularMale: 'jazā’iriyy',
+        arabicNationalityPlurielFemale: 'ٌﺕﺎَّﻳِﺮِﺋاَﺰَﺟ',
+        frenchNationalityPlurielFemale: 'Algériennes',
+        translitNationalityPlurielFemale: 'jazā’iriyyāt',
+        arabicNationalitySingularFemale: 'ٌﺔَّﻳِﺮِﺋاَﺰَﺟ',
+        frenchNationalitySingularFemale: 'Algérienne',
+        translitNationalitySingularFemale: 'jazā’iriyya'
       },
       {
-        arabicCountry: "ُﺲِﻧﻮُﺗ",
-        frenchCountry: "Tunisie",
-        translitCountry: "tūnis",
-        arabicNationalityPlurielMale: "َﻥﻮُّﻴِﺴِﻧﻮُﺗ",
-        frenchNationalityPlurielMale: "Tunisiens",
-        translitNationalityPlurielMale: "tūnisiyyūn",
-        arabicNationalitySingularMale: "ٌّﻲِﺴِﻧﻮُﺗ",
-        frenchNationalitySingularMale: "Tunisien",
-        translitNationalitySingularMale: "tūnisiyy",
-        arabicNationalityPlurielFemale: "ٌﺕﺎَّﻴِﺴِﻧﻮُﺗ",
-        frenchNationalityPlurielFemale: "Tunisiennes",
-        translitNationalityPlurielFemale: "tūnisiyyāt",
-        arabicNationalitySingularFemale: "ٌﺔَّﻴِﺴِﻧﻮُﺗ",
-        frenchNationalitySingularFemale: "Tunisienne",
-        translitNationalitySingularFemale: "tūnisiyya"
+        arabicCountry: 'ُﺲِﻧﻮُﺗ',
+        frenchCountry: 'Tunisie',
+        translitCountry: 'tūnis',
+        arabicNationalityPlurielMale: 'َﻥﻮُّﻴِﺴِﻧﻮُﺗ',
+        frenchNationalityPlurielMale: 'Tunisiens',
+        translitNationalityPlurielMale: 'tūnisiyyūn',
+        arabicNationalitySingularMale: 'ٌّﻲِﺴِﻧﻮُﺗ',
+        frenchNationalitySingularMale: 'Tunisien',
+        translitNationalitySingularMale: 'tūnisiyy',
+        arabicNationalityPlurielFemale: 'ٌﺕﺎَّﻴِﺴِﻧﻮُﺗ',
+        frenchNationalityPlurielFemale: 'Tunisiennes',
+        translitNationalityPlurielFemale: 'tūnisiyyāt',
+        arabicNationalitySingularFemale: 'ٌﺔَّﻴِﺴِﻧﻮُﺗ',
+        frenchNationalitySingularFemale: 'Tunisienne',
+        translitNationalitySingularFemale: 'tūnisiyya'
       },
       {
-        arabicCountry: "ﺎَﻴِﺒﻴِﻟ",
-        frenchCountry: "Libye",
-        translitCountry: "lībiyā",
-        arabicNationalityPlurielMale: "َﻥﻮُّﻴِﺒﻴِﻟ",
-        frenchNationalityPlurielMale: "Libyens",
-        translitNationalityPlurielMale: "lībiyyūn",
-        arabicNationalitySingularMale: "ٌّﻲِﺒﻴِﻟ",
-        frenchNationalitySingularMale: "Libyen",
-        translitNationalitySingularMale: "lībiyy",
-        arabicNationalityPlurielFemale: "ٌﺕﺎَّﻴِﺒﻴِﻟ",
-        frenchNationalityPlurielFemale: "Libyennes",
-        translitNationalityPlurielFemale: "lībiyyāt",
-        arabicNationalitySingularFemale: "ٌﺔَّﻴِﺒﻴِﻟ",
-        frenchNationalitySingularFemale: "Libyenne",
-        translitNationalitySingularFemale: "lībiyya"
+        arabicCountry: 'ﺎَﻴِﺒﻴِﻟ',
+        frenchCountry: 'Libye',
+        translitCountry: 'lībiyā',
+        arabicNationalityPlurielMale: 'َﻥﻮُّﻴِﺒﻴِﻟ',
+        frenchNationalityPlurielMale: 'Libyens',
+        translitNationalityPlurielMale: 'lībiyyūn',
+        arabicNationalitySingularMale: 'ٌّﻲِﺒﻴِﻟ',
+        frenchNationalitySingularMale: 'Libyen',
+        translitNationalitySingularMale: 'lībiyy',
+        arabicNationalityPlurielFemale: 'ٌﺕﺎَّﻴِﺒﻴِﻟ',
+        frenchNationalityPlurielFemale: 'Libyennes',
+        translitNationalityPlurielFemale: 'lībiyyāt',
+        arabicNationalitySingularFemale: 'ٌﺔَّﻴِﺒﻴِﻟ',
+        frenchNationalitySingularFemale: 'Libyenne',
+        translitNationalitySingularFemale: 'lībiyya'
       },
       {
-        arabicCountry: "ُﺮْﺼِﻣ",
-        frenchCountry: "Égypte",
-        translitCountry: "miṣr",
-        arabicNationalityPlurielMale: "َﻥﻮُّﻳِﺮْﺼِﻣ",
-        frenchNationalityPlurielMale: "Égyptiens",
-        translitNationalityPlurielMale: "miṣriyyūn",
-        arabicNationalitySingularMale: "ٌّﻱِﺮْﺼِﻣ",
-        frenchNationalitySingularMale: "Égyptien",
-        translitNationalitySingularMale: "miṣriyy",
-        arabicNationalityPlurielFemale: "ٌﺕﺎَّﻳِﺮْﺼِﻣ",
-        frenchNationalityPlurielFemale: "Égyptiennes",
-        translitNationalityPlurielFemale: "miṣriyyāt",
-        arabicNationalitySingularFemale: "ٌﺔَّﻳِﺮْﺼِﻣ",
-        frenchNationalitySingularFemale: "Égyptienne",
-        translitNationalitySingularFemale: "miṣriyya"
+        arabicCountry: 'ُﺮْﺼِﻣ',
+        frenchCountry: 'Égypte',
+        translitCountry: 'miṣr',
+        arabicNationalityPlurielMale: 'َﻥﻮُّﻳِﺮْﺼِﻣ',
+        frenchNationalityPlurielMale: 'Égyptiens',
+        translitNationalityPlurielMale: 'miṣriyyūn',
+        arabicNationalitySingularMale: 'ٌّﻱِﺮْﺼِﻣ',
+        frenchNationalitySingularMale: 'Égyptien',
+        translitNationalitySingularMale: 'miṣriyy',
+        arabicNationalityPlurielFemale: 'ٌﺕﺎَّﻳِﺮْﺼِﻣ',
+        frenchNationalityPlurielFemale: 'Égyptiennes',
+        translitNationalityPlurielFemale: 'miṣriyyāt',
+        arabicNationalitySingularFemale: 'ٌﺔَّﻳِﺮْﺼِﻣ',
+        frenchNationalitySingularFemale: 'Égyptienne',
+        translitNationalitySingularFemale: 'miṣriyya'
       },
       {
-        arabicCountry: "ُﻥاَﺩﻮُّﺴﻟا",
-        frenchCountry: "Soudan",
-        translitCountry: "as-sūdān",
-        arabicNationalityPlurielMale: "َﻥﻮُّﻴِﻧاَﺩﻮُﺳ",
-        frenchNationalityPlurielMale: "Soudanais",
-        translitNationalityPlurielMale: "sūdāniyyūn",
-        arabicNationalitySingularMale: "ٌّﻲِﻧاَﺩﻮُﺳ",
-        frenchNationalitySingularMale: "Soudanais",
-        translitNationalitySingularMale: "sūdāniyy",
-        arabicNationalityPlurielFemale: "ٌﺕﺎَّﻴِﻧاَﺩﻮُﺳ",
-        frenchNationalityPlurielFemale: "Soudanaises",
-        translitNationalityPlurielFemale: "sūdāniyyāt",
-        arabicNationalitySingularFemale: "ٌﺔَّﻴِﻧاَﺩﻮُﺳ",
-        frenchNationalitySingularFemale: "Soudanaise",
-        translitNationalitySingularFemale: "sūdāniyya"
+        arabicCountry: 'ُﻥاَﺩﻮُّﺴﻟا',
+        frenchCountry: 'Soudan',
+        translitCountry: 'as-sūdān',
+        arabicNationalityPlurielMale: 'َﻥﻮُّﻴِﻧاَﺩﻮُﺳ',
+        frenchNationalityPlurielMale: 'Soudanais',
+        translitNationalityPlurielMale: 'sūdāniyyūn',
+        arabicNationalitySingularMale: 'ٌّﻲِﻧاَﺩﻮُﺳ',
+        frenchNationalitySingularMale: 'Soudanais',
+        translitNationalitySingularMale: 'sūdāniyy',
+        arabicNationalityPlurielFemale: 'ٌﺕﺎَّﻴِﻧاَﺩﻮُﺳ',
+        frenchNationalityPlurielFemale: 'Soudanaises',
+        translitNationalityPlurielFemale: 'sūdāniyyāt',
+        arabicNationalitySingularFemale: 'ٌﺔَّﻴِﻧاَﺩﻮُﺳ',
+        frenchNationalitySingularFemale: 'Soudanaise',
+        translitNationalitySingularFemale: 'sūdāniyya'
       },
       {
-        arabicCountry: "ُﻥﺎَﻨْﺒُﻟ",
-        frenchCountry: "Liban",
-        translitCountry: "lubnān",
-        arabicNationalityPlurielMale: "َﻥﻮُّﻴِﻧﺎَﻨْﺒُﻟ",
-        frenchNationalityPlurielMale: "Libanais",
-        translitNationalityPlurielMale: "lubnāniyyūn",
-        arabicNationalitySingularMale: "ٌّﻲِﻧﺎَﻨْﺒُﻟ",
-        frenchNationalitySingularMale: "Libanais",
-        translitNationalitySingularMale: "lubnāniyy",
-        arabicNationalityPlurielFemale: "ٌﺕﺎَّﻴِﻧﺎَﻨْﺒُﻟ",
-        frenchNationalityPlurielFemale: "Libanaises",
-        translitNationalityPlurielFemale: "lubnāniyyāt",
-        arabicNationalitySingularFemale: "ٌﺔَّﻴِﻧﺎَﻨْﺒُﻟ",
-        frenchNationalitySingularFemale: "Libanaise",
-        translitNationalitySingularFemale: "lubnāniyya"
+        arabicCountry: 'ُﻥﺎَﻨْﺒُﻟ',
+        frenchCountry: 'Liban',
+        translitCountry: 'lubnān',
+        arabicNationalityPlurielMale: 'َﻥﻮُّﻴِﻧﺎَﻨْﺒُﻟ',
+        frenchNationalityPlurielMale: 'Libanais',
+        translitNationalityPlurielMale: 'lubnāniyyūn',
+        arabicNationalitySingularMale: 'ٌّﻲِﻧﺎَﻨْﺒُﻟ',
+        frenchNationalitySingularMale: 'Libanais',
+        translitNationalitySingularMale: 'lubnāniyy',
+        arabicNationalityPlurielFemale: 'ٌﺕﺎَّﻴِﻧﺎَﻨْﺒُﻟ',
+        frenchNationalityPlurielFemale: 'Libanaises',
+        translitNationalityPlurielFemale: 'lubnāniyyāt',
+        arabicNationalitySingularFemale: 'ٌﺔَّﻴِﻧﺎَﻨْﺒُﻟ',
+        frenchNationalitySingularFemale: 'Libanaise',
+        translitNationalitySingularFemale: 'lubnāniyya'
       },
       {
-        arabicCountry: "ﺎَﻳِﺭﻮُﺳ",
-        frenchCountry: "Syrie",
-        translitCountry: "sūriyā",
-        arabicNationalityPlurielMale: "َﻥﻮُّﻳِﺭﻮُﺳ",
-        frenchNationalityPlurielMale: "Syriens",
-        translitNationalityPlurielMale: "sūriyyūn",
-        arabicNationalitySingularMale: "ٌّﻱِﺭﻮُﺳ",
-        frenchNationalitySingularMale: "Syrien",
-        translitNationalitySingularMale: "sūriyy",
-        arabicNationalityPlurielFemale: "ٌﺕﺎَّﻳِﺭﻮُﺳ",
-        frenchNationalityPlurielFemale: "Syriennes",
-        translitNationalityPlurielFemale: "sūriyyāt",
-        arabicNationalitySingularFemale: "ٌﺔَّﻳِﺭﻮُﺳ",
-        frenchNationalitySingularFemale: "Syrienne",
-        translitNationalitySingularFemale: "sūriyya"
+        arabicCountry: 'ﺎَﻳِﺭﻮُﺳ',
+        frenchCountry: 'Syrie',
+        translitCountry: 'sūriyā',
+        arabicNationalityPlurielMale: 'َﻥﻮُّﻳِﺭﻮُﺳ',
+        frenchNationalityPlurielMale: 'Syriens',
+        translitNationalityPlurielMale: 'sūriyyūn',
+        arabicNationalitySingularMale: 'ٌّﻱِﺭﻮُﺳ',
+        frenchNationalitySingularMale: 'Syrien',
+        translitNationalitySingularMale: 'sūriyy',
+        arabicNationalityPlurielFemale: 'ٌﺕﺎَّﻳِﺭﻮُﺳ',
+        frenchNationalityPlurielFemale: 'Syriennes',
+        translitNationalityPlurielFemale: 'sūriyyāt',
+        arabicNationalitySingularFemale: 'ٌﺔَّﻳِﺭﻮُﺳ',
+        frenchNationalitySingularFemale: 'Syrienne',
+        translitNationalitySingularFemale: 'sūriyya'
       }
     ];
 
 
  const dataLevel2 =[
   {
-    arabicCountry: "ﺎﻴﻧﺎﺘﻳﺭﻮﻣ",
-    frenchCountry: "Mauritanie",
-    translitCountry: "mūritāniyā",
-    arabicNationalityPlurielMale: "َﻥﻮُّﻴِﻧﺎَﺘﻳِﺭﻮُﻣ",
-    frenchNationalityPlurielMale: "Mauritaniens",
-    translitNationalityPlurielMale: "mūritāniyyūn",
-    arabicNationalitySingularMale: "ٌّﻲِﻧﺎَﺘﻳِﺭﻮُﻣ",
-    frenchNationalitySingularMale: "Mauritanien",
-    translitNationalitySingularMale: "mūritāniyy",
-    arabicNationalityPlurielFemale: "ٌﺕﺎَّﻴِﻧﺎَﺘﻳِﺭﻮُﻣ",
-    frenchNationalityPlurielFemale: "Mauritaniennes",
-    translitNationalityPlurielFemale: "mūritāniyyāt",
-    arabicNationalitySingularFemale: "ٌﺔَّﻴِﻧﺎَﺘﻳِﺭﻮُﻣ",
-    frenchNationalitySingularFemale: "Mauritanienne",
-    translitNationalitySingularFemale: "mūritāniyya"
+    arabicCountry: 'ﺎﻴﻧﺎﺘﻳﺭﻮﻣ',
+    frenchCountry: 'Mauritanie',
+    translitCountry: 'mūritāniyā',
+    arabicNationalityPlurielMale: 'َﻥﻮُّﻴِﻧﺎَﺘﻳِﺭﻮُﻣ',
+    frenchNationalityPlurielMale: 'Mauritaniens',
+    translitNationalityPlurielMale: 'mūritāniyyūn',
+    arabicNationalitySingularMale: 'ٌّﻲِﻧﺎَﺘﻳِﺭﻮُﻣ',
+    frenchNationalitySingularMale: 'Mauritanien',
+    translitNationalitySingularMale: 'mūritāniyy',
+    arabicNationalityPlurielFemale: 'ٌﺕﺎَّﻴِﻧﺎَﺘﻳِﺭﻮُﻣ',
+    frenchNationalityPlurielFemale: 'Mauritaniennes',
+    translitNationalityPlurielFemale: 'mūritāniyyāt',
+    arabicNationalitySingularFemale: 'ٌﺔَّﻴِﻧﺎَﺘﻳِﺭﻮُﻣ',
+    frenchNationalitySingularFemale: 'Mauritanienne',
+    translitNationalitySingularFemale: 'mūritāniyya'
   },
   {
-    arabicCountry: "ﻲﻟﺎﻣ",
-    frenchCountry: "Mali",
-    translitCountry: "mālī",
-    arabicNationalityPlurielMale: "َﻥﻮُّﻴِﻟﺎَﻣ",
-    frenchNationalityPlurielMale: "Maliens",
-    translitNationalityPlurielMale: "māliyyūn",
-    arabicNationalitySingularMale: "ٌّﻲِﻟﺎَﻣ",
-    frenchNationalitySingularMale: "Malien",
-    translitNationalitySingularMale: "māliyy",
-    arabicNationalityPlurielFemale: "ٌﺕﺎَّﻴِﻟﺎَﻣ",
-    frenchNationalityPlurielFemale: "Maliennes",
-    translitNationalityPlurielFemale: "māliyyāt",
-    arabicNationalitySingularFemale: "ٌﺔَّﻴِﻟﺎَﻣ",
-    frenchNationalitySingularFemale: "Malienne",
-    translitNationalitySingularFemale: "māliyya"
+    arabicCountry: 'ﻲﻟﺎﻣ',
+    frenchCountry: 'Mali',
+    translitCountry: 'mālī',
+    arabicNationalityPlurielMale: 'َﻥﻮُّﻴِﻟﺎَﻣ',
+    frenchNationalityPlurielMale: 'Maliens',
+    translitNationalityPlurielMale: 'māliyyūn',
+    arabicNationalitySingularMale: 'ٌّﻲِﻟﺎَﻣ',
+    frenchNationalitySingularMale: 'Malien',
+    translitNationalitySingularMale: 'māliyy',
+    arabicNationalityPlurielFemale: 'ٌﺕﺎَّﻴِﻟﺎَﻣ',
+    frenchNationalityPlurielFemale: 'Maliennes',
+    translitNationalityPlurielFemale: 'māliyyāt',
+    arabicNationalitySingularFemale: 'ٌﺔَّﻴِﻟﺎَﻣ',
+    frenchNationalitySingularFemale: 'Malienne',
+    translitNationalitySingularFemale: 'māliyya'
   },
   {
-    arabicCountry: "ﺮﺠﻴﻨﻟا",
-    frenchCountry: "Niger",
-    translitCountry: "an-nījar",
-    arabicNationalityPlurielMale: "َﻥﻮُّﻳِﺮَﺠﻴِﻧ",
-    frenchNationalityPlurielMale: "Nigériens",
-    translitNationalityPlurielMale: "nījariyyūn",
-    arabicNationalitySingularMale: "ٌّﻱِﺮَﺠﻴِﻧ",
-    frenchNationalitySingularMale: "Nigérien",
-    translitNationalitySingularMale: "nījariyy",
-    arabicNationalityPlurielFemale: "ٌﺕﺎَّﻳِﺮَﺠﻴِﻧ",
-    frenchNationalityPlurielFemale: "Nigériennes",
-    translitNationalityPlurielFemale: "nījariyyāt",
-    arabicNationalitySingularFemale: "ٌﺔَّﻳِﺮَﺠﻴِﻧ",
-    frenchNationalitySingularFemale: "Nigérienne",
-    translitNationalitySingularFemale: "nījariyya"
+    arabicCountry: 'ﺮﺠﻴﻨﻟا',
+    frenchCountry: 'Niger',
+    translitCountry: 'an-nījar',
+    arabicNationalityPlurielMale: 'َﻥﻮُّﻳِﺮَﺠﻴِﻧ',
+    frenchNationalityPlurielMale: 'Nigériens',
+    translitNationalityPlurielMale: 'nījariyyūn',
+    arabicNationalitySingularMale: 'ٌّﻱِﺮَﺠﻴِﻧ',
+    frenchNationalitySingularMale: 'Nigérien',
+    translitNationalitySingularMale: 'nījariyy',
+    arabicNationalityPlurielFemale: 'ٌﺕﺎَّﻳِﺮَﺠﻴِﻧ',
+    frenchNationalityPlurielFemale: 'Nigériennes',
+    translitNationalityPlurielFemale: 'nījariyyāt',
+    arabicNationalitySingularFemale: 'ٌﺔَّﻳِﺮَﺠﻴِﻧ',
+    frenchNationalitySingularFemale: 'Nigérienne',
+    translitNationalitySingularFemale: 'nījariyya'
   },
   {
-    arabicCountry: "ﺩﺎﺸﺗ",
-    frenchCountry: "Tchad",
-    translitCountry: "tšād",
-    arabicNationalityPlurielMale: "َﻥﻮُّﻳِﺩﺎَﺸَﺗ",
-    frenchNationalityPlurielMale: "Tchadiens",
-    translitNationalityPlurielMale: "tšādiyyūn",
-    arabicNationalitySingularMale: "ٌّﻱِﺩﺎَﺸَﺗ",
-    frenchNationalitySingularMale: "Tchadien",
-    translitNationalitySingularMale: "tšādiyy",
-    arabicNationalityPlurielFemale: "ٌﺕﺎَّﻳِﺩﺎَﺸَﺗ",
-    frenchNationalityPlurielFemale: "Tchadiennes",
-    translitNationalityPlurielFemale: "tšādiyyāt",
-    arabicNationalitySingularFemale: "ٌﺔَّﻳِﺩﺎَﺸَﺗ",
-    frenchNationalitySingularFemale: "Tchadienne",
-    translitNationalitySingularFemale: "tšādiyya"
+    arabicCountry: 'ﺩﺎﺸﺗ',
+    frenchCountry: 'Tchad',
+    translitCountry: 'tšād',
+    arabicNationalityPlurielMale: 'َﻥﻮُّﻳِﺩﺎَﺸَﺗ',
+    frenchNationalityPlurielMale: 'Tchadiens',
+    translitNationalityPlurielMale: 'tšādiyyūn',
+    arabicNationalitySingularMale: 'ٌّﻱِﺩﺎَﺸَﺗ',
+    frenchNationalitySingularMale: 'Tchadien',
+    translitNationalitySingularMale: 'tšādiyy',
+    arabicNationalityPlurielFemale: 'ٌﺕﺎَّﻳِﺩﺎَﺸَﺗ',
+    frenchNationalityPlurielFemale: 'Tchadiennes',
+    translitNationalityPlurielFemale: 'tšādiyyāt',
+    arabicNationalitySingularFemale: 'ٌﺔَّﻳِﺩﺎَﺸَﺗ',
+    frenchNationalitySingularFemale: 'Tchadienne',
+    translitNationalitySingularFemale: 'tšādiyya'
   },
   {
-    arabicCountry: "ﺎﻳﺮﺘﻳﺭﺇ",
-    frenchCountry: "Érythrée",
-    translitCountry: "irītriyā",
-    arabicNationalityPlurielMale: "َﻥﻮُّﻳِﺮْﺘﻳِﺭِﺇ",
-    frenchNationalityPlurielMale: "Érythréens",
-    translitNationalityPlurielMale: "irītriyyūn",
-    arabicNationalitySingularMale: "ٌّﻱِﺮْﺘﻳِﺭِﺇ",
-    frenchNationalitySingularMale: "Érythréen",
-    translitNationalitySingularMale: "irītriyy",
-    arabicNationalityPlurielFemale: "ٌﺕﺎَّﻳِﺮْﺘﻳِﺭِﺇ",
-    frenchNationalityPlurielFemale: "Érythréennes",
-    translitNationalityPlurielFemale: "irītriyyāt",
-    arabicNationalitySingularFemale: "ٌﺔَّﻳِﺮْﺘﻳِﺭِﺇ",
-    frenchNationalitySingularFemale: "Érythréenne",
-    translitNationalitySingularFemale: "irītriyya"
+    arabicCountry: 'ﺎﻳﺮﺘﻳﺭﺇ',
+    frenchCountry: 'Érythrée',
+    translitCountry: 'irītriyā',
+    arabicNationalityPlurielMale: 'َﻥﻮُّﻳِﺮْﺘﻳِﺭِﺇ',
+    frenchNationalityPlurielMale: 'Érythréens',
+    translitNationalityPlurielMale: 'irītriyyūn',
+    arabicNationalitySingularMale: 'ٌّﻱِﺮْﺘﻳِﺭِﺇ',
+    frenchNationalitySingularMale: 'Érythréen',
+    translitNationalitySingularMale: 'irītriyy',
+    arabicNationalityPlurielFemale: 'ٌﺕﺎَّﻳِﺮْﺘﻳِﺭِﺇ',
+    frenchNationalityPlurielFemale: 'Érythréennes',
+    translitNationalityPlurielFemale: 'irītriyyāt',
+    arabicNationalitySingularFemale: 'ٌﺔَّﻳِﺮْﺘﻳِﺭِﺇ',
+    frenchNationalitySingularFemale: 'Érythréenne',
+    translitNationalitySingularFemale: 'irītriyya'
   },
   {
-    arabicCountry: "ﻦﻴﻄﺴﻠﻓ",
-    frenchCountry: "Palestine",
-    translitCountry: "falastīn",
-    arabicNationalityPlurielMale: "َﻥﻮُّﻴِﻨﻴِﻄْﺴَﻠِﻓ",
-    frenchNationalityPlurielMale: "Palestiniens",
-    translitNationalityPlurielMale: "falastīniyyūn",
-    arabicNationalitySingularMale: "ٌّﻲِﻨﻴِﻄْﺴَﻠِﻓ",
-    frenchNationalitySingularMale: "Palestinien",
-    translitNationalitySingularMale: "falastīniyy",
-    arabicNationalityPlurielFemale: "ٌﺕﺎَّﻴِﻨﻴِﻄْﺴَﻠِﻓ",
-    frenchNationalityPlurielFemale: "Palestiniennes",
-    translitNationalityPlurielFemale: "falastīniyyāt",
-    arabicNationalitySingularFemale: "ٌﺔَّﻴِﻨﻴِﻄْﺴَﻠِﻓ",
-    frenchNationalitySingularFemale: "Palestinienne",
-    translitNationalitySingularFemale: "falastīniyya"
+    arabicCountry: 'ﻦﻴﻄﺴﻠﻓ',
+    frenchCountry: 'Palestine',
+    translitCountry: 'falastīn',
+    arabicNationalityPlurielMale: 'َﻥﻮُّﻴِﻨﻴِﻄْﺴَﻠِﻓ',
+    frenchNationalityPlurielMale: 'Palestiniens',
+    translitNationalityPlurielMale: 'falastīniyyūn',
+    arabicNationalitySingularMale: 'ٌّﻲِﻨﻴِﻄْﺴَﻠِﻓ',
+    frenchNationalitySingularMale: 'Palestinien',
+    translitNationalitySingularMale: 'falastīniyy',
+    arabicNationalityPlurielFemale: 'ٌﺕﺎَّﻴِﻨﻴِﻄْﺴَﻠِﻓ',
+    frenchNationalityPlurielFemale: 'Palestiniennes',
+    translitNationalityPlurielFemale: 'falastīniyyāt',
+    arabicNationalitySingularFemale: 'ٌﺔَّﻴِﻨﻴِﻄْﺴَﻠِﻓ',
+    frenchNationalitySingularFemale: 'Palestinienne',
+    translitNationalitySingularFemale: 'falastīniyya'
   },
   {
-    arabicCountry: "ﻕاﺮﻌﻟا",
-    frenchCountry: "Irak",
-    translitCountry: "al-‘irāq",
-    arabicNationalityPlurielMale: "َﻥﻮُّﻴِﻗاَﺮِﻋ",
-    frenchNationalityPlurielMale: "Irakiens",
-    translitNationalityPlurielMale: "‘irāqiyyūn",
-    arabicNationalitySingularMale: "ٌّﻲِﻗاَﺮِﻋ",
-    frenchNationalitySingularMale: "Irakien",
-    translitNationalitySingularMale: "‘irāqiyy",
-    arabicNationalityPlurielFemale: "ٌﺕﺎَّﻴِﻗاَﺮِﻋ",
-    frenchNationalityPlurielFemale: "Irakiennes",
-    translitNationalityPlurielFemale: "‘irāqiyyāt",
-    arabicNationalitySingularFemale: "ٌﺔَّﻴِﻗاَﺮِﻋ",
-    frenchNationalitySingularFemale: "Irakienne",
-    translitNationalitySingularFemale: "‘irāqiyya"
+    arabicCountry: 'ﻕاﺮﻌﻟا',
+    frenchCountry: 'Irak',
+    translitCountry: 'al-‘irāq',
+    arabicNationalityPlurielMale: 'َﻥﻮُّﻴِﻗاَﺮِﻋ',
+    frenchNationalityPlurielMale: 'Irakiens',
+    translitNationalityPlurielMale: '‘irāqiyyūn',
+    arabicNationalitySingularMale: 'ٌّﻲِﻗاَﺮِﻋ',
+    frenchNationalitySingularMale: 'Irakien',
+    translitNationalitySingularMale: '‘irāqiyy',
+    arabicNationalityPlurielFemale: 'ٌﺕﺎَّﻴِﻗاَﺮِﻋ',
+    frenchNationalityPlurielFemale: 'Irakiennes',
+    translitNationalityPlurielFemale: '‘irāqiyyāt',
+    arabicNationalitySingularFemale: 'ٌﺔَّﻴِﻗاَﺮِﻋ',
+    frenchNationalitySingularFemale: 'Irakienne',
+    translitNationalitySingularFemale: '‘irāqiyya'
   },
   {
-    arabicCountry: "ﻥﺩﺭﻷا",
-    frenchCountry: "Jordanie",
-    translitCountry: "al-urdunn",
-    arabicNationalityPlurielMale: "َﻥﻮُّﻴِﻧُﺩْﺭُﺃ",
-    frenchNationalityPlurielMale: "Jordaniens",
-    translitNationalityPlurielMale: "urdunniyyūn",
-    arabicNationalitySingularMale: "ٌّﻲِﻧُﺩْﺭُﺃ",
-    frenchNationalitySingularMale: "Jordanien",
-    translitNationalitySingularMale: "urdunniyy",
-    arabicNationalityPlurielFemale: "ٌﺕﺎَّﻴِﻧُﺩْﺭُﺃ",
-    frenchNationalityPlurielFemale: "Jordaniennes",
-    translitNationalityPlurielFemale: "urdunniyyāt",
-    arabicNationalitySingularFemale: "ٌﺔَّﻴِﻧُﺩْﺭُﺃ",
-    frenchNationalitySingularFemale: "Jordanienne",
-    translitNationalitySingularFemale: "urdunniyya"
+    arabicCountry: 'ﻥﺩﺭﻷا',
+    frenchCountry: 'Jordanie',
+    translitCountry: 'al-urdunn',
+    arabicNationalityPlurielMale: 'َﻥﻮُّﻴِﻧُﺩْﺭُﺃ',
+    frenchNationalityPlurielMale: 'Jordaniens',
+    translitNationalityPlurielMale: 'urdunniyyūn',
+    arabicNationalitySingularMale: 'ٌّﻲِﻧُﺩْﺭُﺃ',
+    frenchNationalitySingularMale: 'Jordanien',
+    translitNationalitySingularMale: 'urdunniyy',
+    arabicNationalityPlurielFemale: 'ٌﺕﺎَّﻴِﻧُﺩْﺭُﺃ',
+    frenchNationalityPlurielFemale: 'Jordaniennes',
+    translitNationalityPlurielFemale: 'urdunniyyāt',
+    arabicNationalitySingularFemale: 'ٌﺔَّﻴِﻧُﺩْﺭُﺃ',
+    frenchNationalitySingularFemale: 'Jordanienne',
+    translitNationalitySingularFemale: 'urdunniyya'
   },
   {
-    arabicCountry: "ﺔﻳﺩﻮﻌﺴﻟا ﺔﻴﺑﺮﻌﻟا ﺔﻜﻠﻤﻤﻟا",
-    frenchCountry: "Arabie Saoudite",
-    translitCountry: "al-mamlaka al-‘arabiyya as-sa‘ūdiyya",
-    arabicNationalityPlurielMale: "َﻥﻮُّﻳِﺩﻮُﻌَﺳ",
-    frenchNationalityPlurielMale: "Saoudiens",
-    translitNationalityPlurielMale: "sa‘ūdiyyūn",
-    arabicNationalitySingularMale: "ٌّﻱِﺩﻮُﻌَﺳ",
-    frenchNationalitySingularMale: "Saoudien",
-    translitNationalitySingularMale: "sa‘ūdiyy",
-    arabicNationalityPlurielFemale: "ٌﺕﺎَّﻳِﺩﻮُﻌَﺳ",
-    frenchNationalityPlurielFemale: "Saoudiennes",
-    translitNationalityPlurielFemale: "sa‘ūdiyyāt",
-    arabicNationalitySingularFemale: "ٌﺔَّﻳِﺩﻮُﻌَﺳ",
-    frenchNationalitySingularFemale: "Saoudienne",
-    translitNationalitySingularFemale: "sa‘ūdiyya"
+    arabicCountry: 'ﺔﻳﺩﻮﻌﺴﻟا ﺔﻴﺑﺮﻌﻟا ﺔﻜﻠﻤﻤﻟا',
+    frenchCountry: 'Arabie Saoudite',
+    translitCountry: 'al-mamlaka al-‘arabiyya as-sa‘ūdiyya',
+    arabicNationalityPlurielMale: 'َﻥﻮُّﻳِﺩﻮُﻌَﺳ',
+    frenchNationalityPlurielMale: 'Saoudiens',
+    translitNationalityPlurielMale: 'sa‘ūdiyyūn',
+    arabicNationalitySingularMale: 'ٌّﻱِﺩﻮُﻌَﺳ',
+    frenchNationalitySingularMale: 'Saoudien',
+    translitNationalitySingularMale: 'sa‘ūdiyy',
+    arabicNationalityPlurielFemale: 'ٌﺕﺎَّﻳِﺩﻮُﻌَﺳ',
+    frenchNationalityPlurielFemale: 'Saoudiennes',
+    translitNationalityPlurielFemale: 'sa‘ūdiyyāt',
+    arabicNationalitySingularFemale: 'ٌﺔَّﻳِﺩﻮُﻌَﺳ',
+    frenchNationalitySingularFemale: 'Saoudienne',
+    translitNationalitySingularFemale: 'sa‘ūdiyya'
   },
   {
-    arabicCountry: "ﻦﻤﻴﻟا",
-    frenchCountry: "Yémen",
-    translitCountry: "al-yaman",
-    arabicNationalityPlurielMale: "َﻥﻮُّﻴِﻨَﻤَﻳ",
-    frenchNationalityPlurielMale: "Yéménites",
-    translitNationalityPlurielMale: "yamaniyyūn",
-    arabicNationalitySingularMale: "ٌّﻲِﻨَﻤَﻳ",
-    frenchNationalitySingularMale: "Yéménite",
-    translitNationalitySingularMale: "yamaniyy",
-    arabicNationalityPlurielFemale: "ٌﺕﺎَّﻴِﻨَﻤَﻳ",
-    frenchNationalityPlurielFemale: "Yéménites",
-    translitNationalityPlurielFemale: "yamaniyyāt",
-    arabicNationalitySingularFemale: "ٌﺔَّﻴِﻨَﻤَﻳ",
-    frenchNationalitySingularFemale: "Yéménite",
-    translitNationalitySingularFemale: "yamaniyya"
+    arabicCountry: 'ﻦﻤﻴﻟا',
+    frenchCountry: 'Yémen',
+    translitCountry: 'al-yaman',
+    arabicNationalityPlurielMale: 'َﻥﻮُّﻴِﻨَﻤَﻳ',
+    frenchNationalityPlurielMale: 'Yéménites',
+    translitNationalityPlurielMale: 'yamaniyyūn',
+    arabicNationalitySingularMale: 'ٌّﻲِﻨَﻤَﻳ',
+    frenchNationalitySingularMale: 'Yéménite',
+    translitNationalitySingularMale: 'yamaniyy',
+    arabicNationalityPlurielFemale: 'ٌﺕﺎَّﻴِﻨَﻤَﻳ',
+    frenchNationalityPlurielFemale: 'Yéménites',
+    translitNationalityPlurielFemale: 'yamaniyyāt',
+    arabicNationalitySingularFemale: 'ٌﺔَّﻴِﻨَﻤَﻳ',
+    frenchNationalitySingularFemale: 'Yéménite',
+    translitNationalitySingularFemale: 'yamaniyya'
   },
   {
-    arabicCountry: "ﻥﺎﻤﻋ",
-    frenchCountry: "Oman",
-    translitCountry: "‘umān",
-    arabicNationalityPlurielMale: "َﻥﻮُّﻴِﻧﺎَﻤُﻋ",
-    frenchNationalityPlurielMale: "Omanais",
-    translitNationalityPlurielMale: "‘umāniyyūn",
-    arabicNationalitySingularMale: "ٌّﻲِﻧﺎَﻤُﻋ",
-    frenchNationalitySingularMale: "Omanais",
-    translitNationalitySingularMale: "‘umāniyy",
-    arabicNationalityPlurielFemale: "ٌﺕﺎَّﻴِﻧﺎَﻤُﻋ",
-    frenchNationalityPlurielFemale: "Omanaises",
-    translitNationalityPlurielFemale: "‘umāniyyāt",
-    arabicNationalitySingularFemale: "ٌﺔَّﻴِﻧﺎَﻤُﻋ",
-    frenchNationalitySingularFemale: "Omanaise",
-    translitNationalitySingularFemale: "‘umāniyya"
+    arabicCountry: 'ﻥﺎﻤﻋ',
+    frenchCountry: 'Oman',
+    translitCountry: '‘umān',
+    arabicNationalityPlurielMale: 'َﻥﻮُّﻴِﻧﺎَﻤُﻋ',
+    frenchNationalityPlurielMale: 'Omanais',
+    translitNationalityPlurielMale: '‘umāniyyūn',
+    arabicNationalitySingularMale: 'ٌّﻲِﻧﺎَﻤُﻋ',
+    frenchNationalitySingularMale: 'Omanais',
+    translitNationalitySingularMale: '‘umāniyy',
+    arabicNationalityPlurielFemale: 'ٌﺕﺎَّﻴِﻧﺎَﻤُﻋ',
+    frenchNationalityPlurielFemale: 'Omanaises',
+    translitNationalityPlurielFemale: '‘umāniyyāt',
+    arabicNationalitySingularFemale: 'ٌﺔَّﻴِﻧﺎَﻤُﻋ',
+    frenchNationalitySingularFemale: 'Omanaise',
+    translitNationalitySingularFemale: '‘umāniyya'
   },
   {
-    arabicCountry: "ﺓﺪﺤﺘﻤﻟا ﺔﻴﺑﺮﻌﻟا ﺕاﺭﺎﻣﻹا",
-    frenchCountry: "Émirats Arabes Unis",
-    translitCountry: "al-imārāt al-‘arabiyya al-muttaḥida",
-    arabicNationalityPlurielMale: "َﻥﻮُّﻴِﺗاَﺭﺎَﻣِﺇ",
-    frenchNationalityPlurielMale: "Émiratis",
-    translitNationalityPlurielMale: "imārātiyyūn",
-    arabicNationalitySingularMale: "ٌّﻲِﺗاَﺭﺎَﻣِﺇ",
-    frenchNationalitySingularMale: "Émirati",
-    translitNationalitySingularMale: "imārātiyy",
-    arabicNationalityPlurielFemale: "ٌﺕﺎَّﻴِﺗاَﺭﺎَﻣِﺇ",
-    frenchNationalityPlurielFemale: "Émiraties",
-    translitNationalityPlurielFemale: "imārātiyyāt",
-    arabicNationalitySingularFemale: "ٌﺔَّﻴِﺗاَﺭﺎَﻣِﺇ",
-    frenchNationalitySingularFemale: "Émiratie",
-    translitNationalitySingularFemale: "imārātiyya"
+    arabicCountry: 'ﺓﺪﺤﺘﻤﻟا ﺔﻴﺑﺮﻌﻟا ﺕاﺭﺎﻣﻹا',
+    frenchCountry: 'Émirats Arabes Unis',
+    translitCountry: 'al-imārāt al-‘arabiyya al-muttaḥida',
+    arabicNationalityPlurielMale: 'َﻥﻮُّﻴِﺗاَﺭﺎَﻣِﺇ',
+    frenchNationalityPlurielMale: 'Émiratis',
+    translitNationalityPlurielMale: 'imārātiyyūn',
+    arabicNationalitySingularMale: 'ٌّﻲِﺗاَﺭﺎَﻣِﺇ',
+    frenchNationalitySingularMale: 'Émirati',
+    translitNationalitySingularMale: 'imārātiyy',
+    arabicNationalityPlurielFemale: 'ٌﺕﺎَّﻴِﺗاَﺭﺎَﻣِﺇ',
+    frenchNationalityPlurielFemale: 'Émiraties',
+    translitNationalityPlurielFemale: 'imārātiyyāt',
+    arabicNationalitySingularFemale: 'ٌﺔَّﻴِﺗاَﺭﺎَﻣِﺇ',
+    frenchNationalitySingularFemale: 'Émiratie',
+    translitNationalitySingularFemale: 'imārātiyya'
   },
   {
-    arabicCountry: "ﺮﻄﻗ",
-    frenchCountry: "Qatar",
-    translitCountry: "qaṭar",
-    arabicNationalityPlurielMale: "َﻥﻮُّﻳِﺮَﻄَﻗ",
-    frenchNationalityPlurielMale: "Qataris",
-    translitNationalityPlurielMale: "qaṭariyyūn",
-    arabicNationalitySingularMale: "ٌّﻱِﺮَﻄَﻗ",
-    frenchNationalitySingularMale: "Qatari",
-    translitNationalitySingularMale: "qaṭariyy",
-    arabicNationalityPlurielFemale: "ٌﺕﺎَّﻳِﺮَﻄَﻗ",
-    frenchNationalityPlurielFemale: "Qataries",
-    translitNationalityPlurielFemale: "qaṭariyyāt",
-    arabicNationalitySingularFemale: "ٌﺔَّﻳِﺮَﻄَﻗ",
-    frenchNationalitySingularFemale: "Qatarie",
-    translitNationalitySingularFemale: "qaṭariyya"
+    arabicCountry: 'ﺮﻄﻗ',
+    frenchCountry: 'Qatar',
+    translitCountry: 'qaṭar',
+    arabicNationalityPlurielMale: 'َﻥﻮُّﻳِﺮَﻄَﻗ',
+    frenchNationalityPlurielMale: 'Qataris',
+    translitNationalityPlurielMale: 'qaṭariyyūn',
+    arabicNationalitySingularMale: 'ٌّﻱِﺮَﻄَﻗ',
+    frenchNationalitySingularMale: 'Qatari',
+    translitNationalitySingularMale: 'qaṭariyy',
+    arabicNationalityPlurielFemale: 'ٌﺕﺎَّﻳِﺮَﻄَﻗ',
+    frenchNationalityPlurielFemale: 'Qataries',
+    translitNationalityPlurielFemale: 'qaṭariyyāt',
+    arabicNationalitySingularFemale: 'ٌﺔَّﻳِﺮَﻄَﻗ',
+    frenchNationalitySingularFemale: 'Qatarie',
+    translitNationalitySingularFemale: 'qaṭariyya'
   },
   {
-    arabicCountry: "ﻦﻳﺮﺤﺒﻟا",
-    frenchCountry: "Bahreïn",
-    translitCountry: "al-baḥrayn",
-    arabicNationalityPlurielMale: "َﻥﻮُّﻴِﻨْﻳَﺮْﺤَﺑ",
-    frenchNationalityPlurielMale: "Bahreïniens",
-    translitNationalityPlurielMale: "baḥrayniyyūn",
-    arabicNationalitySingularMale: "ٌّﻲِﻨْﻳَﺮْﺤَﺑ",
-    frenchNationalitySingularMale: "Bahreïnien",
-    translitNationalitySingularMale: "baḥrayniyy",
-    arabicNationalityPlurielFemale: "ٌﺕﺎَّﻴِﻨْﻳَﺮْﺤَﺑ",
-    frenchNationalityPlurielFemale: "Bahreïniennes",
-    translitNationalityPlurielFemale: "baḥrayniyyāt",
-    arabicNationalitySingularFemale: "ٌﺔَّﻴِﻨْﻳَﺮْﺤَﺑ",
-    frenchNationalitySingularFemale: "Bahreïnienne",
-    translitNationalitySingularFemale: "baḥrayniyya"
+    arabicCountry: 'ﻦﻳﺮﺤﺒﻟا',
+    frenchCountry: 'Bahreïn',
+    translitCountry: 'al-baḥrayn',
+    arabicNationalityPlurielMale: 'َﻥﻮُّﻴِﻨْﻳَﺮْﺤَﺑ',
+    frenchNationalityPlurielMale: 'Bahreïniens',
+    translitNationalityPlurielMale: 'baḥrayniyyūn',
+    arabicNationalitySingularMale: 'ٌّﻲِﻨْﻳَﺮْﺤَﺑ',
+    frenchNationalitySingularMale: 'Bahreïnien',
+    translitNationalitySingularMale: 'baḥrayniyy',
+    arabicNationalityPlurielFemale: 'ٌﺕﺎَّﻴِﻨْﻳَﺮْﺤَﺑ',
+    frenchNationalityPlurielFemale: 'Bahreïniennes',
+    translitNationalityPlurielFemale: 'baḥrayniyyāt',
+    arabicNationalitySingularFemale: 'ٌﺔَّﻴِﻨْﻳَﺮْﺤَﺑ',
+    frenchNationalitySingularFemale: 'Bahreïnienne',
+    translitNationalitySingularFemale: 'baḥrayniyya'
   },
   {
-    arabicCountry: "ﺖﻳﻮﻜﻟا",
-    frenchCountry: "Koweït",
-    translitCountry: "al-kuwayt",
-    arabicNationalityPlurielMale: "َﻥﻮُّﻴِﺘْﻳَﻮُﻛ",
-    frenchNationalityPlurielMale: "Koweïtiens",
-    translitNationalityPlurielMale: "kuwaytiyyūn",
-    arabicNationalitySingularMale: "ٌّﻲِﺘْﻳَﻮُﻛ",
-    frenchNationalitySingularMale: "Koweïtien",
-    translitNationalitySingularMale: "kuwaytiyy",
-    arabicNationalityPlurielFemale: "ٌﺕﺎَّﻴِﺘْﻳَﻮُﻛ",
-    frenchNationalityPlurielFemale: "Koweïtiennes",
-    translitNationalityPlurielFemale: "kuwaytiyyāt",
-    arabicNationalitySingularFemale: "ٌﺔَّﻴِﺘْﻳَﻮُﻛ",
-    frenchNationalitySingularFemale: "Koweïtienne",
-    translitNationalitySingularFemale: "kuwaytiyya"
+    arabicCountry: 'ﺖﻳﻮﻜﻟا',
+    frenchCountry: 'Koweït',
+    translitCountry: 'al-kuwayt',
+    arabicNationalityPlurielMale: 'َﻥﻮُّﻴِﺘْﻳَﻮُﻛ',
+    frenchNationalityPlurielMale: 'Koweïtiens',
+    translitNationalityPlurielMale: 'kuwaytiyyūn',
+    arabicNationalitySingularMale: 'ٌّﻲِﺘْﻳَﻮُﻛ',
+    frenchNationalitySingularMale: 'Koweïtien',
+    translitNationalitySingularMale: 'kuwaytiyy',
+    arabicNationalityPlurielFemale: 'ٌﺕﺎَّﻴِﺘْﻳَﻮُﻛ',
+    frenchNationalityPlurielFemale: 'Koweïtiennes',
+    translitNationalityPlurielFemale: 'kuwaytiyyāt',
+    arabicNationalitySingularFemale: 'ٌﺔَّﻴِﺘْﻳَﻮُﻛ',
+    frenchNationalitySingularFemale: 'Koweïtienne',
+    translitNationalitySingularFemale: 'kuwaytiyya'
   },
   {
-    arabicCountry: "ﺎﻴﻛﺮﺗ",
-    frenchCountry: "Turquie",
-    translitCountry: "turkiyā",
-    arabicNationalityPlurielMale: "ٌﻙاَﺮْﺗَﺃ",
-    frenchNationalityPlurielMale: "Turcs",
-    translitNationalityPlurielMale: "atrāk",
-    arabicNationalitySingularMale: "ٌّﻲِﻛْﺮُﺗ",
-    frenchNationalitySingularMale: "Turc",
-    translitNationalitySingularMale: "turkiyy",
-    arabicNationalityPlurielFemale: "ٌﺕﺎَّﻴِﻛْﺮُﺗ",
-    frenchNationalityPlurielFemale: "Turques",
-    translitNationalityPlurielFemale: "turkiyyāt",
-    arabicNationalitySingularFemale: "ٌﺔَّﻴِﻛْﺮُﺗ",
-    frenchNationalitySingularFemale: "Turque",
-    translitNationalitySingularFemale: "turkiyya"
+    arabicCountry: 'ﺎﻴﻛﺮﺗ',
+    frenchCountry: 'Turquie',
+    translitCountry: 'turkiyā',
+    arabicNationalityPlurielMale: 'ٌﻙاَﺮْﺗَﺃ',
+    frenchNationalityPlurielMale: 'Turcs',
+    translitNationalityPlurielMale: 'atrāk',
+    arabicNationalitySingularMale: 'ٌّﻲِﻛْﺮُﺗ',
+    frenchNationalitySingularMale: 'Turc',
+    translitNationalitySingularMale: 'turkiyy',
+    arabicNationalityPlurielFemale: 'ٌﺕﺎَّﻴِﻛْﺮُﺗ',
+    frenchNationalityPlurielFemale: 'Turques',
+    translitNationalityPlurielFemale: 'turkiyyāt',
+    arabicNationalitySingularFemale: 'ٌﺔَّﻴِﻛْﺮُﺗ',
+    frenchNationalitySingularFemale: 'Turque',
+    translitNationalitySingularFemale: 'turkiyya'
   },
   {
-    arabicCountry: "ﺹﺮﺒﻗ",
-    frenchCountry: "Chypre",
-    translitCountry: "qubrus",
-    arabicNationalityPlurielMale: "َﻥﻮُّﻴِﺻُﺮْﺒُﻗ",
-    frenchNationalityPlurielMale: "Chypriotes",
-    translitNationalityPlurielMale: "qubrusiyyūn",
-    arabicNationalitySingularMale: "ٌّﻲِﺻُﺮْﺒُﻗ",
-    frenchNationalitySingularMale: "Chypriote",
-    translitNationalitySingularMale: "qubrusiyy",
-    arabicNationalityPlurielFemale: "ٌﺕﺎَّﻴِﺻُﺮْﺒُﻗ",
-    frenchNationalityPlurielFemale: "Chypriotes",
-    translitNationalityPlurielFemale: "qubrusiyyāt",
-    arabicNationalitySingularFemale: "ٌﺔَّﻴِﺻُﺮْﺒُﻗ",
-    frenchNationalitySingularFemale: "Chypriote",
-    translitNationalitySingularFemale: "qubrusiyya"
+    arabicCountry: 'ﺹﺮﺒﻗ',
+    frenchCountry: 'Chypre',
+    translitCountry: 'qubrus',
+    arabicNationalityPlurielMale: 'َﻥﻮُّﻴِﺻُﺮْﺒُﻗ',
+    frenchNationalityPlurielMale: 'Chypriotes',
+    translitNationalityPlurielMale: 'qubrusiyyūn',
+    arabicNationalitySingularMale: 'ٌّﻲِﺻُﺮْﺒُﻗ',
+    frenchNationalitySingularMale: 'Chypriote',
+    translitNationalitySingularMale: 'qubrusiyy',
+    arabicNationalityPlurielFemale: 'ٌﺕﺎَّﻴِﺻُﺮْﺒُﻗ',
+    frenchNationalityPlurielFemale: 'Chypriotes',
+    translitNationalityPlurielFemale: 'qubrusiyyāt',
+    arabicNationalitySingularFemale: 'ٌﺔَّﻴِﺻُﺮْﺒُﻗ',
+    frenchNationalitySingularFemale: 'Chypriote',
+    translitNationalitySingularFemale: 'qubrusiyya'
   },
   {
-    arabicCountry: "ﻥاﺮﻳﺇ",
-    frenchCountry: "Iran",
-    translitCountry: "īrān",
-    arabicNationalityPlurielMale: "َﻥﻮُّﻴِﻧاَﺮﻳِﺇ",
-    frenchNationalityPlurielMale: "Iraniens",
-    translitNationalityPlurielMale: "īrāniyyūn",
-    arabicNationalitySingularMale: "ٌّﻲِﻧاَﺮﻳِﺇ",
-    frenchNationalitySingularMale: "Iranien",
-    translitNationalitySingularMale: "īrāniyy",
-    arabicNationalityPlurielFemale: "ٌﺕﺎَّﻴِﻧاَﺮﻳِﺇ",
-    frenchNationalityPlurielFemale: "Iraniennes",
-    translitNationalityPlurielFemale: "īrāniyyāt",
-    arabicNationalitySingularFemale: "ٌﺔَّﻴِﻧاَﺮﻳِﺇ",
-    frenchNationalitySingularFemale: "Iranienne",
-    translitNationalitySingularFemale: "īrāniyya"
+    arabicCountry: 'ﻥاﺮﻳﺇ',
+    frenchCountry: 'Iran',
+    translitCountry: 'īrān',
+    arabicNationalityPlurielMale: 'َﻥﻮُّﻴِﻧاَﺮﻳِﺇ',
+    frenchNationalityPlurielMale: 'Iraniens',
+    translitNationalityPlurielMale: 'īrāniyyūn',
+    arabicNationalitySingularMale: 'ٌّﻲِﻧاَﺮﻳِﺇ',
+    frenchNationalitySingularMale: 'Iranien',
+    translitNationalitySingularMale: 'īrāniyy',
+    arabicNationalityPlurielFemale: 'ٌﺕﺎَّﻴِﻧاَﺮﻳِﺇ',
+    frenchNationalityPlurielFemale: 'Iraniennes',
+    translitNationalityPlurielFemale: 'īrāniyyāt',
+    arabicNationalitySingularFemale: 'ٌﺔَّﻴِﻧاَﺮﻳِﺇ',
+    frenchNationalitySingularFemale: 'Iranienne',
+    translitNationalitySingularFemale: 'īrāniyya'
   },
   {
-    arabicCountry: "ﺎﺴﻧﺮﻓ",
-    frenchCountry: "France",
-    translitCountry: "faransā",
-    arabicNationalityPlurielMale: "َﻥﻮُّﻴِﺴْﻧَﺮَﻓ",
-    frenchNationalityPlurielMale: "Français",
-    translitNationalityPlurielMale: "faransiyyūn",
-    arabicNationalitySingularMale: "ٌّﻲِﺴْﻧَﺮَﻓ",
-    frenchNationalitySingularMale: "Français",
-    translitNationalitySingularMale: "faransiyy",
-    arabicNationalityPlurielFemale: "ٌﺕﺎَّﻴِﺴْﻧَﺮَﻓ",
-    frenchNationalityPlurielFemale: "Françaises",
-    translitNationalityPlurielFemale: "faransiyyāt",
-    arabicNationalitySingularFemale: "ٌﺔَّﻴِﺴْﻧَﺮَﻓ",
-    frenchNationalitySingularFemale: "Française",
-    translitNationalitySingularFemale: "faransiyya"
+    arabicCountry: 'ﺎﺴﻧﺮﻓ',
+    frenchCountry: 'France',
+    translitCountry: 'faransā',
+    arabicNationalityPlurielMale: 'َﻥﻮُّﻴِﺴْﻧَﺮَﻓ',
+    frenchNationalityPlurielMale: 'Français',
+    translitNationalityPlurielMale: 'faransiyyūn',
+    arabicNationalitySingularMale: 'ٌّﻲِﺴْﻧَﺮَﻓ',
+    frenchNationalitySingularMale: 'Français',
+    translitNationalitySingularMale: 'faransiyy',
+    arabicNationalityPlurielFemale: 'ٌﺕﺎَّﻴِﺴْﻧَﺮَﻓ',
+    frenchNationalityPlurielFemale: 'Françaises',
+    translitNationalityPlurielFemale: 'faransiyyāt',
+    arabicNationalitySingularFemale: 'ٌﺔَّﻴِﺴْﻧَﺮَﻓ',
+    frenchNationalitySingularFemale: 'Française',
+    translitNationalitySingularFemale: 'faransiyya'
   },
   {
-    arabicCountry: "ﺎﻴﻧﺎﺒﺳﺇ",
-    frenchCountry: "Espagne",
-    translitCountry: "isbāniyā",
-    arabicNationalityPlurielMale: "َﻥﻮُّﻴِﻧﺎَﺒْﺳِﺇ",
-    frenchNationalityPlurielMale: "Espagnols",
-    translitNationalityPlurielMale: "isbāniyyūn",
-    arabicNationalitySingularMale: "ٌّﻲِﻧﺎَﺒْﺳِﺇ",
-    frenchNationalitySingularMale: "Espagnol",
-    translitNationalitySingularMale: "isbāniyy",
-    arabicNationalityPlurielFemale: "ٌﺕﺎَّﻴِﻧﺎَﺒْﺳِﺇ",
-    frenchNationalityPlurielFemale: "Espagnoles",
-    translitNationalityPlurielFemale: "isbāniyyāt",
-    arabicNationalitySingularFemale: "ٌﺔَّﻴِﻧﺎَﺒْﺳِﺇ",
-    frenchNationalitySingularFemale: "Espagnole",
-    translitNationalitySingularFemale: "isbāniyya"
+    arabicCountry: 'ﺎﻴﻧﺎﺒﺳﺇ',
+    frenchCountry: 'Espagne',
+    translitCountry: 'isbāniyā',
+    arabicNationalityPlurielMale: 'َﻥﻮُّﻴِﻧﺎَﺒْﺳِﺇ',
+    frenchNationalityPlurielMale: 'Espagnols',
+    translitNationalityPlurielMale: 'isbāniyyūn',
+    arabicNationalitySingularMale: 'ٌّﻲِﻧﺎَﺒْﺳِﺇ',
+    frenchNationalitySingularMale: 'Espagnol',
+    translitNationalitySingularMale: 'isbāniyy',
+    arabicNationalityPlurielFemale: 'ٌﺕﺎَّﻴِﻧﺎَﺒْﺳِﺇ',
+    frenchNationalityPlurielFemale: 'Espagnoles',
+    translitNationalityPlurielFemale: 'isbāniyyāt',
+    arabicNationalitySingularFemale: 'ٌﺔَّﻴِﻧﺎَﺒْﺳِﺇ',
+    frenchNationalitySingularFemale: 'Espagnole',
+    translitNationalitySingularFemale: 'isbāniyya'
   },
   {
-    arabicCountry: "ﻝﺎﻐﺗﺮﺒﻟا",
-    frenchCountry: "Portugal",
-    translitCountry: "al-burtughāl",
-    arabicNationalityPlurielMale: "َﻥﻮُّﻴِﻟﺎَﻐُﺗْﺮُﺑ",
-    frenchNationalityPlurielMale: "Portugais",
-    translitNationalityPlurielMale: "burtughāliyūn",
-    arabicNationalitySingularMale: "ٌّﻲِﻟﺎَﻐُﺗْﺮُﺑ",
-    frenchNationalitySingularMale: "Portugais",
-    translitNationalitySingularMale: "burtughāliy",
-    arabicNationalityPlurielFemale: "ٌﺕﺎَّﻴِﻟﺎَﻐُﺗْﺮُﺑ",
-    frenchNationalityPlurielFemale: "Portugaises",
-    translitNationalityPlurielFemale: "burtughāliyāt",
-    arabicNationalitySingularFemale: "ٌﺔَّﻴِﻟﺎَﻐُﺗْﺮُﺑ",
-    frenchNationalitySingularFemale: "Portugaise",
-    translitNationalitySingularFemale: "burtughāliyya"
+    arabicCountry: 'ﻝﺎﻐﺗﺮﺒﻟا',
+    frenchCountry: 'Portugal',
+    translitCountry: 'al-burtughāl',
+    arabicNationalityPlurielMale: 'َﻥﻮُّﻴِﻟﺎَﻐُﺗْﺮُﺑ',
+    frenchNationalityPlurielMale: 'Portugais',
+    translitNationalityPlurielMale: 'burtughāliyūn',
+    arabicNationalitySingularMale: 'ٌّﻲِﻟﺎَﻐُﺗْﺮُﺑ',
+    frenchNationalitySingularMale: 'Portugais',
+    translitNationalitySingularMale: 'burtughāliy',
+    arabicNationalityPlurielFemale: 'ٌﺕﺎَّﻴِﻟﺎَﻐُﺗْﺮُﺑ',
+    frenchNationalityPlurielFemale: 'Portugaises',
+    translitNationalityPlurielFemale: 'burtughāliyāt',
+    arabicNationalitySingularFemale: 'ٌﺔَّﻴِﻟﺎَﻐُﺗْﺮُﺑ',
+    frenchNationalitySingularFemale: 'Portugaise',
+    translitNationalitySingularFemale: 'burtughāliyya'
   },
   {
-    arabicCountry: "ﺎﻴﻟﺎﻄﻳﺇ",
-    frenchCountry: "Italie",
-    translitCountry: "iṭāliyā",
-    arabicNationalityPlurielMale: "َﻥﻮُّﻴِﻟﺎَﻄﻳِﺇ",
-    frenchNationalityPlurielMale: "Italiens",
-    translitNationalityPlurielMale: "iṭāliyyūn",
-    arabicNationalitySingularMale: "ٌّﻲِﻟﺎَﻄﻳِﺇ",
-    frenchNationalitySingularMale: "Italien",
-    translitNationalitySingularMale: "iṭāliyy",
-    arabicNationalityPlurielFemale: "ٌﺕﺎَّﻴِﻟﺎَﻄﻳِﺇ",
-    frenchNationalityPlurielFemale: "Italiennes",
-    translitNationalityPlurielFemale: "iṭāliyyāt",
-    arabicNationalitySingularFemale: "ٌﺔَّﻴِﻟﺎَﻄﻳِﺇ",
-    frenchNationalitySingularFemale: "Italienne",
-    translitNationalitySingularFemale: "iṭāliyya"
+    arabicCountry: 'ﺎﻴﻟﺎﻄﻳﺇ',
+    frenchCountry: 'Italie',
+    translitCountry: 'iṭāliyā',
+    arabicNationalityPlurielMale: 'َﻥﻮُّﻴِﻟﺎَﻄﻳِﺇ',
+    frenchNationalityPlurielMale: 'Italiens',
+    translitNationalityPlurielMale: 'iṭāliyyūn',
+    arabicNationalitySingularMale: 'ٌّﻲِﻟﺎَﻄﻳِﺇ',
+    frenchNationalitySingularMale: 'Italien',
+    translitNationalitySingularMale: 'iṭāliyy',
+    arabicNationalityPlurielFemale: 'ٌﺕﺎَّﻴِﻟﺎَﻄﻳِﺇ',
+    frenchNationalityPlurielFemale: 'Italiennes',
+    translitNationalityPlurielFemale: 'iṭāliyyāt',
+    arabicNationalitySingularFemale: 'ٌﺔَّﻴِﻟﺎَﻄﻳِﺇ',
+    frenchNationalitySingularFemale: 'Italienne',
+    translitNationalitySingularFemale: 'iṭāliyya'
   },
   {
-    arabicCountry: "ﻥﺎﻧﻮﻴﻟا",
-    frenchCountry: "Grèce",
-    translitCountry: "al-yūnān",
-    arabicNationalityPlurielMale: "َﻥﻮُّﻴِﻧﺎَﻧﻮُﻳ",
-    frenchNationalityPlurielMale: "Grecs",
-    translitNationalityPlurielMale: "yūnāniyyūn",
-    arabicNationalitySingularMale: "ٌّﻲِﻧﺎَﻧﻮُﻳ",
-    frenchNationalitySingularMale: "Grec",
-    translitNationalitySingularMale: "yūnāniyy",
-    arabicNationalityPlurielFemale: "ٌﺕﺎَّﻴِﻧﺎَﻧﻮُﻳ",
-    frenchNationalityPlurielFemale: "Grecques",
-    translitNationalityPlurielFemale: "yūnāniyyāt",
-    arabicNationalitySingularFemale: "ٌﺔَّﻴِﻧﺎَﻧﻮُﻳ",
-    frenchNationalitySingularFemale: "Grecque",
-    translitNationalitySingularFemale: "yūnāniyya"
+    arabicCountry: 'ﻥﺎﻧﻮﻴﻟا',
+    frenchCountry: 'Grèce',
+    translitCountry: 'al-yūnān',
+    arabicNationalityPlurielMale: 'َﻥﻮُّﻴِﻧﺎَﻧﻮُﻳ',
+    frenchNationalityPlurielMale: 'Grecs',
+    translitNationalityPlurielMale: 'yūnāniyyūn',
+    arabicNationalitySingularMale: 'ٌّﻲِﻧﺎَﻧﻮُﻳ',
+    frenchNationalitySingularMale: 'Grec',
+    translitNationalitySingularMale: 'yūnāniyy',
+    arabicNationalityPlurielFemale: 'ٌﺕﺎَّﻴِﻧﺎَﻧﻮُﻳ',
+    frenchNationalityPlurielFemale: 'Grecques',
+    translitNationalityPlurielFemale: 'yūnāniyyāt',
+    arabicNationalitySingularFemale: 'ٌﺔَّﻴِﻧﺎَﻧﻮُﻳ',
+    frenchNationalitySingularFemale: 'Grecque',
+    translitNationalitySingularFemale: 'yūnāniyya'
   },
   {
-    arabicCountry: "ﻞﻴﺋاﺮﺳﺇ",
-    frenchCountry: "Israël",
-    translitCountry: "isrā’īl",
-    arabicNationalityPlurielMale: "َﻥﻮُّﻴِﻠﻴِﺋاَﺮْﺳِﺇ",
-    frenchNationalityPlurielMale: "Israéliens",
-    translitNationalityPlurielMale: "isrā’īliyyūn",
-    arabicNationalitySingularMale: "ٌّﻲِﻠﻴِﺋاَﺮْﺳِﺇ",
-    frenchNationalitySingularMale: "Israélien",
-    translitNationalitySingularMale: "isrā’īliyy",
-    arabicNationalityPlurielFemale: "ٌﺕﺎَّﻴِﻠﻴِﺋاَﺮْﺳِﺇ",
-    frenchNationalityPlurielFemale: "Israéliennes",
-    translitNationalityPlurielFemale: "isrā’īliyyāt",
-    arabicNationalitySingularFemale: "ٌﺔَّﻴِﻠﻴِﺋاَﺮْﺳِﺇ",
-    frenchNationalitySingularFemale: "Israélienne",
-    translitNationalitySingularFemale: "isrā’īliyya"
+    arabicCountry: 'ﻞﻴﺋاﺮﺳﺇ',
+    frenchCountry: 'Israël',
+    translitCountry: 'isrā’īl',
+    arabicNationalityPlurielMale: 'َﻥﻮُّﻴِﻠﻴِﺋاَﺮْﺳِﺇ',
+    frenchNationalityPlurielMale: 'Israéliens',
+    translitNationalityPlurielMale: 'isrā’īliyyūn',
+    arabicNationalitySingularMale: 'ٌّﻲِﻠﻴِﺋاَﺮْﺳِﺇ',
+    frenchNationalitySingularMale: 'Israélien',
+    translitNationalitySingularMale: 'isrā’īliyy',
+    arabicNationalityPlurielFemale: 'ٌﺕﺎَّﻴِﻠﻴِﺋاَﺮْﺳِﺇ',
+    frenchNationalityPlurielFemale: 'Israéliennes',
+    translitNationalityPlurielFemale: 'isrā’īliyyāt',
+    arabicNationalitySingularFemale: 'ٌﺔَّﻴِﻠﻴِﺋاَﺮْﺳِﺇ',
+    frenchNationalitySingularFemale: 'Israélienne',
+    translitNationalitySingularFemale: 'isrā’īliyya'
   }
 ] ;
 
@@ -1265,14 +1301,12 @@ function pickRandomQuestion() {
         });
       }
     }*/
-
+/*
 function renderArList() {
   let ab = document.getElementById("action-buttons");
   let rDiv = document.getElementById("reponses");
-  // Génère la liste plausible pour ce mode (tous pays ou toutes nationalités niveau 1)
-/*  let all = data.map(currentMode.a);
- */ 
-let all = getCurrentDataList().map(currentMode.a);
+
+  let all = getCurrentDataList().map(currentMode.a);
 
   let expected = currentMode.a(currentData);
   let choices = shuffle([...all]);
@@ -1300,8 +1334,19 @@ let all = getCurrentDataList().map(currentMode.a);
       let lbl = document.createElement("label");
       lbl.htmlFor = "choix" + i;
       lbl.innerHTML = c;
-      td.appendChild(lbl);
-      tr.appendChild(td);
+
+      if (/[\u0600-\u06FF]/.test(c)) {
+       lbl.setAttribute("dir", "rtl");
+       lbl.setAttribute("lang", "ar");
+       lbl.style.textAlign = "right";
+      }
+      else {
+       lbl.removeAttribute('dir');
+       lbl.removeAttribute('lang');
+       lbl.style.textAlign = '';
+         }
+    td.appendChild(lbl);
+    tr.appendChild(td);
     });
     rDiv.appendChild(table);
     ab.innerHTML = `<button onclick="validateArListAnswer()">Valider</button>`;
@@ -1313,6 +1358,15 @@ let all = getCurrentDataList().map(currentMode.a);
     choices.forEach((c, i) => {
       let btn = document.createElement("button");
       btn.type = "button";
+      if (/[\u0600-\u06FF]/.test(c)) {
+     btn.setAttribute('dir', 'rtl');
+     btn.setAttribute("lang", "ar");
+     btn.style.textAlign = 'right'; // Optionnel
+     } else {
+     btn.removeAttribute('dir');
+     btn.removeAttribute('lang');
+     btn.style.textAlign = ''; // Reset
+     }
       btn.textContent = c;
       btn.onclick = () => {
         // Désélectionner tous les boutons
@@ -1346,8 +1400,111 @@ let all = getCurrentDataList().map(currentMode.a);
     }
   }
 }
+*/
 
 
+function format(word) {
+  // Expression régulière pour détecter au moins une lettre arabe
+  const arabicRegex = /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]/;
+
+  if (arabicRegex.test(word)) {
+    // Regroupe chaque lettre arabe avec ses éventuels diacritiques qui la suivent
+    const graphemes = [...word.matchAll(/[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF](?:[\u064B-\u065F\u0610-\u061A\u06D6-\u06ED])*/g)];
+    return graphemes.map(m => m[0]).reverse().join('');
+  }
+
+  // Sinon, renvoyer tel quel
+  return word;
+}
+
+
+
+function renderArList() {
+  let ab = document.getElementById("action-buttons");
+  let rDiv = document.getElementById("reponses");
+
+  let all = getCurrentDataList().map(currentMode.a);
+  let expected = currentMode.a(currentData);
+  let choices = shuffle([...all]);
+
+  // Desktop : tableau à 4 colonnes
+  if (!deviceIsMobile) {
+    let table = document.createElement("table");
+    table.className = "tableau-reponses";
+    let tr = null;
+
+    choices.forEach((c, i) => {
+      if (i % 4 === 0) {
+        tr = document.createElement("tr");
+        table.appendChild(tr);
+      }
+
+      let td = document.createElement("td");
+      td.className = "checkbox-cell";
+
+      let chk = document.createElement("input");
+      chk.type = "checkbox";
+      chk.name = "choix";
+      chk.id = "choix" + i;
+      chk.onclick = () => {
+        document.querySelectorAll('input[name="choix"]').forEach(cb => {
+          if (cb !== chk) cb.checked = false;
+        });
+      };
+
+      td.appendChild(chk);
+      td.appendChild(document.createElement("br"));
+
+      let lbl = document.createElement("label");
+      lbl.htmlFor = "choix" + i;
+       console.log(c);
+      format(c)
+      console.log(c);
+      lbl.textContent = format(c);
+
+      
+
+      if (/[\u0600-\u06FF]/.test(c)) {
+        lbl.setAttribute("dir", "rtl");
+        lbl.setAttribute("lang", "ar");
+        lbl.style.textAlign = "right";
+        lbl.style.fontSize = "2.5em";
+      }
+
+      td.appendChild(lbl);
+      tr.appendChild(td);
+    });
+
+    rDiv.appendChild(table);
+    ab.innerHTML = `<button onclick="validateArListAnswer()">Valider</button>`;
+
+  } else {
+    // Mobile : boutons verticaux
+    let container = document.createElement("div");
+    container.className = "mobile-choices";
+
+    choices.forEach((c, i) => {
+      let btn = document.createElement("button");
+      console.log(c);
+      format(c)
+      console.log(c);
+      btn.textContent = format(c);
+
+      if (/[\u0600-\u06FF]/.test(c)) {
+        btn.setAttribute("dir", "rtl");
+        btn.setAttribute("lang", "ar");
+        btn.style.textAlign = "center";
+        btn.style.fontSize = "1.4em";
+        btn.style.letterSpacing = "0.1em"; // meilleure lisibilité
+      }
+
+      btn.onclick = () => validateArListAnswer(i);
+      container.appendChild(btn);
+    });
+
+    rDiv.appendChild(container);
+  }
+}
 
 
     function validateTextAnswer(val) {
@@ -1370,7 +1527,7 @@ let all = getCurrentDataList().map(currentMode.a);
       if (!allowAnswer) return;
       allowAnswer = false;
       clearInterval(timer);
-      let expected = currentMode.a(currentData);
+      let expected = format(currentMode.a(currentData));
       let ok = false;
       if (!deviceIsMobile) {
         let chks = Array.from(document.querySelectorAll('input[name="choix"]'));
@@ -1391,7 +1548,7 @@ let all = getCurrentDataList().map(currentMode.a);
     }
     // --- Popups pédagogiques ---
     function showCountriesPopup() {
-      let html = `<table class="responsive-table" style="width:100%;font-size:1.1em;"><thead><tr><th>🇦🇪 Arabe</th><th>🇫🇷 Français</th></tr></thead><tbody>`;
+      let html = `<table class="responsive-table" style="width:100%;font-size:1.1em;padding:15px;"><thead><tr><th>🇦🇪 Arabe</th><th>🇫🇷 Français</th></tr></thead><tbody>`;
       getCurrentDataList().forEach(d => {
         html += `<tr><td style="font-family:serif;font-size:1.2em;">${d.arabicCountry}</td><td>${d.frenchCountry}</td></tr>`;
       });
@@ -1400,7 +1557,7 @@ let all = getCurrentDataList().map(currentMode.a);
       document.getElementById("popup-overlay").style.display = "block";
     }
     function showNationalitiesPopup() {
-      let html = `<table class="responsive-table" style="width:100%;font-size:1em;"><thead><tr>
+      let html = `<table class="responsive-table" style="width:100%;font-size:1em;padding:15px;"><thead><tr>
       <th>Arabe masc. sg</th><th>Fr. masc. sg</th>
       <th>Arabe masc. pl</th><th>Fr. masc. pl</th>
       <th>Arabe fém. sg</th><th>Fr. fém. sg</th>
