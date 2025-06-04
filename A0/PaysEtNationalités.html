@@ -1255,6 +1255,9 @@ function pickRandomQuestion() {
       rDiv.appendChild(input);
       input.focus();
     }
+
+
+
 /*    function renderArList() {
       let ab = document.getElementById("action-buttons");
       let rDiv = document.getElementById("reponses");
@@ -1457,19 +1460,19 @@ function renderArList() {
 
       let lbl = document.createElement("label");
       lbl.htmlFor = "choix" + i;
-       console.log(c);
+    //   console.log(c);
       format(c)
-      console.log(c);
+    //  console.log(c);
       lbl.textContent = format(c);
 
       
 
-      if (/[\u0600-\u06FF]/.test(c)) {
+      //if (/[\u0600-\u06FF]/.test(c)) {
         lbl.setAttribute("dir", "rtl");
         lbl.setAttribute("lang", "ar");
         lbl.style.textAlign = "right";
         lbl.style.fontSize = "2.5em";
-      }
+     // }
 
       td.appendChild(lbl);
       tr.appendChild(td);
@@ -1485,28 +1488,31 @@ function renderArList() {
 
     choices.forEach((c, i) => {
       let btn = document.createElement("button");
-      console.log(c);
+   //   console.log(c);
       format(c)
-      console.log(c);
+   //   console.log(c);
       btn.textContent = format(c);
 
-      if (/[\u0600-\u06FF]/.test(c)) {
+      // if (/[\u0600-\u06FF]/.test(c)) {
         btn.setAttribute("dir", "rtl");
         btn.setAttribute("lang", "ar");
         btn.style.textAlign = "center";
-        btn.style.fontSize = "1.4em";
+        btn.style.fontSize = "2.5em";
+        btn.id = "btn-" + i;
         btn.style.letterSpacing = "0.1em"; // meilleure lisibilité
-      }
+      // }
 
       btn.onclick = () => validateArListAnswer(i);
       container.appendChild(btn);
     });
 
     rDiv.appendChild(container);
-    ab.innerHTML = `<button onclick="validateArListAnswer()">Valider</button>`;
+   // ab.innerHTML = `<button onclick="validateArListAnswer()">Valider</button>`;
 
   }
 }
+
+
 
 
     function validateTextAnswer(val) {
@@ -1536,7 +1542,11 @@ function renderArList() {
         let checkedIdx = chks.findIndex(cb => cb.checked);
         ok = checkedIdx !== -1 && chks[checkedIdx].nextSibling.nextSibling.textContent === expected;
       } else {
-        ok = typeof idx === "number" && document.getElementById("action-buttons").children[idx].textContent === expected;
+
+
+        //ok = typeof idx === "number" && document.getElementById("action-buttons").children[idx].textContent === format(expected);
+          let identifiant = `btn-${idx}`;
+          ok = typeof idx === "number" && document.getElementById(identifiant).textContent === expected;
       }
       if (ok) {
         good++; updateStats();
