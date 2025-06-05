@@ -358,6 +358,21 @@ body::before {
           <span class="button-tooltip-text">Méthodes alternatives d'apprentissage.</span>
         </div>
       </a>
+
+      <a href="A0/PaysEtNationalités.html" data-btn-id="btn8" class="button-card" title="Pays et Nationalités" data-original-image="images/Learn-8.png">
+        <img src="images/bouton_Learn-8.png" class="button-icon" alt="">
+        <div class="button-content">
+          <span class="button-label">Pays et Nationalités</span>
+          <span class="button-tooltip-text">Méthodes alternatives d'apprentissage.</span>
+        </div>
+      </a>
+
+       <a href="A0/Prez.html" data-btn-id="btn9" class="button-card" data-original-image="images/Learn-8.png">
+        <div class="button-content">
+          <span class="button-label">Autre</span>
+        </div>
+      </a>
+
     </div>
   </div>
 
@@ -399,6 +414,75 @@ body::before {
 
 
 document.addEventListener("DOMContentLoaded", function() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const isGTY = urlParams.has("GTY");
+
+  const boutonsConfig = [
+    { id: "btn1", actif: true },
+    { id: "btn2", actif: true },
+    { id: "btn3", actif: true },
+    { id: "btn4", actif: true },
+    { id: "btn5", actif: true },
+    { id: "btn6", actif: true },
+    { id: "btn7", actif: true },
+    { id: "btn8", actif: true },
+    { id: "btn9", actif: isGTY }
+  ];
+
+  boutonsConfig.forEach(({ id, actif }) => {
+    const btn = document.querySelector(`[data-btn-id="${id}"]`);
+    if (!btn) return;
+
+    const tooltip = btn.querySelector('.button-tooltip-text');
+
+    if (actif) {
+      btn.style.display = ''; // Rendre visible
+      btn.classList.remove("inactive");
+      btn.setAttribute("tabindex", "0");
+      btn.removeAttribute("aria-disabled");
+
+      if (btn.dataset.originalHref) {
+        btn.setAttribute("href", btn.dataset.originalHref);
+      }
+
+      if (tooltip && btn.dataset.originalTooltip) {
+        tooltip.textContent = btn.dataset.originalTooltip;
+      }
+
+    } else {
+      btn.style.display = 'none'; // Masquer complètement
+    }
+
+      /*else {
+      btn.classList.add("inactive");
+      btn.setAttribute("tabindex", "-1");
+      btn.setAttribute("aria-disabled", "true");
+
+      // Sauvegarde href original
+      if (!btn.dataset.originalHref) {
+        btn.dataset.originalHref = btn.getAttribute("href");
+      }
+      btn.removeAttribute("href");
+
+      // Sauvegarde et remplace le tooltip
+      if (tooltip) {
+        if (!btn.dataset.originalTooltip) {
+          btn.dataset.originalTooltip = tooltip.textContent;
+        }
+        tooltip.textContent = "Bientôt disponible";
+      }
+    }
+*/
+
+
+
+
+  });
+});
+
+
+/*
+document.addEventListener("DOMContentLoaded", function() {
   const boutonsConfig = [
     { id: "btn1", actif: true },
     { id: "btn2", actif: true},
@@ -406,7 +490,9 @@ document.addEventListener("DOMContentLoaded", function() {
     { id: "btn4", actif: true },
     { id: "btn5", actif: true }, 
     { id: "btn6", actif: true },
-    { id: "btn7", actif: true }
+    { id: "btn7", actif: true },
+    { id: "btn8", actif: true }
+    { id: "btn9", actif: false }
   ];
 
   boutonsConfig.forEach(cfg => {
@@ -436,9 +522,114 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   });
 });
+*/
+/*
+document.addEventListener("DOMContentLoaded", function() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const isGTY = urlParams.has("GTY");
 
+  const boutonsConfig = [
+    { id: "btn1", actif: true },
+    { id: "btn2", actif: true },
+    { id: "btn3", actif: true },
+    { id: "btn4", actif: true },
+    { id: "btn5", actif: true },
+    { id: "btn6", actif: true },
+    { id: "btn7", actif: true },
+    { id: "btn8", actif: true },
+    { id: "btn9", actif: isGTY }
+  ];
+
+  boutonsConfig.forEach(({ id, actif }) => {
+    const btn = document.querySelector(`[data-btn-id="${id}"]`);
+    if (!btn) return;
+
+    const tooltip = btn.querySelector('.button-tooltip-text');
+
+    if (actif) {
+      btn.classList.remove("inactive");
+      btn.setAttribute("tabindex", "0");
+      btn.removeAttribute("aria-disabled");
+
+      // Restaure href si besoin
+      if (btn.dataset.originalHref) {
+        btn.setAttribute("href", btn.dataset.originalHref);
+      }
+
+      // Restaure le texte du tooltip si besoin
+      if (tooltip && btn.dataset.originalTooltip) {
+        tooltip.textContent = btn.dataset.originalTooltip;
+      }
+
+    } else {
+      btn.classList.add("inactive");
+      btn.setAttribute("tabindex", "-1");
+      btn.setAttribute("aria-disabled", "true");
+
+      // Sauvegarde href original
+      if (!btn.dataset.originalHref) {
+        btn.dataset.originalHref = btn.getAttribute("href");
+      }
+      btn.removeAttribute("href");
+
+      // Sauvegarde et remplace le tooltip
+      if (tooltip) {
+        if (!btn.dataset.originalTooltip) {
+          btn.dataset.originalTooltip = tooltip.textContent;
+        }
+        tooltip.textContent = "Bientôt disponible";
+      }
+    }
+  });
+});
+*/
+
+document.addEventListener("DOMContentLoaded", function() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const isGTY = urlParams.has("GTY");
+
+  const boutonsConfig = [
+    { id: "btn1", actif: true },
+    { id: "btn2", actif: true },
+    { id: "btn3", actif: true },
+    { id: "btn4", actif: true },
+    { id: "btn5", actif: true },
+    { id: "btn6", actif: true },
+    { id: "btn7", actif: true },
+    { id: "btn8", actif: true },
+    { id: "btn9", actif: isGTY }
+  ];
+
+  boutonsConfig.forEach(({ id, actif }) => {
+    const btn = document.querySelector(`[data-btn-id="${id}"]`);
+    if (!btn) return;
+
+    const tooltip = btn.querySelector('.button-tooltip-text');
+
+    if (actif) {
+      btn.style.display = ''; // Rendre visible
+      btn.classList.remove("inactive");
+      btn.setAttribute("tabindex", "0");
+      btn.removeAttribute("aria-disabled");
+
+      if (btn.dataset.originalHref) {
+        btn.setAttribute("href", btn.dataset.originalHref);
+      }
+
+      if (tooltip && btn.dataset.originalTooltip) {
+        tooltip.textContent = btn.dataset.originalTooltip;
+      }
+
+    } else {
+      btn.style.display = 'none'; // Masquer complètement
+    }
+  });
+});
 
 </script>
+
+
+
 
 
 <!-- Popup modal -->

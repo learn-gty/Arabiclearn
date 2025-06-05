@@ -490,9 +490,9 @@ td[lang="ar"] {
         <span>❌ <span id="bad-count">0</span></span>
         <span id="timer" style="float:right;"></span>
       </div>
+      <div class="feedback" id="feedback"></div>
       <div id="question"></div>
       <div id="reponses"></div>
-      <div class="feedback" id="feedback"></div>
       <div class="buttons" id="action-buttons"></div>
     </div>
   </div>
@@ -1228,7 +1228,7 @@ function pickRandomQuestion() {
       rDiv.innerHTML = "";
       ab.innerHTML = "";
       let qtxt = currentMode.q(currentData);
-      qDiv.textContent = qtxt;
+      qDiv.textContent = format(qtxt);
       // Cas réponse attendue en arabe (liste)
       if (currentMode.inputType === "ar-list") {
         renderArList();
@@ -1497,7 +1497,7 @@ function renderArList() {
         btn.setAttribute("dir", "rtl");
         btn.setAttribute("lang", "ar");
         btn.style.textAlign = "center";
-        btn.style.fontSize = "2.5em";
+        btn.style.fontSize = "2.0em";
         btn.id = "btn-" + i;
         btn.style.letterSpacing = "0.1em"; // meilleure lisibilité
       // }
@@ -1524,7 +1524,7 @@ function renderArList() {
       if (ok) {
         good++; updateStats();
         showFeedback(true, "Bonne réponse !", currentMode.showTranslit(currentData));
-        setTimeout(nextQuestion, 1100);
+        setTimeout(nextQuestion, 1500);
       } else {
         bad++; updateStats();
         showFeedback(false, `Mauvaise réponse. Réponse attendue : <b>${expected}</b>`, currentMode.showTranslit(currentData));
@@ -1551,7 +1551,7 @@ function renderArList() {
       if (ok) {
         good++; updateStats();
         showFeedback(true, "Bonne réponse !", currentMode.showTranslit(currentData));
-        setTimeout(nextQuestion, 1100);
+        setTimeout(nextQuestion, 1500);
       } else {
         bad++; updateStats();
         showFeedback(false, `Mauvaise réponse. Réponse attendue : <b>${expected}</b>`, currentMode.showTranslit(currentData));
