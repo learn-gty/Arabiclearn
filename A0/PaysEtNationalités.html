@@ -490,10 +490,12 @@ td[lang="ar"] {
         <span>❌ <span id="bad-count">0</span></span>
         <span id="timer" style="float:right;"></span>
       </div>
+
       <div class="feedback" id="feedback"></div>
+      <div class="buttons" id="action-buttons"></div>
       <div id="question"></div>
       <div id="reponses"></div>
-      <div class="buttons" id="action-buttons"></div>
+     
     </div>
   </div>
   <!-- Popups pédagogiques -->
@@ -1109,7 +1111,7 @@ document.getElementById("level-select").addEventListener("change", function() {
   resetQuiz();
 });
 
-function shuffleQuestions() {
+    function shuffleQuestions() {
   /*questionOrder = Array.from({length: data.length}, (_, i) => i);*/
 const dataList = getCurrentDataList();
 questionOrder = Array.from({length: dataList.length}, (_, i) => i);
@@ -1118,10 +1120,7 @@ questionOrder = Array.from({length: dataList.length}, (_, i) => i);
     [questionOrder[i], questionOrder[j]] = [questionOrder[j], questionOrder[i]];
   }
   questionPointer = 0;
-}
-
-
-
+    }
 
 
     function shuffle(arr) {
@@ -1131,6 +1130,7 @@ questionOrder = Array.from({length: dataList.length}, (_, i) => i);
       }
       return arr;
     }
+
     /*function pickRandomQuestion() {
       let idx;
       do {
@@ -1140,16 +1140,14 @@ questionOrder = Array.from({length: dataList.length}, (_, i) => i);
       return data[idx];
     }*/
 
-function pickRandomQuestion() {
+    function pickRandomQuestion() {
   if (questionOrder.length === 0 || questionPointer >= questionOrder.length) {
     shuffleQuestions();
   }
   const idx = questionOrder[questionPointer];
   questionPointer++;
   return getCurrentDataList()[idx];
-}
-
-
+    }
 
     function pickRandomMode() {
       let idx;
@@ -1240,6 +1238,8 @@ function pickRandomQuestion() {
         renderTextInput();
       }
     }
+
+
     function renderTextInput() {
       let rDiv = document.getElementById("reponses");
       let input = document.createElement("input");
@@ -1256,154 +1256,6 @@ function pickRandomQuestion() {
       input.focus();
     }
 
-
-
-/*    function renderArList() {
-      let ab = document.getElementById("action-buttons");
-      let rDiv = document.getElementById("reponses");
-      // Génère la liste plausible pour ce mode (tous pays ou toutes nationalités niveau 1)
-      let all = data.map(currentMode.a);
-      let expected = currentMode.a(currentData);
-      let choices = shuffle([...all]);
-      // Desktop : tableau à 4 colonnes, checkboxes exclusives
-      if (!deviceIsMobile) {
-        let table = document.createElement("table");
-        table.className = "tableau-reponses";
-        let tr = null;
-        choices.forEach((c, i) => {
-          if (i % 4 === 0) {
-            tr = document.createElement("tr");
-            table.appendChild(tr);
-          }
-          let td = document.createElement("td");
-          td.className = "checkbox-cell";
-          let chk = document.createElement("input");
-          chk.type = "checkbox";
-          chk.name = "choix";
-          chk.id = "choix" + i;
-          chk.onclick = () => {
-            document.querySelectorAll('input[name="choix"]').forEach(cb => { if (cb !== chk) cb.checked = false; });
-          };
-          td.appendChild(chk);
-          td.appendChild(document.createElement("br"));
-          let lbl = document.createElement("label");
-          lbl.htmlFor = "choix" + i;
-          lbl.innerHTML = c;
-          td.appendChild(lbl);
-          tr.appendChild(td);
-        });
-        rDiv.appendChild(table);
-        ab.innerHTML = `<button onclick="validateArListAnswer()">Valider</button>`;
-      } else {
-        // Mobile : boutons
-        choices.forEach((c, i) => {
-          let btn = document.createElement("button");
-          btn.textContent = c;
-          btn.onclick = () => validateArListAnswer(i);
-          ab.appendChild(btn);
-        });
-      }
-    }*/
-/*
-function renderArList() {
-  let ab = document.getElementById("action-buttons");
-  let rDiv = document.getElementById("reponses");
-
-  let all = getCurrentDataList().map(currentMode.a);
-
-  let expected = currentMode.a(currentData);
-  let choices = shuffle([...all]);
-  // Desktop : tableau à 4 colonnes, checkboxes exclusives
-  if (!deviceIsMobile) {
-    let table = document.createElement("table");
-    table.className = "tableau-reponses";
-    let tr = null;
-    choices.forEach((c, i) => {
-      if (i % 4 === 0) {
-        tr = document.createElement("tr");
-        table.appendChild(tr);
-      }
-      let td = document.createElement("td");
-      td.className = "checkbox-cell";
-      let chk = document.createElement("input");
-      chk.type = "checkbox";
-      chk.name = "choix";
-      chk.id = "choix" + i;
-      chk.onclick = () => {
-        document.querySelectorAll('input[name="choix"]').forEach(cb => { if (cb !== chk) cb.checked = false; });
-      };
-      td.appendChild(chk);
-      td.appendChild(document.createElement("br"));
-      let lbl = document.createElement("label");
-      lbl.htmlFor = "choix" + i;
-      lbl.innerHTML = c;
-
-      if (/[\u0600-\u06FF]/.test(c)) {
-       lbl.setAttribute("dir", "rtl");
-       lbl.setAttribute("lang", "ar");
-       lbl.style.textAlign = "right";
-      }
-      else {
-       lbl.removeAttribute('dir');
-       lbl.removeAttribute('lang');
-       lbl.style.textAlign = '';
-         }
-    td.appendChild(lbl);
-    tr.appendChild(td);
-    });
-    rDiv.appendChild(table);
-    ab.innerHTML = `<button onclick="validateArListAnswer()">Valider</button>`;
-  } else {
-    // MOBILE : boutons verticaux, une seule sélection possible
-    let container = document.createElement("div");
-    container.className = "mobile-choices";
-    let selectedIdx = null;
-    choices.forEach((c, i) => {
-      let btn = document.createElement("button");
-      btn.type = "button";
-      if (/[\u0600-\u06FF]/.test(c)) {
-     btn.setAttribute('dir', 'rtl');
-     btn.setAttribute("lang", "ar");
-     btn.style.textAlign = 'right'; // Optionnel
-     } else {
-     btn.removeAttribute('dir');
-     btn.removeAttribute('lang');
-     btn.style.textAlign = ''; // Reset
-     }
-      btn.textContent = c;
-      btn.onclick = () => {
-        // Désélectionner tous les boutons
-        Array.from(container.children).forEach(b => b.classList.remove("selected"));
-        btn.classList.add("selected");
-        selectedIdx = i;
-      };
-      container.appendChild(btn);
-    });
-    rDiv.appendChild(container);
-    ab.innerHTML = `<button onclick="validateArListAnswerMobile()">Valider</button>`;
-    // Fonction de validation spécifique mobile
-    window.validateArListAnswerMobile = function() {
-      if (!allowAnswer) return;
-      allowAnswer = false;
-      clearInterval(timer);
-      let expected = currentMode.a(currentData);
-      let ok = false;
-      if (selectedIdx !== null) {
-        ok = container.children[selectedIdx].textContent === expected;
-      }
-      if (ok) {
-        good++; updateStats();
-        showFeedback(true, "Bonne réponse !", currentMode.showTranslit(currentData));
-        setTimeout(nextQuestion, 1100);
-      } else {
-        bad++; updateStats();
-        showFeedback(false, `Mauvaise réponse. Réponse attendue : <b>${expected}</b>`, currentMode.showTranslit(currentData));
-        ab.innerHTML = `<button onclick="nextQuestion()">Nouvel exercice</button>`;
-      }
-    }
-  }
-}
-*/
 
 
 function format(word) {
@@ -1530,6 +1382,9 @@ function renderArList() {
         showFeedback(false, `Mauvaise réponse. Réponse attendue : <b>${expected}</b>`, currentMode.showTranslit(currentData));
         document.getElementById("action-buttons").innerHTML = `<button onclick="nextQuestion()">Nouvel exercice</button>`;
       }
+
+      const select = document.getElementById("mode-select");
+      currentMode = modes.find(m => m.value === select.value);
     }
     function validateArListAnswer(idx) {
       if (!allowAnswer) return;
@@ -1557,6 +1412,8 @@ function renderArList() {
         showFeedback(false, `Mauvaise réponse. Réponse attendue : <b>${expected}</b>`, currentMode.showTranslit(currentData));
         document.getElementById("action-buttons").innerHTML = `<button onclick="nextQuestion()">Nouvel exercice</button>`;
       }
+      const select = document.getElementById("mode-select");
+      currentMode = modes.find(m => m.value === select.value);
     }
     // --- Popups pédagogiques ---
     function showCountriesPopup() {
