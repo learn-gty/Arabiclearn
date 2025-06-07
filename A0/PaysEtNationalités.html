@@ -22,10 +22,10 @@
     body.dark-mode {
       --container-bg: rgba(24,24,24,0.96);
       --container-border: #444;
-      --button-bg: var(--pal-black);
+      --button-bg: var(--pal-white);
       --button-text: var(--pal-white);
       --button-hover-bg: var(--pal-red);
-      --button-hover-text: var(--pal-white);
+      --button-hover-text: var(--pal-black);
       --stats-bg: #232323;
     }
     body {
@@ -257,8 +257,8 @@ body.dark-mode .tableau-reponses label {
       .container { width: 98vw; padding: 8px 3px;}
       .tableau-reponses td { min-width: 35px; height: 35px; font-size: 11px;}
       .checkbox-cell input[type="checkbox"] { width: 10px; height: 10px; transform: scale(0.8);}
-      h1, h2 { font-size: 0.9rem;}
-      #question { font-size: 0.8rem; padding: 8px;}
+      h1, h2 { font-size: 1.5rem;}
+      #question { font-size: 1.5rem; padding: 8px;}
       button { width: 90%; padding: 10px; font-size: 13px;}
     }
     .menu-hamburger { position: fixed; top: 1rem; left: 1rem; z-index: 1100;}
@@ -344,9 +344,9 @@ body.dark-mode .tableau-reponses label {
     border-color: #fff;
   }
   body.dark-mode .mobile-choices button.selected {
-    background: var(--pal-green);
+    background: var(--pal-red);
     color: #fff;
-    border-color: var(--pal-green);
+    border-color: var(--pal-red);
   }
 }
 
@@ -385,9 +385,9 @@ body.dark-mode .tableau-reponses label {
     border-color: #fff;
   }
   body.dark-mode .mobile-choices button.selected {
-    background: var(--pal-green);
+    background: var(--pal-red);
     color: #fff;
-    border-color: var(--pal-green);
+    border-color: var(--pal-red);
   }
 }
 /* Cacher le tableau des coches sur mobile */
@@ -1377,6 +1377,7 @@ function renderArList() {
         good++; updateStats();
         showFeedback(true, "Bonne réponse !", currentMode.showTranslit(currentData));
         setTimeout(nextQuestion, 1500);
+
       } else {
         bad++; updateStats();
         showFeedback(false, `Mauvaise réponse. Réponse attendue : <b>${expected}</b>`, currentMode.showTranslit(currentData));
@@ -1407,6 +1408,10 @@ function renderArList() {
         good++; updateStats();
         showFeedback(true, "Bonne réponse !", currentMode.showTranslit(currentData));
         setTimeout(nextQuestion, 1500);
+        let identifiant = `btn-${idx}`;
+        let btnOK =document.getElementById(identifiant);
+         btnOK.style.backgroundColor ="var(--pal-green)";
+
       } else {
         bad++; updateStats();
         showFeedback(false, `Mauvaise réponse. Réponse attendue : <b>${expected}</b>`, currentMode.showTranslit(currentData));
