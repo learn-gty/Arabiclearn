@@ -112,10 +112,57 @@
       cursor: pointer;
       transition: background var(--transition);
     }
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  padding-top: 40px;
+}
+
+/* Style général pour tous les boutons */
+.tab,
+.theme-toggle {
+  flex: 1 1 auto;
+  min-width: 100px;
+  max-width: 150px;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  background-color: var(--btn-bg, #ddd);
+  color: var(--btn-color, #000);
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.2s;
+}
+
+.tab:hover,
+.theme-toggle:hover {
+  background-color: var(--btn-hover-bg, #bbb);
+}
+
+/* ✅ Mode mobile : tous les boutons en colonne, pas de chevauchement */
+@media (max-width: 768px) {
+  .tabs {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .tab,
+  .theme-toggle {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+    
   </style>
 </head>
 <body class="light">
-  <button class="theme-toggle">🌞 / 🌙</button>
+ 
   <div class="container">
     <div class="tabs">
       <button class="tab" onclick="switchTab(0)">Il</button>
@@ -126,6 +173,7 @@
       <button class="tab" onclick="switchTab(5)">Je- passé</button>
       <button class="tab" onclick="switchTab(6)">Il - passé </button>
       <button class="tab" onclick="switchTab(7)">Elle - passé </button>
+       <button class="theme-toggle">🌞 / 🌙</button>
     </div>
 
     <div class="tab-content active">

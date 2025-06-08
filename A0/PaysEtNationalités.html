@@ -432,19 +432,25 @@ td[lang="ar"] {
   </style>
 </head>
 <body>
-  <!-- Menu hamburger pour mobile -->
-  <input type="checkbox" id="menu-toggle" style="display:none;">
-  <label class="menu-icon menu-hamburger" for="menu-toggle">
+<nav class="menu-hamburger">
+  <input type="checkbox" id="menu-toggle" />
+  <label for="menu-toggle" class="menu-icon">
     <span></span>
     <span></span>
     <span></span>
   </label>
   <ul class="menu">
-    <li><a href="#" onclick="showCountriesPopup(); return false;">Tableau des pays</a></li>
-    <li><a href="#" onclick="showNationalitiesPopup(); return false;">Tableau des nationalités</a></li>
-    <li><a href="#" onclick="showRulesPopup(); return false;">Règle du Alif & Suffixes</a></li>
-    <li><a href="#" onclick="toggleDarkMode(); return false;">Basculer mode clair/sombre</a></li>
-  </ul>
+  <li><a href="../index.html">Accueil</a></li>
+    <li><a href="ar50.html">Séquences & Leçons</a></li>
+    <li><a href="pronoms.html">Pronoms</a></li>
+    <li><a href="pronomsPossessifs.html">Possessifs</a></li>
+    <li><a href="LunaireSolaire.html">Lettres Lunaires/Solaires</a></li>
+    <li><a href="chiffres.3.html">Exercice Chiffres </a></li>
+    <li><a href="ChiffresEx.3.5.html">Autres Exercice Chiffres</a></li>
+    <li><a href="Verb.1.1.html">Conjugaison (1er verbes)</a></li> 
+    <li><a href="PaysEtNationalités.html">Pays Et Nationalités</a></li>  
+    <li><a href="PageUnderConstruction.html">Suite...</a></li> </ul>
+</nav>
   <div id="content-wrapper">
     <div class="container">
       <h1>Apprentissage : Pays arabes & Nationalités</h1>
@@ -1352,6 +1358,8 @@ function renderArList() {
         btn.style.fontSize = "2.0em";
         btn.id = "btn-" + i;
         btn.style.letterSpacing = "0.1em"; // meilleure lisibilité
+        btn.style.backgroundColor ="var(--pal-white)";
+
       // }
 
       btn.onclick = () => validateArListAnswer(i);

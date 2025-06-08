@@ -144,6 +144,7 @@
             line-height: 1.1;
             transition: all 0.3s ease;
             padding: 8px;
+            font-size: 20px;
         }
 
         /* Première ligne - Réponses possibles */
@@ -201,7 +202,7 @@
             align-items: center;
             justify-content: center;
             transition: all 0.3s ease;
-            padding: 20px;
+            padding: 1px;
             background-color: var(--stats-bg);
             border-radius: 8px;
             border-left: 4px solid var(--pal-red);
@@ -322,7 +323,7 @@
             }
             
             .tableau-reponses td {
-                font-size: 14px;
+                font-size: 18px;
                 height: 45px;
                 min-width: 60px;
             }
@@ -363,7 +364,7 @@
     border: 1px solid var(--pal-black);
     text-align: center;
     vertical-align: middle;
-    font-size: 14px;
+    font-size: 20px;
     padding: 4px 2px;
 }
 
@@ -403,7 +404,7 @@
     }
 
     .numero-cell {
-        font-size: 13px;
+        font-size: 16px;
         padding: 6px 2px;
     }
 
@@ -475,7 +476,7 @@
     }
 
     .numero-cell {
-        font-size: 12px;
+        font-size: 14px;
         padding: 4px 1px;
     }
 
@@ -505,7 +506,7 @@
 @media (max-width: 768px) and (orientation: landscape) {
     .container {
         margin: 2px auto 0 auto;
-        padding: 5px;
+        padding: 1px;
     }
 
     .tableau-reponses {
@@ -625,7 +626,8 @@
     font-weight: 600;
     line-height: 1.2; /* Amélioré pour le texte plus gros */
     transition: all 0.3s ease;
-    padding: 10px; /* Augmenté de 8px à 10px */
+    padding: 1px; /* Augmenté de 8px à 10px */
+    font-size: 20px;
 }
 /* 1. Activer le responsive design */
 @media screen and (max-width: 600px) {
@@ -651,6 +653,7 @@
   table.responsive-table td {
     display: block;
     width: 100%;
+    font-size: 12px;
   }
   table.responsive-table tr {
     margin-bottom: 1.5em;
@@ -814,6 +817,48 @@
   #loader-overlay {
     z-index: 10000;
   }
+
+/* Section mobile pour les boutons de réponse */
+.mobile-reponses {
+    display: none;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin: 15px 0;
+}
+
+.mobile-reponses button {
+    font-size: 1.1rem;
+    padding: 10px 20px;
+    border-radius: 8px;
+    background: var(--button-bg);
+    color: var(--button-text);
+    border: 2px solid var(--pal-black);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 80px;
+}
+
+.mobile-reponses button.selected {
+    background: var(--pal-red);
+    color: white;
+    border-color: var(--pal-red);
+}
+
+.mobile-reponses button.correct {
+    background: var(--pal-green);
+    color: white;
+    border-color: var(--pal-green);
+}
+
+@media (max-width: 768px) {
+    .tableau-reponses {
+        display: none !important;
+    }
+
+    .mobile-reponses {
+        display: flex;
+    }
 }
 
 
@@ -835,8 +880,9 @@
     <li><a href="pronomsPossessifs.html">Possessifs</a></li>
     <li><a href="LunaireSolaire.html">Lettres Lunaires/Solaires</a></li>
     <li><a href="chiffres.3.html">Exercice Chiffres </a></li>
-    <li><a href="ChiffresEx.3.4.html">Autres Exercice Chiffres</a></li> 
+    <li><a href="ChiffresEx.3.4.html">Autres Exercice Chiffres</a></li>
     <li><a href="Verb.1.1.html">Conjugaison (1er verbes)</a></li> 
+    <li><a href="PaysEtNationalités.html">Pays Et Nationalités</a></li>  
     <li><a href="PageUnderConstruction.html">Suite...</a></li> </ul>
 </nav>
 
@@ -856,6 +902,8 @@
                 <!-- Les cases à cocher seront générées dynamiquement -->
             </tr>
         </table>
+        <!-- Réponses en boutons pour mobile -->
+        <div class="mobile-reponses" id="mobileReponses"></div>
 
         <div class="controls">
             <div class="control-group">
@@ -900,14 +948,14 @@
                 </select>
             </div>
         </div>
-
+        <div id="feedback" class="feedback"></div>
         <div class="buttons">
             <button type="button" id="nouvelleQuestion">Nouvelle question</button>
             <button type="button" id="valider">Valider</button>
             <button type="button" id="aide">Aide</button>
         </div>
 
-        <div id="feedback" class="feedback"></div>
+        
     </div>
 
    <script>
@@ -1015,7 +1063,7 @@ function genererQuestionAvecInputLibre(mode, maxRange) {
     question.innerHTML = prompt;
 }
 
-function genererQuestionAvecTableau(mode, maxRange) {
+/*function genererQuestionAvecTableau(mode, maxRange) {
     const question = document.getElementById('question');
     const nombre = Math.floor(Math.random() * (maxRange + 1));
     reponseCorrecte = nombre;
@@ -1033,6 +1081,36 @@ function genererQuestionAvecTableau(mode, maxRange) {
     const options = genererOptions(nombre, maxRange);
     creerTableauReponses(options, mode);
 }
+*/
+function genererQuestionAvecTableau(mode, maxRange) {
+    const question = document.getElementById('question');
+    const nombre = Math.floor(Math.random() * (maxRange + 1));
+    reponseCorrecte = nombre;
+
+    let texte = '';
+    if (mode === 'arabe-ecriture') texte = `Quelle est l'écriture arabe de : ${nombre}`;
+    if (mode === 'arabe-indien') texte = `Quel est le chiffre indien de : ${nombre}`;
+    if (mode === 'arabe-translitteration') texte = `Quelle est la translittération de : ${nombre}`;
+    if (mode === 'translitteration-indien') texte = `Quel est le chiffre indien de : ${getTranslit(nombre)}`;
+    if (mode === 'translitteration-ecriture') texte = `Quelle est l'écriture arabe de : ${getTranslit(nombre)}`;
+    if (mode === 'indien-translitteration') texte = `Quelle est la translittération de : ${convertirEnIndien(nombre)}`;
+
+    question.innerHTML = texte;
+
+    const options = genererOptions(nombre, maxRange);
+
+    if (window.innerWidth > 768) {
+        document.getElementById('tableauReponses').style.display = 'table';
+        document.getElementById('mobileReponses').style.display = 'none';
+        creerTableauReponses(options, mode);
+    } else {
+        document.getElementById('tableauReponses').style.display = 'none';
+        document.getElementById('mobileReponses').style.display = 'flex';
+        creerBoutonsReponses(options, mode);
+    }
+}
+
+
 
 function genererQuestionComplement(mode, maxRange) {
             const tableau = document.getElementById('tableauReponses');
@@ -1160,6 +1238,40 @@ function creerTableauReponses(options, mode) {
             });
         }
 
+
+
+function creerBoutonsReponses(options, mode) {
+    const zoneBoutons = document.getElementById('mobileReponses');
+    zoneBoutons.innerHTML = ''; // reset
+
+    options.forEach(option => {
+        const btn = document.createElement('button');
+
+        // Texte affiché selon le mode
+        let texte = option;
+        if (mode.endsWith('ecriture')) {
+            texte = option <= 10 ? donneesArabes.ecriture[option] : donneesArabes.ecritureEtendue[option] || option;
+        } else if (mode.endsWith('indien')) {
+            texte = option <= 10 ? donneesArabes.chiffres[option] : convertirEnIndien(option);
+        } else if (mode.endsWith('translitteration')) {
+            texte = option <= 10 ? donneesArabes.translitteration[option] : option;
+        }
+
+        btn.textContent = texte;
+        btn.dataset.valeur = texte;
+
+        btn.addEventListener('click', () => {
+            // Un seul bouton sélectionné
+            [...zoneBoutons.children].forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+        });
+
+        zoneBoutons.appendChild(btn);
+    });
+}
+
+
+
 function afficherOption(valeur, mode) {
     if (mode.includes('-ecriture')) return getEcriture(valeur);
     if (mode.includes('-indien')) return convertirEnIndien(valeur);
@@ -1180,45 +1292,6 @@ function getTranslit(n) {
 }
 
 
-// function validerReponse() {
-//     const feedback = document.getElementById('feedback');
-//     const mode = document.getElementById('mode').value;
-//     const isInputLibre = ['ecriture-arabe', 'indien-arabe', 'translitteration-arabe'].includes(mode);
-
-//     if (isInputLibre) {
-//         const val = inputLibre.value.trim();
-//         if (val === '') {
-//             feedback.textContent = 'Veuillez entrer une réponse.';
-//             feedback.className = 'feedback error';
-//             return;
-//         }
-//         if (parseInt(val) === reponseCorrecte) {
-//             feedback.innerHTML = '✅ Correct !';
-//             feedback.className = 'feedback success';
-//             setTimeout(() => { genererQuestion(); }, 1200);
-//         } else {
-//             feedback.innerHTML = `❌ Incorrect. Réponse attendue : ${reponseCorrecte}`;
-//             feedback.className = 'feedback error';
-//         }
-//         return;
-//     }
-
-//     const checked = [...document.querySelectorAll('input[name="reponse"]:checked')];
-//     if (checked.length !== 1) {
-//         feedback.textContent = 'Veuillez sélectionner une seule réponse.';
-//         feedback.className = 'feedback error';
-//         return;
-//     }
-//     const val = parseInt(checked[0].value);
-//     if (val === reponseCorrecte) {
-//         feedback.innerHTML = '✅ Correct !';
-//         feedback.className = 'feedback success';
-//         setTimeout(() => { genererQuestion(); }, 1200);
-//     } else {
-//         feedback.innerHTML = `❌ Mauvaise réponse. Réponse attendue : ${reponseCorrecte}`;
-//         feedback.className = 'feedback error';
-//     }
-// }
 
 
 function validerReponse() {
@@ -1244,6 +1317,35 @@ function validerReponse() {
         }
         return;
     }
+
+// Mode boutons mobile
+const mobileBtns = document.querySelectorAll('#mobileReponses button.selected');
+if (mobileBtns.length === 1) {
+    const selectedBtn = mobileBtns[0];
+    const val = selectedBtn.dataset.valeur;
+
+    let bonneReponse = '';
+    if (mode.endsWith('ecriture')) bonneReponse = getEcriture(reponseCorrecte);
+    else if (mode.endsWith('indien')) bonneReponse = convertirEnIndien(reponseCorrecte);
+    else if (mode.endsWith('translitteration')) bonneReponse = getTranslit(reponseCorrecte);
+    else bonneReponse = reponseCorrecte.toString();
+
+    if (val === bonneReponse) {
+        selectedBtn.classList.remove('selected');
+        selectedBtn.classList.add('correct');
+        feedback.innerHTML = '✅ Correct !';
+        feedback.className = 'feedback success';
+        setTimeout(() => { genererQuestion(); }, 1200);
+    } else {
+        feedback.innerHTML = `❌ Mauvaise réponse. Réponse attendue : ${bonneReponse}`;
+        feedback.className = 'feedback error';
+    }
+
+    return;
+}
+
+
+
 
     // Mode avec tableau de réponses
     const checked = [...document.querySelectorAll('input[name="reponse"]:checked')];
