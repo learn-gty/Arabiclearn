@@ -1342,7 +1342,10 @@ function renderArList() {
   } else {
     // Mobile : boutons verticaux
     let container = document.createElement("div");
+  
     container.className = "mobile-choices";
+
+    removeBtnChildren(container);
 
     choices.forEach((c, i) => {
       let btn = document.createElement("button");
@@ -1374,6 +1377,12 @@ function renderArList() {
   }
 }
 
+ 
+ function removeBtnChildren(container) {
+  // Sélectionne tous les enfants directs dont l'id commence par "btn"
+  const btnChildren = container.querySelectorAll(':scope > [id^="btn"]');
+  btnChildren.forEach(child => child.remove());
+}
 
 
 
@@ -1420,10 +1429,13 @@ function renderArList() {
         setTimeout(nextQuestion, 1500);
         let identifiant = `btn-${idx}`;
         let btnOK =document.getElementById(identifiant);
-         btnOK.style.backgroundColor ="var(--pal-green)";
+         if (btnOK) btnOK.style.backgroundColor ="var(--pal-green)";
 
       } else {
         bad++; updateStats();
+        let identifiant = `btn-${idx}`;
+        let btnKO =document.getElementById(identifiant);
+        if(btnKO) btnKO.style.backgroundColor ="var(--pal-red)";
         showFeedback(false, `Mauvaise réponse. Réponse attendue : <b>${expected}</b>`, currentMode.showTranslit(currentData));
         document.getElementById("action-buttons").innerHTML = `<button onclick="nextQuestion()">Nouvel exercice</button>`;
       }
