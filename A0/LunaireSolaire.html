@@ -436,7 +436,7 @@ input[type="checkbox"] {
   }
   #mobileChoices button {
     width: 100%;
-    font-size: 1.1em;
+    font-size: 2.2em;
     padding: 14px 0;
     border-radius: 6px;
     border: 2px solid #222;
@@ -465,6 +465,38 @@ input[type="checkbox"] {
     color: #fff;
     border-color: #149954;
   }
+
+  .stat-item {
+    font-size: 1.8rem;
+  }
+
+  label {
+    font-size: 1.5rem;
+  }
+
+  input {
+    font-size: 1.5rem;
+  }
+
+  button {
+    font-size: 1.5rem;
+  }
+
+
+  #question {
+    font-size: 2.2rem;
+    text-align: center;
+
+  }
+
+.controls {
+  display: flex;            /* active le flex layout */
+  align-items: center;      /* centre verticalement label et boutons */
+  flex-wrap: nowrap;        /* interdit le retour à la ligne */
+  gap: 0.5rem;              /* espacement horizontal entre les items */
+  overflow-x: auto;         /* permet le scroll horizontal si trop large */
+}
+
 }
 
 
@@ -505,7 +537,7 @@ input[type="checkbox"] {
 
 
         <div class="controls">
-            <label>Nombre de mots : 
+             <label>Nombre de mots : 
                 <input type="number" id="wordCount" value="10" min="1" max="100">
             </label>
             <button onclick="generateExercise()">🔄 Nouvel exercice</button>
@@ -514,6 +546,8 @@ input[type="checkbox"] {
         </div>
 
         <div id="question"></div>
+
+        <div id="feedback" class="feedback"></div>
         
         <table id="wordTable">
             <thead>
@@ -533,7 +567,7 @@ input[type="checkbox"] {
             <div id="mobileChoices"></div>
 
         </div>
-        <div id="feedback" class="feedback"></div>
+      
     </div>
 
     <!-- Modales d'aide -->
@@ -820,6 +854,9 @@ if (!deviceIsMobile) {
     `).join('');
 } else {
     // --- BOUTONS VERTICAUX (MOBILE) ---
+    const el = document.getElementById('wordTable'); 
+    el.hidden = true;  
+   
     selectedWords.forEach((word, i) => {
         let btn = document.createElement('button');
         btn.type = "button";
@@ -953,6 +990,7 @@ function afficherBoutonsSiMobile() {
   if (window.innerWidth <= 600) {
     group.style.display = 'flex';
     document.querySelectorAll('.checkbox-selection').forEach(e => e.style.display = 'none');
+   
     genererBoutonsMobile();
   } else {
     group.style.display = 'none';
