@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Apprentissage des couleurs en arabe</title>
+  <link href="https://fonts.googleapis.com/css?family=Quicksand:400,700&display=swap" rel="stylesheet"/>
+    <style>
+    /* CSS du cahier des charges (voir paste.txt) */
+    :root {
+      --pal-red: #E4312b;
+      --pal-black: #000;
+      --pal-white: #fff;
+      --pal-green: #149954;
+      --container-bg: rgba(255,255,255,0.98);
+      --container-border: #ddd;
+      --button-bg: var(--pal-black);
+      --button-text: var(--pal-white);
+      --button-hover-bg: var(--pal-red);
+      --button-hover-text: var(--pal-white);
+      --stats-bg: #f4f4f4;
+    }
+    body.dark-mode {
+      --container-bg: rgba(24,24,24,0.96);
+      --container-border: #444;
+      --button-bg: var(--pal-white);
+      --button-text: var(--pal-white);
+      --button-hover-bg: var(--pal-red);
+      --button-hover-text: var(--pal-black);
+      --stats-bg: #232323;
+    }
+    body {
+      min-height: 100vh;
+      font-family: 'Quicksand', Arial, sans-serif;
+      background:
+        linear-gradient(to bottom, var(--pal-black) 0 33%, var(--pal-white) 33% 66%, var(--pal-green) 66% 100%),
+        linear-gradient(135deg, var(--pal-red) 0 32%, transparent 32% 100%);
+      color: var(--pal-black);
+      margin: 0;
+      padding: 0;
+      line-height: 1.1;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0;
+      width: 30vw; height: 100vh;
+      background: var(--pal-red);
+      clip-path: polygon(0 0, 100% 50%, 0 100%);
+      z-index: 0;
+      opacity: 0.7;
+      pointer-events: none;
+    }
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 900px;
+      width: 99vw;
+      margin: 10px auto 0 auto;
+      background: var(--container-bg);
+      border-radius: 8px;
+      box-shadow: 0 0 6px rgba(0,0,0,0.08);
+      padding: 15px 10px;
+      border: 1px solid var(--container-border);
+      display: flex;
+      flex-direction: column;
+      animation: slideIn 0.8s ease-out;
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(30px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+    h1, h2 {
+      font-weight: 700;
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      color: var(--pal-red);
+      text-align: center;
+      letter-spacing: 0.5px;
+      animation: fadeInScale 1s ease-out;
+    }
+    @keyframes fadeInScale {
+      from { opacity: 0; transform: scale(0.8);}
+      to { opacity: 1; transform: scale(1);}
+    }
+    #question {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin: 1rem 0;
+      text-align: center;
+      color: var(--pal-black);
+      min-height: 40px;
+      padding: 15px;
+      background: var(--stats-bg);
+      border-radius: 8px;
+      border-left: 4px solid var(--pal-red);
+    }
+    body.dark-mode #question { color: var(--pal-white);}
+    .tableau-reponses {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 25px 0;
+      background: var(--container-bg);
+      border: 2px solid var(--pal-black);
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      animation: tableSlide 0.6s ease-out;
+      font-size: 1.5rem;
+    }
+    @keyframes tableSlide {
+      from { opacity: 0; transform: translateX(-20px);}
+      to { opacity: 1; transform: translateX(0);}
+    }
+    .tableau-reponses td {
+      min-width: 80px;
+      border: 1px solid var(--pal-black);
+      text-align: center;
+      vertical-align: middle;
+      font-weight: 600;
+      line-height: 1.1;
+      transition: all 0.3s ease;
+      padding: 8px;
+    }
+    .checkbox-cell {
+      background-color: var(--stats-bg);
+      padding: 8px;
+      height: 40px;
+    }
+    body.dark-mode .checkbox-cell { background-color: var(--stats-bg);}
+    .checkbox-cell:hover {
+      background: rgba(228, 49, 43, 0.1);
+      transform: scale(1.01);
+    }
+    .checkbox-cell input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+      margin: 0;
+      accent-color: var(--pal-red);
+      transform: scale(1.1);
+    }
+    .checkbox-cell input[type="checkbox"]:checked {
+      animation: checkBounce 0.3s ease-out;
+    }
+
+body.dark-mode .tableau-reponses td,
+body.dark-mode .tableau-reponses label {
+    color: #fff !important;
+}
+
+    @keyframes checkBounce {
+      0% { transform: scale(1.1);}
+      50% { transform: scale(1.3);}
+      100% { transform: scale(1.1);}
+    }
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin: 25px 0;
+      font-size: 0.87rem;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      padding: 20px;
+      background-color: var(--stats-bg);
+      border-radius: 8px;
+      border-left: 4px solid var(--pal-red);
+    }
+    body.dark-mode .controls { background-color: var(--stats-bg);}
+    .controls:hover { transform: translateY(-2px);}
+    .control-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+    }
+    input[type="number"], select {
+      padding: 8px 12px;
+      margin-left: 10px;
+      border: 2px solid var(--pal-black);
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--pal-black);
+      background: var(--container-bg);
+      transition: all 0.3s ease;
+    }
+    body.dark-mode input[type="number"], 
+    body.dark-mode select {
+      color: var(--pal-white);
+      border-color: var(--pal-white);
+      background: #232323;
+    }
+    input[type="number"]:focus, select:focus {
+      border-color: var(--pal-green);
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(20, 153, 84, 0.2);
+    }
+    .buttons {
+      margin-top: 25px;
+      text-align: center;
+    }
+    button {
+      background-color: var(--button-bg);
+      color: var(--button-text);
+      border: 1px solid var(--pal-black);
+      border-radius: 4px;
+      padding: 12px 25px;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      white-space: nowrap;
+      line-height: 1;
+      margin: 0 10px;
+    }
+    button:hover:not(:disabled) {
+      background-color: var(--button-hover-bg);
+      color: var(--button-hover-text);
+      border: 1px solid var(--pal-red);
+      transform: translateY(-1px);
+    }
+    button:active { transform: translateY(1px);}
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .feedback {
+      font-weight: 700;
+      min-height: 20px;
+      margin: 1rem 0;
+      text-align: center;
+      font-size: 0.9rem;
+      transition: all 0.3s;
+      padding: 12px;
+      border-radius: 4px;
+    }
+    .success {
+      background: rgba(20, 153, 84, 0.15);
+      border-left: 4px solid var(--pal-green);
+      color: var(--pal-green);
+    }
+    .error {
+      background: rgba(228, 49, 43, 0.15);
+      border-left: 4px solid var(--pal-red);
+      color: var(--pal-red);
+      font-size: 1.3em;
+    }
+    @media (max-width: 768px) {
+      .container { max-width: 100vw; padding: 8px 4vw; margin: 2vw auto 0 auto;}
+      .controls { justify-content: center; flex-direction: column; gap: 8px;}
+      .tableau-reponses td { font-size: 14px; height: 45px; min-width: 60px;}
+      .checkbox-cell input[type="checkbox"] { width: 12px; height: 12px; transform: scale(0.9);}
+    }
+    @media (max-width: 480px) {
+      .container { width: 98vw; padding: 8px 3px;}
+      .tableau-reponses td { min-width: 35px; height: 35px; font-size: 11px;}
+      .checkbox-cell input[type="checkbox"] { width: 10px; height: 10px; transform: scale(0.8);}
+      h1, h2 { font-size: 1.5rem;}
+      #question { font-size: 1.5rem; padding: 8px;}
+      button { width: 90%; padding: 10px; font-size: 13px;}
+    }
+    .menu-hamburger { position: fixed; top: 1rem; left: 1rem; z-index: 1100;}
+    .menu-icon {
+      display: flex; flex-direction: column; justify-content: center;
+      width: 40px; height: 40px; cursor: pointer; transition: transform 0.3s ease;
+    }
+    .menu-icon span {
+      height: 3px; width: 100%; background-color: #333; margin: 5px 0;
+      border-radius: 2px; transition: 0.4s ease;
+    }
+    #menu-toggle { display: none;}
+    .menu {
+      position: fixed; top: 0; left: -260px; width: 240px; height: 100vh;
+      background: #fff; box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
+      border-top-right-radius: 16px; border-bottom-right-radius: 16px;
+      padding: 60px 0 20px 0; list-style: none; transition: left 0.35s ease;
+      font-family: 'Segoe UI', Arial, sans-serif; overflow-y: auto;
+    }
+    .menu li { margin: 0; padding: 0;}
+    .menu li a {
+      display: block; padding: 14px 24px; color: #333; font-size: 1rem;
+      text-decoration: none; border-left: 4px solid transparent;
+      transition: background-color 0.25s, border-color 0.25s;
+    }
+    .menu li a:hover {
+      background-color: #f5f5f5; color: #007a33; border-left: 4px solid #007a33;
+    }
+    #menu-toggle:checked ~ .menu { left: 0;}
+    #menu-toggle:checked + .menu-icon span:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);}
+    #menu-toggle:checked + .menu-icon span:nth-child(2) { opacity: 0;}
+    #menu-toggle:checked + .menu-icon span:nth-child(3) {
+      transform: rotate(-45deg) translate(5px, -5px);}
+    @media (max-width: 600px) {
+      .menu { width: 80vw; max-width: 300px; border-radius: 0 16px 16px 0; left: -300px;}
+      .menu li a { font-size: 0.95rem; padding: 12px 20px;}
+      .menu-icon { width: 36px; height: 36px;}
+      .menu-icon span { margin: 4px 0;}
+      #content-wrapper { z-index: 0; position: relative; }
+
+      /* Pour tous les boutons avec texte arabe */
+.mode-btn[dir="rtl"] {
+  direction: rtl;
+  text-align: right; /* Optionnel, améliore l’alignement */
+}
+
+    }
+
+
+/* Affichage vertical des boutons de réponse sur mobile */
+@media (max-width: 700px), (pointer: coarse) {
+  .mobile-choices {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
+    margin: 20px 0;
+  }
+  .mobile-choices button {
+    width: 100%;
+    font-size: 1.1em;
+    padding: 14px 0;
+    border-radius: 6px;
+    border: 2px solid var(--pal-black);
+    background: var(--container-bg);
+    color: var(--pal-black);
+    transition: background 0.2s, color 0.2s, border 0.2s;
+    font-weight: 600;
+    outline: none;
+  }
+  .mobile-choices button.selected {
+    background: var(--pal-red);
+    color: #fff;
+    border-color: var(--pal-red);
+  }
+  .mobile-choices button:active {
+    filter: brightness(0.95);
+  }
+  body.dark-mode .mobile-choices button {
+    background: #232323;
+    color: #fff;
+    border-color: #fff;
+  }
+  body.dark-mode .mobile-choices button.selected {
+    background: var(--pal-red);
+    color: #fff;
+    border-color: var(--pal-red);
+  }
+}
+
+
+
+.controls button {
+  background-color: var(--button-bg);
+  color: var(--button-text);
+  border: 2px solid var(--pal-black);
+  padding: 10px 18px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.controls button:hover {
+  background-color: var(--button-hover-bg);
+  color: var(--button-hover-text);
+  border-color: var(--pal-red);
+}
+
+
+
+
+/* Pour l'affichage vertical des boutons de réponse sur mobile */
+@media (max-width: 700px), (pointer: coarse) {
+  .mobile-choices {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    align-items: stretch;
+    margin: 20px 0;
+  }
+  .mobile-choices button {
+    width: 100%;
+    font-size: 1.2em;
+    padding: 16px 0;
+    border-radius: 6px;
+    border: 2px solid var(--pal-black);
+    background: var(--container-bg);
+    color: var(--pal-black);
+    transition: background 0.2s, color 0.2s, border 0.2s;
+    font-weight: 600;
+    outline: none;
+  }
+  .mobile-choices button.selected {
+    background: var(--pal-red);
+    color: #fff;
+    border-color: var(--pal-red);
+  }
+  .mobile-choices button:active {
+    filter: brightness(0.95);
+  }
+  body.dark-mode .mobile-choices button {
+    background: #232323;
+    color: #fff;
+    border-color: #fff;
+  }
+  body.dark-mode .mobile-choices button.selected {
+    background: var(--pal-red);
+    color: #fff;
+    border-color: var(--pal-red);
+  }
+}
+/* Cacher le tableau des coches sur mobile */
+@media (max-width: 700px), (pointer: coarse) {
+  .tableau-reponses {
+    display: none !important;
+  }
+}
+
+td[dir="rtl"], span[dir="rtl"], label[dir="rtl"] {
+  direction: rtl;
+  text-align: right;
+
+}
+
+[dir="rtl"][lang="ar"] {
+  text-align: right;
+  direction: rtl;
+  font-family: 'Arial', 'Tahoma', sans-serif; /* police adaptée à l'arabe */
+}
+/* 🔽 Ajout spécifique pour garantir l'affichage correct de l'arabe */
+.texte-arabe,
+[dir="rtl"][lang="ar"],
+span[lang="ar"],
+label[lang="ar"],
+td[lang="ar"] {
+  direction: rtl !important;
+  text-align: center !important;
+  font-family: 'Amiri', 'Scheherazade New', 'Noto Naskh Arabic', 'Arial', 'Tahoma', sans-serif !important;
+  font-size: 2.0em;
+  line-height: 1.6;
+  unicode-bidi: isolate; /* essentiel pour forcer le regroupement logique */
+}
+
+/* 📱 Bonus mobile : améliore le rendu arabe sur petit écran */
+@media (max-width: 600px) {
+  .texte-arabe,
+  [dir="rtl"][lang="ar"] {
+    font-size: 1.2em;
+  }
+}
+
+
+/* ✅ Bloc #stats (résultats et timer) */
+#stats {
+  background: var(--stats-bg);
+  padding: 10px;
+  border-radius: 6px;
+  margin: 20px 0 10px 0;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1rem;
+  color: var(--pal-black);
+  display: block;
+}
+
+
+body.dark-mode #stats {
+  background: var(--stats-bg);
+  color: var(--pal-white);
+}
+
+  /*@media (pointer:coarse), (max-width: 700px) {
+    .mobile-option {
+      font-size: 1.2em;
+      padding: 12px;
+      border-radius: 12px;
+      background: var(--btn-bg, #eee);
+      border: 1px solid #ccc;
+      color: var(--text-color, #000);
+    }
+    .mobile-option:hover {
+      background-color: var(--hover-color, #ddd);
+    }
+  }*/
+  </style>
+</head>
+<body>
+  <!-- Menu mobile -->
+  <input type="checkbox" id="menu-toggle" style="display:none;">
+  <label class="menu-icon menu-hamburger" for="menu-toggle">
+    <span></span><span></span><span></span>
+  </label>
+  <ul class="menu">
+    <li><a href="#" onclick="toggleDarkMode(); return false;">Mode clair/sombre</a></li>
+    <li><a href="#" onclick="showRulesPopup(); return false;">Grammaire des couleurs</a></li>
+  </ul>
+
+
+  <div class="container">
+    <h1>Couleurs en arabe littéraire</h1>
+    <div class="controls">
+      <div class="control-group">
+        <label for="mode-select">Mode :</label>
+        <select id="mode-select">
+          <option value="color-fr-to-ar-m">Couleur (fr → ar, masc.)</option>
+          <option value="color-fr-to-ar-f">Couleur (fr → ar, fém.)</option>
+          <option value="color-ar-to-fr-m">Couleur (ar → fr, masc.)</option>
+          <option value="color-ar-to-fr-f">Couleur (ar → fr, fém.)</option>
+          <option value="quizz-mix">Quizz mixte</option>
+        </select>
+      </div>
+      <div class="control-group">
+        <label for="level-select">Niveau :</label>
+       <select id="level-select">
+        <option value="1">Niveau 1</option>
+        <option value="2">Niveau 2</option>
+        <option value="3">Niveau 3 (complet)</option>
+      </select>
+      </div>
+      <div class="control-group">
+        <label for="timer-input">Délai (s) :</label>
+        <input type="number" id="timer-input" min="10" max="600" value="120">
+      </div>
+      <div class="control-group">
+        <button onclick="toggleDarkMode()">Clair/Sombre</button>
+      </div>
+        <div class="control-group">
+        <button onclick="showHelpPopup()">📘 Aide</button>
+     </div>
+         <div id="stats">
+        ✅ <span id="good-count">0</span>
+        ❌ <span id="bad-count">0</span>
+        <span id="timer" style="float:right;"></span>
+      </div>
+    </div>
+
+ 
+
+    <div id="question"></div>
+    <div id="reponses"></div>
+    <div class="feedback" id="feedback"></div>
+    <div class="buttons" id="action-buttons"></div>
+  </div>
+
+
+
+  <script>
+  const couleursN1 = [
+  { fr: "rouge", ar_m: "أَحْمَر", ar_f: "حَمْرَاء", translit: "aḥmar / ḥamrāʾ" },
+  { fr: "blanc", ar_m: "أَبْيَض", ar_f: "بَيْضَاء", translit: "abyaḍ / bayḍāʾ" },
+  { fr: "noir", ar_m: "أَسْوَد", ar_f: "سَوْدَاء", translit: "aswad / sawdāʾ" },
+  { fr: "vert", ar_m: "أَخْضَر", ar_f: "خَضْرَاء", translit: "aḫḍar / ḫaḍrāʾ" },
+  { fr: "bleu", ar_m: "أَزْرَق", ar_f: "زَرْقَاء", translit: "azraq / zarqāʾ" },
+  { fr: "jaune", ar_m: "أَصْفَر", ar_f: "صَفْرَاء", translit: "aṣfar / ṣafrāʾ" },
+  { fr: "marron", ar_m: "بُنِّيّ", ar_f: "بُنِّيَّة", translit: "bunniyy / bunniyya" }
+];
+
+const couleursN2 = [
+  { fr: "gris", ar_m: "رَمَادِيّ", ar_f: "رَمَادِيَّة", translit: "ramādiyy / ramādiyya" },
+  { fr: "rose", ar_m: "وَرْدِيّ", ar_f: "وَرْدِيَّة", translit: "wardiyy / wardiyya" },
+  { fr: "orange", ar_m: "بُرْتُقَالِيّ", ar_f: "بُرْتُقَالِيَّة", translit: "burtuqāliy / burtuqāliyya" },
+  { fr: "doré", ar_m: "ذَهَبِيّ", ar_f: "ذَهَبِيَّة", translit: "ḏahabiyy / ḏahabiyya" },
+  { fr: "argenté", ar_m: "فِضِّيّ", ar_f: "فِضِّيَّة", translit: "fiḍḍiyy / fiḍḍiyya" }
+];
+
+
+const couleursN3 = [
+  // Variantes plus complexes et dérivées
+  { fr: "rouge foncé", ar_m: "أَحْمَر غَامِق", ar_f: "حَمْرَاء غَامِقَة", translit: "aḥmar ḡāmiq / ḥamrāʾ ḡāmiqa" },
+  { fr: "rouge clair", ar_m: "أَحْمَر فَاتِح", ar_f: "حَمْرَاء فَاتِحَة", translit: "aḥmar fātiḥ / ḥamrāʾ fātiḥa" },
+  { fr: "bleu foncé", ar_m: "أَزْرَق غَامِق", ar_f: "زَرْقَاء غَامِقَة", translit: "azraq ḡāmiq / zarqāʾ ḡāmiqa" },
+  { fr: "bleu clair", ar_m: "أَزْرَق فَاتِح", ar_f: "زَرْقَاء فَاتِحَة", translit: "azraq fātiḥ / zarqāʾ fātiḥa" },
+  { fr: "jaune pastel", ar_m: "أَصْفَر بَاهِت", ar_f: "صَفْرَاء بَاهِتَة", translit: "aṣfar bāhit / ṣafrāʾ bāhita" },
+  { fr: "vert clair", ar_m: "أَخْضَر فَاتِح", ar_f: "خَضْرَاء فَاتِحَة", translit: "aḫḍar fātiḥ / ḫaḍrāʾ fātiḥa" },
+  { fr: "rose foncé", ar_m: "وَرْدِيّ غَامِق", ar_f: "وَرْدِيَّة غَامِقَة", translit: "wardiyy ḡāmiq / wardiyya ḡāmiqa" },
+  { fr: "gris clair", ar_m: "رَمَادِيّ فَاتِح", ar_f: "رَمَادِيَّة فَاتِحَة", translit: "ramādiyy fātiḥ / ramādiyya fātiḥa" },
+  { fr: "vert foncé", ar_m: "أَخْضَر غَامِق", ar_f: "خَضْرَاء غَامِقَة", translit: "aḫḍar ḡāmiq / ḫaḍrāʾ ḡāmiqa" },
+  { fr: "marron clair", ar_m: "بُنِّيّ فَاتِح", ar_f: "بُنِّيَّة فَاتِحَة", translit: "bunniyy fātiḥ / bunniyya fātiḥa" }
+];
+
+
+const modes = [
+  { value: "color-fr-to-ar-m", label: "Fr → Ar (masc.)", q: d => d.fr, a: d => d.ar_m, t: d => d.translit, inputType: "ar-list" },
+  { value: "color-fr-to-ar-f", label: "Fr → Ar (fém.)", q: d => d.fr, a: d => d.ar_f, t: d => d.translit, inputType: "ar-list" },
+  { value: "color-ar-to-fr-m", label: "Ar → Fr (masc.)", q: d => d.ar_m, a: d => d.fr, t: d => d.translit, inputType: "text" },
+  { value: "color-ar-to-fr-f", label: "Ar → Fr (fém.)", q: d => d.ar_f, a: d => d.fr, t: d => d.translit, inputType: "text" },
+  { value: "quizz-mix", label: "Quiz mixte", q: null, a: null, t: null, inputType: "auto" }
+];
+
+let currentMode = modes[0];
+let currentLevel = 1;
+let currentDataList = couleursN1;
+let currentItem = null;
+let good = 0, bad = 0;
+let allowAnswer = true;
+let timerVal = 120;
+let timeLeft = 120;
+let timer = null;
+let questionOrder = [], questionPointer = 0;
+const isMobile = window.matchMedia("(pointer:coarse)").matches || window.innerWidth < 700;
+
+document.getElementById("mode-select").addEventListener("change", function() {
+  currentMode = modes.find(m => m.value === this.value);
+  resetQuiz();
+});
+document.getElementById("level-select").addEventListener("change", function() {
+  currentLevel = parseInt(this.value);
+  currentDataList = getCurrentDataList();
+  resetQuiz();
+});
+
+
+function getCurrentDataList() {
+  if (currentLevel === 1) return couleursN1;
+  if (currentLevel === 2) return couleursN1.concat(couleursN2);
+  if (currentLevel === 3) return couleursN1.concat(couleursN2).concat(couleursN3);
+  return couleursN1;
+}
+
+
+
+
+function shuffle(arr) {
+  const length = arr.length;
+  const shuffled = Array.from(arr); // clone de l’original pour ne pas modifier la source
+
+  for (let i = length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+
+  return shuffled;
+}
+
+
+function stripSpecial(str) {
+  return str.normalize("NFD").replace(/[\u064B-\u0652]/g, "").replace(/[^\w\u0600-\u06FF\s]/g, "").trim().toLowerCase();
+}
+
+function answerIsCorrect(user, expected) {
+  return stripSpecial(user) === stripSpecial(expected);
+}
+
+function shuffleQuestions() {
+  questionOrder = Array.from({ length: currentDataList.length }, (_, i) => i);
+  shuffle(questionOrder);
+  questionPointer = 0;
+}
+
+function updateStats() {
+  document.getElementById("good-count").textContent = good;
+  document.getElementById("bad-count").textContent = bad;
+}
+function updateTimerDisplay() {
+  document.getElementById("timer").textContent = `⏳ ${timeLeft}s`;
+}
+function startTimer() {
+  clearInterval(timer);
+  timeLeft = timerVal;
+  updateTimerDisplay();
+  timer = setInterval(() => {
+    timeLeft--;
+    updateTimerDisplay();
+    if (timeLeft <= 0) {
+      clearInterval(timer);
+      allowAnswer = false;
+      showFeedback(false, "⏰ Temps écoulé !");
+      document.getElementById("action-buttons").innerHTML = `<button onclick="nextQuestion()">Nouvel exercice</button>`;
+    }
+  }, 1000);
+}
+
+function resetQuiz() {
+  good = 0; bad = 0;
+  updateStats();
+  shuffleQuestions();
+  nextQuestion(); // Cette ligne déclenche aussi renderQuestion()
+}
+
+
+function nextQuestion() {
+  allowAnswer = true;
+  document.getElementById("feedback").textContent = "";
+  document.getElementById("action-buttons").innerHTML = "";
+  if (currentMode.value === "quizz-mix") {
+    currentMode = shuffle(modes.filter(m => m.value !== "quizz-mix"))[0];
+  }
+  const idx = questionOrder[questionPointer++ % questionOrder.length];
+  currentItem = currentDataList[idx];
+  renderQuestion();
+  startTimer();
+}
+
+function renderQuestion() {
+  const qDiv = document.getElementById("question");
+  const rDiv = document.getElementById("reponses");
+  const ab = document.getElementById("action-buttons");
+  qDiv.textContent = currentMode.q(currentItem);
+  rDiv.innerHTML = "";
+  ab.innerHTML = "";
+  if (currentMode.inputType === "ar-list") renderArList();
+  else renderTextInput();
+}
+
+function renderTextInput() {
+  const rDiv = document.getElementById("reponses");
+  const input = document.createElement("input");
+  input.type = "text";
+  input.style.fontSize = "1.3em";
+  input.style.width = "80%";
+  input.dir = currentMode.value.includes("ar-to-fr") ? "ltr" : "rtl";
+  input.addEventListener("keydown", e => {
+    if (e.key === "Enter" && allowAnswer) validateTextAnswer(input.value);
+  });
+  rDiv.appendChild(input);
+  input.focus();
+  document.getElementById("action-buttons").innerHTML = `<button onclick="validateTextAnswer(document.querySelector('#reponses input').value)">Valider</button>`;
+}
+/*
+function renderArList() {
+  const ab = document.getElementById("action-buttons");
+  const rDiv = document.getElementById("reponses");
+  const expected = currentMode.a(currentItem);
+  const allAnswers = shuffle(currentDataList.map(currentMode.a));
+  const options = shuffle([expected, ...allAnswers.filter(a => a !== expected)]).slice(0, 6);
+
+  if (isMobile) {
+    options.forEach(opt => {
+      const btn = document.createElement("button");
+      btn.textContent = opt;
+      btn.onclick = () => validateArListAnswer(opt);
+      ab.appendChild(btn);
+    });
+  } else {
+    const table = document.createElement("table");
+    table.className = "tableau-reponses";
+    let tr = null;
+    options.forEach((opt, i) => {
+      if (i % 3 === 0) tr = table.insertRow();
+      const td = tr.insertCell();
+      td.className = "checkbox-cell";
+      const cb = document.createElement("input");
+      cb.type = "checkbox";
+      cb.name = "choix";
+      cb.onclick = () => {
+        document.querySelectorAll('input[name="choix"]').forEach(ch => {
+          if (ch !== cb) ch.checked = false;
+        });
+      };
+      td.appendChild(cb);
+      td.appendChild(document.createElement("br"));
+      const lbl = document.createElement("label");
+      lbl.textContent = opt;
+      td.appendChild(lbl);
+    });
+    rDiv.appendChild(table);
+    ab.innerHTML = `<button onclick="validateArListAnswer()">Valider</button>`;
+  }
+}
+*/
+
+function renderArList() {
+  const ab = document.getElementById("action-buttons");
+  const rDiv = document.getElementById("reponses");
+  const expected = currentMode.a(currentItem);
+  const allAnswers = shuffle(currentDataList.map(currentMode.a));
+  const options = shuffle([expected, ...allAnswers.filter(a => a !== expected)]).slice(0, 6);
+
+  rDiv.innerHTML = "";
+  ab.innerHTML = "";
+
+  if (isMobile) {
+    // Mode mobile : boutons verticaux
+    options.forEach(opt => {
+      const btn = document.createElement("button");
+      btn.textContent = opt;
+      btn.className = "mobile-option";
+      btn.style.display = "block";
+      btn.style.width = "100%";
+      btn.style.marginBottom = "10px";
+      btn.onclick = () => validateArListAnswer(opt);
+      rDiv.appendChild(btn);
+    });
+  } else {
+    // Mode desktop : tableau de cases à cocher
+    const table = document.createElement("table");
+    table.className = "tableau-reponses";
+    let tr = null;
+    options.forEach((opt, i) => {
+      if (i % 3 === 0) tr = table.insertRow();
+      const td = tr.insertCell();
+      td.className = "checkbox-cell";
+      const cb = document.createElement("input");
+      cb.type = "checkbox";
+      cb.name = "choix";
+      cb.onclick = () => {
+        document.querySelectorAll('input[name="choix"]').forEach(chk => {
+          if (chk !== cb) chk.checked = false;
+        });
+      };
+      td.appendChild(cb);
+      td.appendChild(document.createElement("br"));
+      const lbl = document.createElement("label");
+      lbl.textContent = opt;
+      td.appendChild(lbl);
+    });
+    rDiv.appendChild(table);
+    ab.innerHTML = `<button onclick="validateArListAnswer()">Valider</button>`;
+  }
+}
+
+
+function validateTextAnswer(val) {
+  if (!allowAnswer) return;
+  const expected = currentMode.a(currentItem);
+  const ok = answerIsCorrect(val, expected);
+  if (ok) good++; else bad++;
+  showFeedback(ok, ok ? expected : `❌ ${expected}`, currentMode.t(currentItem));
+  updateStats();
+  allowAnswer = false;
+
+  if (ok) {
+    setTimeout(nextQuestion, 1000);
+  } else {
+    document.getElementById("action-buttons").innerHTML += `<button onclick="nextQuestion()">Suivant</button>`;
+  }
+}
+
+
+function validateArListAnswer(selected = null) {
+  if (!allowAnswer) return;
+  let value = selected;
+  if (!value) {
+    const checks = document.querySelectorAll('input[name="choix"]');
+    const labels = Array.from(checks).map((c, i) => c.checked ? c.parentElement.querySelector("label").textContent : null);
+    value = labels.find(l => l);
+  }
+  const expected = currentMode.a(currentItem);
+  const ok = value && answerIsCorrect(value, expected);
+  if (ok) good++; else bad++;
+  showFeedback(ok, ok ? expected : `❌ ${expected}`, currentMode.t(currentItem));
+  updateStats();
+  allowAnswer = false;
+
+  if (ok) {
+    setTimeout(nextQuestion, 1000);
+  } else {
+    document.getElementById("action-buttons").innerHTML += `<button onclick="nextQuestion()">Suivant</button>`;
+  }
+}
+
+
+function showFeedback(ok, msg, translit = "") {
+  const fb = document.getElementById("feedback");
+  fb.className = "feedback " + (ok ? "success" : "error");
+  fb.innerHTML = `${ok ? "✅" : "❌"} ${msg}<br><span style="font-size:0.9em;color:#777;">${translit}</span>`;
+}
+
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  if (localStorage.getItem("darkMode") === "true") {
+    document.body.classList.add("dark-mode");
+  }
+    currentMode = modes.find(m => m.value === document.getElementById("mode-select").value);
+  currentDataList = currentLevel === 1 ? couleursN1 : couleursN1.concat(couleursN2);
+  resetQuiz();
+});
+
+
+
+
+function showHelpPopup() {
+  document.getElementById("popup-overlay").style.display = "block";
+}
+function closeHelpPopup() {
+  document.getElementById("popup-overlay").style.display = "none";
+}
+
+function toggleDarkMode() {
+  document.body.classList.toggle("dark-mode");
+
+  // Sauvegarde dans le localStorage pour persistance
+  const isDark = document.body.classList.contains("dark-mode");
+  localStorage.setItem("darkMode", isDark ? "true" : "false");
+}
+
+
+  </script>
+
+<div id="popup-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#000a; z-index:1000;">
+  <div id="popup-content" style="background:white; color:black; max-width:90%; margin:5% auto; padding:1em; border-radius:10px; overflow-y:auto; max-height:90%;">
+    <button onclick="closeHelpPopup()" style="float:right; font-size:1.2em;">&times;</button>
+    <h2>Aide : les couleurs en arabe</h2>
+    <p>Les couleurs en arabe sont des adjectifs et doivent s'accorder en <strong>genre</strong> avec le nom.</p>
+    <p>Exemples :</p>
+    <table style="width:100%; border-collapse: collapse; font-size:0.95em;">
+      <thead>
+        <tr style="background:#f0f0f0;">
+          <th style="padding:6px;">Français</th>
+          <th style="padding:6px;">Masculin</th>
+          <th style="padding:6px;">Féminin</th>
+          <th style="padding:6px;">Translittération</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>rouge</td><td>أَحْمَر</td><td>حَمْرَاء</td><td>aḥmar / ḥamrāʾ</td></tr>
+        <tr><td>blanc</td><td>أَبْيَض</td><td>بَيْضَاء</td><td>abyaḍ / bayḍāʾ</td></tr>
+        <tr><td>noir</td><td>أَسْوَد</td><td>سَوْدَاء</td><td>aswad / sawdāʾ</td></tr>
+        <tr><td>vert</td><td>أَخْضَر</td><td>خَضْرَاء</td><td>aḫḍar / ḫaḍrāʾ</td></tr>
+        <tr><td>bleu</td><td>أَزْرَق</td><td>زَرْقَاء</td><td>azraq / zarqāʾ</td></tr>
+        <tr><td>jaune</td><td>أَصْفَر</td><td>صَفْرَاء</td><td>aṣfar / ṣafrāʾ</td></tr>
+        <tr><td>marron</td><td>بُنِّيّ</td><td>بُنِّيَّة</td><td>bunniyy / bunniyya</td></tr>
+        <tr><td>gris</td><td>رَمَادِيّ</td><td>رَمَادِيَّة</td><td>ramādiyy / ramādiyya</td></tr>
+        <tr><td>rose</td><td>وَرْدِيّ</td><td>وَرْدِيَّة</td><td>wardiyy / wardiyya</td></tr>
+        <tr><td>orange</td><td>بُرْتُقَالِيّ</td><td>بُرْتُقَالِيَّة</td><td>burtuqāliy / burtuqāliyya</td></tr>
+        <tr><td>doré</td><td>ذَهَبِيّ</td><td>ذَهَبِيَّة</td><td>ḏahabiyy / ḏahabiyya</td></tr>
+        <tr><td>argenté</td><td>فِضِّيّ</td><td>فِضِّيَّة</td><td>fiḍḍiyy / fiḍḍiyya</td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top:1em;"><strong>Remarques :</strong></p>
+    <ul>
+      <li>Les formes masculines suivent souvent le gabarit أَفْعَل.</li>
+      <li>Les formes féminines suivent souvent le gabarit فَعْلاء.</li>
+      <li>Certains adjectifs de couleur ne changent pas (ex. beige : بِيج).</li>
+    </ul>
+    <button onclick="closeHelpPopup()" style="margin-top:1em;">Fermer</button>
+  </div>
+</div>
+
+
+</body>
+</html>
