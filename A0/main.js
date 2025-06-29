@@ -1155,7 +1155,7 @@ function isDebugMode() {
 }
 
 // Mélange un tableau (Fisher-Yates) - Renvoie une NOUVELLE copie mélangée
-function shuffleArray(array) {
+/*function shuffleArray(array) {
     let shuffled = [...array]; // Crée une copie
     let currentIndex = shuffled.length, randomIndex;
     while (currentIndex !== 0) {
@@ -1165,7 +1165,34 @@ function shuffleArray(array) {
             shuffled[randomIndex], shuffled[currentIndex]];
     }
     return shuffled;
-}
+}*/
+
+const shuffleArray = (function () {
+    const stateMap = new WeakMap();
+
+    return function (array) {
+        if (!Array.isArray(array)) throw new Error("shuffleArray() attend un tableau");
+
+        let state = stateMap.get(array);
+
+        if (!state || state.remaining.length === 0) {
+            // Démarre un nouveau cycle
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            state = { remaining: shuffled.slice() };
+            stateMap.set(array, state);
+        }
+
+        // Consomme tous les éléments restants dans l'ordre actuel
+        const output = [...state.remaining];
+        state.remaining = []; // Vide pour déclencher un nouveau cycle au prochain appel
+
+        return output;
+    };
+})();
 
 
 function createShuffledLessonPlaylistFromSelection() {
