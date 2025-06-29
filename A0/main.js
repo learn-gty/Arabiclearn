@@ -1358,7 +1358,14 @@ function playTrackWithCurrentSettings(trackKey) {
             return;
         }
         audioSource = tracks[trackKey];
-        console.log(`Mode Quiz: Lecture de ${trackKey}`);
+    //    console.log(`Mode Quiz: Lecture de ${trackKey}`);
+
+        let trad = '', tradAr = '';
+       
+         trad = translations[trackKey] || '';
+         tradAr = translations_ar[trackKey] || '';
+
+         console.log(`${trackKey},${trad},\u202B${tradAr}`);
 
         const delayInput = document.querySelector('input[name=delay]:checked');
         const orderInput = document.querySelector('input[name=order]:checked');
@@ -1368,7 +1375,7 @@ function playTrackWithCurrentSettings(trackKey) {
         const language = languageInput ? languageInput.value : 'fr';
 
       
-        let trad = '', prefix = '';
+        let prefix = '';
         if (language === 'fr') {
             trad = translations[trackKey] || 'Trad. Quiz (fr) ?';
           //  prefix = 'Mot : ';
